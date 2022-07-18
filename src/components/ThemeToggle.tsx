@@ -8,7 +8,7 @@ const ThemeToggle = () => {
 	return (
 		<button
 			onClick={darkMode.toggle}
-			className="absolute right-2 top-[10px] text-2xl hover:scale-110 transition-all duration-150"
+			className="absolute right-6 top-[10px] text-2xl hover:scale-110 transition-all duration-150"
 		>
 			{darkMode.value ? <BsMoonFill /> : <BsSunFill />}
 		</button>
