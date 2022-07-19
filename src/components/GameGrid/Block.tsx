@@ -30,7 +30,7 @@ const Block: React.FC<Props> = ({ status, letter }) => {
 
 	return (
 		<div
-			className="h-14 w-14 md:h-18 md:w-18 border-solid border-gray-600 border-2 relative"
+			className="h-14 w-14 md:h-18 md:w-18 border-solid border-gray-600 border-2 relative select-none"
 			ref={ref}
 		>
 			<p className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] text-4xl font-semibold">
