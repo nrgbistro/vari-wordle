@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
-		<div className="text-black dark:text-white">
+		<div className="text-black dark:text-white dark:bg-gray-800">
 			<App />
 		</div>
 	</React.StrictMode>
