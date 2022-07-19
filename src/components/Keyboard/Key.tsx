@@ -10,7 +10,7 @@ const Key: React.FC<Props> = ({ action, children }) => {
 			onClick={() => {
 				action ? action() : console.log("No action defined");
 			}}
-			className="bg-gray-300 rounded-md min-w-[20px]"
+			className="bg-gray-300 dark:bg-gray-600 rounded-md sm:min-w-[40px] grow sm:grow-0"
 		>
 			<h1 className="my-4 mx-2 font-bold">{children}</h1>
 		</button>

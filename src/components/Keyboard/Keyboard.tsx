@@ -4,7 +4,7 @@ import KeyRow from "./KeyRow";
 
 const Keyboard = () => {
 	return (
-		<div className="flex flex-col gap-2 grow">
+		<div className="flex flex-col items-center gap-2 mt-auto mb-1 sm:mx-2">
 			<KeyRow>
 				<Key
 					action={() => {
@@ -77,7 +77,7 @@ const Keyboard = () => {
 					P
 				</Key>
 			</KeyRow>
-			<KeyRow>
+			<KeyRow className="px-4">
 				<Key
 					action={() => {
 						console.log("A");

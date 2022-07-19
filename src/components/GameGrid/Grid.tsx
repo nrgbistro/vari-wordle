@@ -11,7 +11,9 @@ const GameGrid = ({ wordLength }: { wordLength: 4 | 5 | 6 | 7 | 8 }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-center m-6 gap-1 grow">{grid}</div>
+		<div className="w-full h-full grow flex flex-col items-center justify-center">
+			<div className="flex flex-col items-center gap-1">{grid}</div>
+		</div>
 	);
 };
 
