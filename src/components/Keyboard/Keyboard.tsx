@@ -1,6 +1,10 @@
 import { BsBackspace } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { removeLetter, typeLetter } from "../../redux/slices/wordSlice";
+import {
+	removeLetter,
+	typeLetter,
+	guessWord,
+} from "../../redux/slices/wordSlice";
 import Key from "./Key";
 import KeyRow from "./KeyRow";
 
@@ -148,7 +152,7 @@ const Keyboard = () => {
 			<KeyRow>
 				<Key
 					action={() => {
-						// dispatch(typeLetter("ENTER"));
+						dispatch(guessWord());
 					}}
 				>
 					ENTER

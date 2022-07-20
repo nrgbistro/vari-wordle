@@ -1,10 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface wordData {
+	correctWord: string;
+	currentGuess: string;
+	guessIndex: number;
+	guessedWords: string[];
+}
+
+const initialState: wordData = {
 	correctWord: "tests",
-	currentGuess: "te",
+	currentGuess: "",
 	guessIndex: 0,
-	guessedWords: [""],
+	guessedWords: [],
 };
 
 const wordSlice = createSlice({
@@ -22,9 +29,16 @@ const wordSlice = createSlice({
 				state.currentGuess = state.currentGuess.substring(0, length - 1);
 			}
 		},
+		guessWord: (state) => {
+			if (state.correctWord.length === state.currentGuess.length) {
+				state.guessedWords.push(state.currentGuess);
+				state.currentGuess = "";
+				state.guessIndex++;
+			}
+		},
 	},
 });
 
-export const { typeLetter, removeLetter } = wordSlice.actions;
+export const { typeLetter, removeLetter, guessWord } = wordSlice.actions;
 
 export default wordSlice.reducer;
