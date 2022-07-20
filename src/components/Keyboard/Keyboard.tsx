@@ -1,77 +1,80 @@
 import { BsBackspace } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { removeLetter, typeLetter } from "../../redux/slices/wordSlice";
 import Key from "./Key";
 import KeyRow from "./KeyRow";
 
 const Keyboard = () => {
+	const dispatch = useDispatch();
 	return (
-		<div className="w-screen flex flex-col items-center gap-2 mt-auto mb-1 px-1">
+		<div className="flex flex-col items-center gap-2 mt-auto mb-1 px-1">
 			<KeyRow>
 				<Key
 					action={() => {
-						console.log("Q");
+						dispatch(typeLetter("Q"));
 					}}
 				>
 					Q
 				</Key>
 				<Key
 					action={() => {
-						console.log("W");
+						dispatch(typeLetter("W"));
 					}}
 				>
 					W
 				</Key>
 				<Key
 					action={() => {
-						console.log("E");
+						dispatch(typeLetter("E"));
 					}}
 				>
 					E
 				</Key>
 				<Key
 					action={() => {
-						console.log("R");
+						dispatch(typeLetter("R"));
 					}}
 				>
 					R
 				</Key>
 				<Key
 					action={() => {
-						console.log("T");
+						dispatch(typeLetter("T"));
 					}}
 				>
 					T
 				</Key>
 				<Key
 					action={() => {
-						console.log("Y");
+						dispatch(typeLetter("Y"));
 					}}
 				>
 					Y
 				</Key>
 				<Key
 					action={() => {
-						console.log("U");
+						dispatch(typeLetter("U"));
 					}}
 				>
 					U
 				</Key>
 				<Key
 					action={() => {
-						console.log("I");
+						dispatch(typeLetter("I"));
 					}}
 				>
 					I
 				</Key>
 				<Key
 					action={() => {
-						console.log("O");
+						dispatch(typeLetter("O"));
 					}}
 				>
 					O
 				</Key>
 				<Key
 					action={() => {
-						console.log("P");
+						dispatch(typeLetter("P"));
 					}}
 				>
 					P
@@ -80,63 +83,63 @@ const Keyboard = () => {
 			<KeyRow className="px-4">
 				<Key
 					action={() => {
-						console.log("A");
+						dispatch(typeLetter("A"));
 					}}
 				>
 					A
 				</Key>
 				<Key
 					action={() => {
-						console.log("S");
+						dispatch(typeLetter("S"));
 					}}
 				>
 					S
 				</Key>
 				<Key
 					action={() => {
-						console.log("D");
+						dispatch(typeLetter("D"));
 					}}
 				>
 					D
 				</Key>
 				<Key
 					action={() => {
-						console.log("F");
+						dispatch(typeLetter("F"));
 					}}
 				>
 					F
 				</Key>
 				<Key
 					action={() => {
-						console.log("G");
+						dispatch(typeLetter("G"));
 					}}
 				>
 					G
 				</Key>
 				<Key
 					action={() => {
-						console.log("H");
+						dispatch(typeLetter("H"));
 					}}
 				>
 					H
 				</Key>
 				<Key
 					action={() => {
-						console.log("J");
+						dispatch(typeLetter("J"));
 					}}
 				>
 					J
 				</Key>
 				<Key
 					action={() => {
-						console.log("K");
+						dispatch(typeLetter("K"));
 					}}
 				>
 					K
 				</Key>
 				<Key
 					action={() => {
-						console.log("L");
+						dispatch(typeLetter("L"));
 					}}
 				>
 					L
@@ -145,63 +148,63 @@ const Keyboard = () => {
 			<KeyRow>
 				<Key
 					action={() => {
-						console.log("ENTER");
+						// dispatch(typeLetter("ENTER"));
 					}}
 				>
 					ENTER
 				</Key>
 				<Key
 					action={() => {
-						console.log("Z");
+						dispatch(typeLetter("Z"));
 					}}
 				>
 					Z
 				</Key>
 				<Key
 					action={() => {
-						console.log("X");
+						dispatch(typeLetter("X"));
 					}}
 				>
 					X
 				</Key>
 				<Key
 					action={() => {
-						console.log("C");
+						dispatch(typeLetter("C"));
 					}}
 				>
 					C
 				</Key>
 				<Key
 					action={() => {
-						console.log("V");
+						dispatch(typeLetter("V"));
 					}}
 				>
 					V
 				</Key>
 				<Key
 					action={() => {
-						console.log("B");
+						dispatch(typeLetter("B"));
 					}}
 				>
 					B
 				</Key>
 				<Key
 					action={() => {
-						console.log("N");
+						dispatch(typeLetter("N"));
 					}}
 				>
 					N
 				</Key>
 				<Key
 					action={() => {
-						console.log("M");
+						dispatch(typeLetter("M"));
 					}}
 				>
 					M
 				</Key>
 				<Key
 					action={() => {
-						console.log("delete");
+						dispatch(removeLetter());
 					}}
 				>
 					<BsBackspace className="text-xl mx-4" />
