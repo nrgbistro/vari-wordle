@@ -1,18 +1,19 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 type Props = {
-	status?: "empty" | "guessed" | "yellow" | "green";
 	x: number;
 	y: number;
 };
 
-const Block: React.FC<Props> = ({ status, x, y }) => {
+const Block: React.FC<Props> = ({ x, y }) => {
 	const ref = useRef<HTMLDivElement>(null);
-	const { guessIndex, currentGuess, guessedWords } = useSelector(
+	const { guessIndex, currentGuess, guessedWords, correctWord } = useSelector(
 		(state: RootState) => state.word
 	);
+
+	const [status, updateStatus] = useState("empty");
 
 	const getLetter = (x: number, y: number): string => {
 		if (guessIndex === y) {
@@ -25,6 +26,27 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 	};
 
 	useEffect(() => {
+		const getStatus = () => {
+			const currentLetter = guessedWords[y].split("")[x];
+			const correctWordList = correctWord.split("");
+
+			for (let i = 0; i < correctWordList.length; i++) {
+				if (currentLetter === correctWordList[i] && x === i) {
+					return "green";
+				} else if (correctWord.includes(currentLetter)) {
+					return "yellow";
+				} else {
+					return "guessed";
+				}
+			}
+		};
+
+		if (guessIndex > y) {
+			updateStatus(getStatus()!);
+		}
+	}, [correctWord, guessIndex, guessedWords, x, y]);
+
+	useEffect(() => {
 		if (ref && ref.current) {
 			if (status !== undefined && status !== "empty") {
 				ref.current.classList.add("border-none");
@@ -35,10 +57,12 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 					ref.current.classList.add("bg-yellow-300/75");
 					break;
 				case "green":
-					ref.current.classList.add("bg-green-300/600");
+					ref.current.classList.add("bg-green-600");
 					break;
 				case "guessed":
 					ref.current.classList.add("bg-slate-700");
+					break;
+				default:
 					break;
 			}
 		}
