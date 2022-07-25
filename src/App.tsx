@@ -3,17 +3,21 @@ import { useDispatch } from "react-redux";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Navbar from "./components/Navbar";
-import { typeLetter, removeLetter } from "./redux/slices/wordSlice";
+import { typeLetter, removeLetter, guessWord } from "./redux/slices/wordSlice";
 
 const App = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const keyHandler = (event: KeyboardEvent) => {
-			if (event.code === "Backspace") {
+			if (event.code === "Enter") {
+				dispatch(guessWord());
+			} else if (event.code === "Backspace" || event.code === "Delete") {
 				dispatch(removeLetter());
 			}
+			// Ensure key pressed is a single letter
 			if (event.key.length > 1) return;
+
 			const keyCode = event.key.charCodeAt(0);
 			if (
 				(keyCode >= 65 && keyCode <= 90) ||
