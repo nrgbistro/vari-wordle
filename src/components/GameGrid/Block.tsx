@@ -60,7 +60,8 @@ const Block: React.FC<Props> = ({ x, y }) => {
 					ref.current.classList.add("bg-green-600");
 					break;
 				case "guessed":
-					ref.current.classList.add("bg-slate-700");
+					ref.current.classList.add("bg-gray-400");
+					ref.current.classList.add("dark:bg-slate-700");
 					break;
 				default:
 					break;
