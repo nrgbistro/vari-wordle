@@ -35,7 +35,7 @@ const Block: React.FC<Props> = ({ x, y }) => {
 	useEffect(() => {
 		const getStatus = () => {
 			const currentLetter = guessedWords[y].split("")[x].toLowerCase();
-			const correctWordList = correctWord.split("");
+			const correctWordList = correctWord.toLowerCase().split("");
 
 			for (let i = 0; i < correctWordList.length; i++) {
 				if (currentLetter === correctWordList[i] && x === i) {
@@ -50,7 +50,7 @@ const Block: React.FC<Props> = ({ x, y }) => {
 		};
 
 		if (guessIndex > y) {
-			updateStatus(getStatus()!);
+			updateStatus(getStatus());
 		}
 	}, [correctWord, guessIndex, guessedWords, x, y]);
 
