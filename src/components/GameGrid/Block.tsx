@@ -7,13 +7,20 @@ type Props = {
 	y: number;
 };
 
+enum Status {
+	empty,
+	guessed,
+	yellow,
+	green,
+}
+
 const Block: React.FC<Props> = ({ x, y }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const { guessIndex, currentGuess, guessedWords, correctWord } = useSelector(
 		(state: RootState) => state.word
 	);
 
-	const [status, updateStatus] = useState("empty");
+	const [status, updateStatus] = useState(Status.empty);
 
 	const getLetter = (x: number, y: number): string => {
 		if (guessIndex === y) {
@@ -27,17 +34,18 @@ const Block: React.FC<Props> = ({ x, y }) => {
 
 	useEffect(() => {
 		const getStatus = () => {
-			const currentLetter = guessedWords[y].split("")[x];
+			const currentLetter = guessedWords[y].split("")[x].toLowerCase();
 			const correctWordList = correctWord.split("");
 
 			for (let i = 0; i < correctWordList.length; i++) {
 				if (currentLetter === correctWordList[i] && x === i) {
-					return "green";
-				} else if (correctWord.includes(currentLetter)) {
-					return "yellow";
-				} else {
-					return "guessed";
+					return Status.green;
 				}
+			}
+			if (correctWord.includes(currentLetter)) {
+				return Status.yellow;
+			} else {
+				return Status.guessed;
 			}
 		};
 
@@ -48,18 +56,18 @@ const Block: React.FC<Props> = ({ x, y }) => {
 
 	useEffect(() => {
 		if (ref && ref.current) {
-			if (status !== undefined && status !== "empty") {
+			if (status !== undefined && status !== Status.empty) {
 				ref.current.classList.add("border-none");
 			}
 
 			switch (status) {
-				case "yellow":
+				case Status.yellow:
 					ref.current.classList.add("bg-yellow-300/75");
 					break;
-				case "green":
+				case Status.green:
 					ref.current.classList.add("bg-green-600");
 					break;
-				case "guessed":
+				case Status.guessed:
 					ref.current.classList.add("bg-gray-400");
 					ref.current.classList.add("dark:bg-slate-700");
 					break;
