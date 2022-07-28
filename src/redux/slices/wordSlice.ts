@@ -10,7 +10,7 @@ interface wordData {
 }
 
 const initialState: wordData = {
-	correctWord: "scrappy",
+	correctWord: "practice",
 	currentGuess: "",
 	guessIndex: 0,
 	guessedWords: [],

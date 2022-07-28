@@ -5,7 +5,7 @@ import Row from "./Row";
 
 const Grid = () => {
 	const { correctWord } = useSelector((state: RootState) => state.word);
-	const NUMBER_OF_TRIES = [5, 6, 7, 9, 10];
+	const NUMBER_OF_TRIES = [5, 6, 7, 8, 9];
 
 	let grid: ReactElement[] = [];
 
@@ -14,7 +14,7 @@ const Grid = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-full w-full md:w-[500px] gap-1 grow items-center content-center p-2">
+		<div className="flex flex-col h-full w-full md:w-[30rem] gap-1 grow items-center content-center p-2">
 			{grid}
 		</div>
 	);

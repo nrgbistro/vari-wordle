@@ -39,7 +39,7 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 
 		if (ref && ref.current) {
 			if (status !== undefined && status !== Status.empty) {
-				ref.current.classList.add("border-none");
+				ref.current.classList.add("border-transparent");
 			}
 
 			switch (status) {
