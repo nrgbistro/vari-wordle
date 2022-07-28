@@ -19,8 +19,6 @@ const Key: React.FC<Props> = ({ action, children }) => {
 			}
 		}
 
-		console.log(status);
-
 		if (ref && ref.current) {
 			if (status !== Status.empty) {
 				ref.current.classList.add("text-white");
