@@ -31,6 +31,7 @@ const wordSlice = createSlice({
 			const newStatus: Status = payload[1];
 			for (let i = 0; i < state.guessedLetters.length; i++) {
 				if (state.guessedLetters[i][0] === letter) {
+					// Ensure only 'greater' statuses can replace an existing status
 					if (newStatus.valueOf() > state.guessedLetters[i][1].valueOf()) {
 						state.guessedLetters[i][1] = newStatus;
 					}
