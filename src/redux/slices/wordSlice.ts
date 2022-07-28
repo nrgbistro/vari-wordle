@@ -27,17 +27,17 @@ const wordSlice = createSlice({
 			}
 		},
 		addGuessedLetter: (state, { payload }) => {
-			const newGuessedLetter: [string, Status] = [
-				payload[0].toUpperCase(),
-				payload[1],
-			];
+			const letter: string = payload[0].toUpperCase();
+			const newStatus: Status = payload[1];
 			for (let i = 0; i < state.guessedLetters.length; i++) {
-				if (state.guessedLetters[i][0] === newGuessedLetter[0]) {
-					state.guessedLetters[i][1] = newGuessedLetter[1];
+				if (state.guessedLetters[i][0] === letter) {
+					if (newStatus.valueOf() > state.guessedLetters[i][1].valueOf()) {
+						state.guessedLetters[i][1] = newStatus;
+					}
 					return;
 				}
 			}
-			state.guessedLetters.push(newGuessedLetter);
+			state.guessedLetters.push([letter, newStatus]);
 		},
 		removeLetter: (state) => {
 			const length = state.currentGuess.length;

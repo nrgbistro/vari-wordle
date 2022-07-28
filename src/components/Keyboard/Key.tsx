@@ -22,34 +22,33 @@ const Key: React.FC<Props> = ({ action, children }) => {
 		if (ref && ref.current) {
 			if (status !== Status.empty) {
 				ref.current.classList.add("text-white");
-				ref.current.classList.remove("bg-gray-300");
-				ref.current.classList.remove("dark:bg-gray-500");
 			}
 
+			let newClassName = "";
+
+			// TODO: Fix class list updating to match redux state
 			switch (status) {
-				case Status.yellow:
-					ref.current.classList.add("bg-yellow-400");
-					break;
 				case Status.green:
-					ref.current.classList.add("bg-green-600");
+					newClassName = "bg-green-600";
+					break;
+				case Status.yellow:
+					newClassName = "bg-yellow-400";
 					break;
 				case Status.guessed:
-					ref.current.classList.add("bg-gray-600");
-					ref.current.classList.add("dark:bg-slate-600/50");
+					newClassName = "bg-gray-600 dark:bg-slate-600/50";
 					break;
 				default:
-					ref.current.classList.add("bg-gray-300");
-					ref.current.classList.add("dark:bg-gray-500");
+					newClassName = "bg-gray-300 dark:bg-gray-500";
 					break;
 			}
+			ref.current.className =
+				"rounded-md sm:min-w-[40px] sm:grow-0 grow items-center " +
+				newClassName;
 		}
 	}, [guessedLetters, children]);
 
 	return (
-		<div
-			className="rounded-md sm:min-w-[40px] sm:grow-0 grow items-center"
-			ref={ref}
-		>
+		<div ref={ref}>
 			<button
 				onClick={() => {
 					action ? action() : console.log("No action defined");

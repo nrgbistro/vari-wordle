@@ -34,12 +34,7 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 
 	useEffect(() => {
 		const getLetter = (x: number, y: number): string => {
-			if (guessIndex === y) {
-				return currentGuess.split("")[x]?.toUpperCase();
-			} else if (guessIndex > y) {
-				return guessedWords[y].split("")[x]?.toUpperCase();
-			}
-			return "";
+			return guessedWords[y].split("")[x]?.toUpperCase();
 		};
 
 		if (ref && ref.current) {
