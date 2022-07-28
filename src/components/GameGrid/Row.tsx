@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
 import Block, { Status } from "./Block";
+import { addGuessedLetter } from "../../redux/slices/wordSlice";
 
 const Row = ({ y }: { y: number }) => {
 	let ret = [];
+	const dispatch = useDispatch();
 	const { correctWord, guessedWords, guessIndex } = useSelector(
 		(state: RootState) => state.word
 	);
@@ -18,7 +20,6 @@ const Row = ({ y }: { y: number }) => {
 		guess = guess.toLowerCase();
 
 		// correct (matched) index letter
-		console.log(guess[index] + "" + word[index]);
 		if (guess[index] === word[index]) {
 			return Status.green;
 		}

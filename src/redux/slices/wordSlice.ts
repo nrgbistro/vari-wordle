@@ -1,17 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Status } from "../../components/GameGrid/Block";
 
 interface wordData {
 	correctWord: string;
 	currentGuess: string;
 	guessIndex: number;
 	guessedWords: string[];
+	guessedLetters: [string, Status][];
 }
 
 const initialState: wordData = {
-	correctWord: "abbey",
+	correctWord: "abbeys",
 	currentGuess: "",
 	guessIndex: 0,
 	guessedWords: [],
+	guessedLetters: [],
 };
 
 const wordSlice = createSlice({
@@ -22,6 +25,19 @@ const wordSlice = createSlice({
 			if (state.currentGuess.length < state.correctWord.length) {
 				state.currentGuess += payload;
 			}
+		},
+		addGuessedLetter: (state, { payload }) => {
+			const newGuessedLetter: [string, Status] = [
+				payload[0].toUpperCase(),
+				payload[1],
+			];
+			for (let i = 0; i < state.guessedLetters.length; i++) {
+				if (state.guessedLetters[i][0] === newGuessedLetter[0]) {
+					state.guessedLetters[i][1] = newGuessedLetter[1];
+					return;
+				}
+			}
+			state.guessedLetters.push(newGuessedLetter);
 		},
 		removeLetter: (state) => {
 			const length = state.currentGuess.length;
@@ -36,9 +52,18 @@ const wordSlice = createSlice({
 				state.guessIndex++;
 			}
 		},
+		resetGame: (state) => {
+			state = initialState;
+		},
 	},
 });
 
-export const { typeLetter, removeLetter, guessWord } = wordSlice.actions;
+export const {
+	typeLetter,
+	removeLetter,
+	guessWord,
+	addGuessedLetter,
+	resetGame,
+} = wordSlice.actions;
 
 export default wordSlice.reducer;

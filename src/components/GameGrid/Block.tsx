@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../redux/store";
+import { addGuessedLetter } from "../../redux/slices/wordSlice";
 
 type Props = {
 	x: number;
@@ -20,40 +21,27 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 	const { guessIndex, currentGuess, guessedWords } = useSelector(
 		(state: RootState) => state.word
 	);
+	const dispatch = useDispatch();
 
 	const getLetter = (x: number, y: number): string => {
 		if (guessIndex === y) {
 			return currentGuess.split("")[x]?.toUpperCase();
 		} else if (guessIndex > y) {
 			return guessedWords[y].split("")[x]?.toUpperCase();
-		} else {
-			return "";
 		}
+		return "";
 	};
 
-	// useEffect(() => {
-	// 	const getStatus = () => {
-	// 		const currentLetter = guessedWords[y].split("")[x].toLowerCase();
-	// 		const correctWordList = correctWord.toLowerCase().split("");
-
-	// 		for (let i = 0; i < correctWordList.length; i++) {
-	// 			if (currentLetter === correctWordList[i] && x === i) {
-	// 				return Status.green;
-	// 			}
-	// 		}
-	// 		if (correctWord.includes(currentLetter)) {
-	// 			return Status.yellow;
-	// 		} else {
-	// 			return Status.guessed;
-	// 		}
-	// 	};
-
-	// 	if (guessIndex > y) {
-	// 		updateStatus(getStatus());
-	// 	}
-	// }, [correctWord, guessIndex, guessedWords, x, y]);
-
 	useEffect(() => {
+		const getLetter = (x: number, y: number): string => {
+			if (guessIndex === y) {
+				return currentGuess.split("")[x]?.toUpperCase();
+			} else if (guessIndex > y) {
+				return guessedWords[y].split("")[x]?.toUpperCase();
+			}
+			return "";
+		};
+
 		if (ref && ref.current) {
 			if (status !== undefined && status !== Status.empty) {
 				ref.current.classList.add("border-none");
@@ -62,19 +50,22 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 			switch (status) {
 				case Status.yellow:
 					ref.current.classList.add("bg-yellow-300/75");
+					dispatch(addGuessedLetter([getLetter(x, y), Status.yellow]));
 					break;
 				case Status.green:
 					ref.current.classList.add("bg-green-600");
+					dispatch(addGuessedLetter([getLetter(x, y), Status.green]));
 					break;
 				case Status.guessed:
 					ref.current.classList.add("bg-gray-400");
 					ref.current.classList.add("dark:bg-slate-700");
+					dispatch(addGuessedLetter([getLetter(x, y), Status.guessed]));
 					break;
 				default:
 					break;
 			}
 		}
-	}, [status]);
+	}, [currentGuess, dispatch, guessIndex, guessedWords, status, x, y]);
 
 	return (
 		<div
