@@ -5,9 +5,10 @@ import { RootState } from "../../redux/store";
 type Props = {
 	x: number;
 	y: number;
+	status: Status;
 };
 
-enum Status {
+export const enum Status {
 	empty,
 	guessed,
 	yellow,
@@ -79,7 +80,7 @@ const Block: React.FC<Props> = ({ x, y }) => {
 
 	return (
 		<div
-			className="h-10 w-10 sm:h-12 sm:w-12 border-solid border-gray-600 border-2 relative select-none"
+			className="grow border-solid border-gray-600 border-2 relative select-none"
 			ref={ref}
 			onClick={() => {
 				console.log(`X: ${x}, Y: ${y}`);
