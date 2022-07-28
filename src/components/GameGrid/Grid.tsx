@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import Row from "./GridRow";
+import Row from "./Row";
 
 const Grid = () => {
 	const { correctWord } = useSelector((state: RootState) => state.word);
@@ -14,7 +14,7 @@ const Grid = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-fit w-full gap-1 grow items-center content-center p-2">
+		<div className="flex flex-col h-full w-full md:w-[500px] gap-1 grow items-center content-center p-2">
 			{grid}
 		</div>
 	);

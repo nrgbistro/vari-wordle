@@ -15,13 +15,11 @@ export const enum Status {
 	green,
 }
 
-const Block: React.FC<Props> = ({ x, y }) => {
+const Block: React.FC<Props> = ({ status, x, y }) => {
 	const ref = useRef<HTMLDivElement>(null);
-	const { guessIndex, currentGuess, guessedWords, correctWord } = useSelector(
+	const { guessIndex, currentGuess, guessedWords } = useSelector(
 		(state: RootState) => state.word
 	);
-
-	const [status, updateStatus] = useState(Status.empty);
 
 	const getLetter = (x: number, y: number): string => {
 		if (guessIndex === y) {
@@ -33,27 +31,27 @@ const Block: React.FC<Props> = ({ x, y }) => {
 		}
 	};
 
-	useEffect(() => {
-		const getStatus = () => {
-			const currentLetter = guessedWords[y].split("")[x].toLowerCase();
-			const correctWordList = correctWord.toLowerCase().split("");
+	// useEffect(() => {
+	// 	const getStatus = () => {
+	// 		const currentLetter = guessedWords[y].split("")[x].toLowerCase();
+	// 		const correctWordList = correctWord.toLowerCase().split("");
 
-			for (let i = 0; i < correctWordList.length; i++) {
-				if (currentLetter === correctWordList[i] && x === i) {
-					return Status.green;
-				}
-			}
-			if (correctWord.includes(currentLetter)) {
-				return Status.yellow;
-			} else {
-				return Status.guessed;
-			}
-		};
+	// 		for (let i = 0; i < correctWordList.length; i++) {
+	// 			if (currentLetter === correctWordList[i] && x === i) {
+	// 				return Status.green;
+	// 			}
+	// 		}
+	// 		if (correctWord.includes(currentLetter)) {
+	// 			return Status.yellow;
+	// 		} else {
+	// 			return Status.guessed;
+	// 		}
+	// 	};
 
-		if (guessIndex > y) {
-			updateStatus(getStatus());
-		}
-	}, [correctWord, guessIndex, guessedWords, x, y]);
+	// 	if (guessIndex > y) {
+	// 		updateStatus(getStatus());
+	// 	}
+	// }, [correctWord, guessIndex, guessedWords, x, y]);
 
 	useEffect(() => {
 		if (ref && ref.current) {
@@ -82,9 +80,6 @@ const Block: React.FC<Props> = ({ x, y }) => {
 		<div
 			className="grow border-solid border-gray-600 border-2 relative select-none"
 			ref={ref}
-			onClick={() => {
-				console.log(`X: ${x}, Y: ${y}`);
-			}}
 		>
 			<p className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] text-4xl font-semibold">
 				{getLetter(x, y)}
