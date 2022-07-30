@@ -9,7 +9,7 @@ const Grid = () => {
 
 	let grid: ReactElement[] = [];
 
-	for (let i = 0; i < NUMBER_OF_TRIES[correctWord.length - 4]; i++) {
+	for (let i = 0; i < NUMBER_OF_TRIES[correctWord.word.length - 4]; i++) {
 		grid.push(<Row y={i} key={i} />);
 	}
 

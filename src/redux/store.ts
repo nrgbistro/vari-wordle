@@ -12,6 +12,8 @@ const reducers = combineReducers({
 const persistConfig = {
 	key: "root",
 	storage: storage,
+	// Turn off persistence for development
+	...(process.env.NODE_ENV !== "production" ? { blacklist: ["word"] } : {}),
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

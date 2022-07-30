@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -10,7 +10,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(express.static(path.resolve(__dirname, "../build")));
 
 // create a GET route
-app.get("/api", (req, res) => {
+app.get("/api/word", (req, res) => {
 	res.json({ word: "test" });
 });
 

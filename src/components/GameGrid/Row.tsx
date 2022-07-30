@@ -14,7 +14,7 @@ const Row = ({ y }: { y: number }) => {
 		if (guessIndex <= y) {
 			return Status.empty;
 		}
-		const word = correctWord.toLowerCase();
+		const word = correctWord.word.toLowerCase();
 		guess = guess.toLowerCase();
 
 		// correct (matched) index letter
@@ -51,7 +51,7 @@ const Row = ({ y }: { y: number }) => {
 		return Status.guessed;
 	};
 
-	for (let j = 0; j < correctWord.length; j++) {
+	for (let j = 0; j < correctWord.word.length; j++) {
 		ret.push(
 			<Block
 				status={getStatus(guessedWords[y], j)}

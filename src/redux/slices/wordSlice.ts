@@ -1,16 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import { Status } from "../../components/GameGrid/Block";
 
+const checkWord = require("check-if-word");
+const word = checkWord("en");
+
+const WORD_URL =
+	"https://d24a4e67-4a13-4045-b478-6e50a7204af1.mock.pstmn.io/api/word";
 interface wordData {
-	correctWord: string;
+	correctWord: {
+		word: string;
+		status: "idle" | "loading" | "succeeded" | "failed";
+		error: null | string;
+	};
 	currentGuess: string;
 	guessIndex: number;
 	guessedWords: string[];
 	guessedLetters: [string, Status][];
 }
 
+export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
+	try {
+		const word = await axios.get(WORD_URL);
+		return word;
+	} catch (err: any) {
+		return err.message;
+	}
+});
+
 const initialState: wordData = {
-	correctWord: "practice",
+	correctWord: {
+		word: "place",
+		status: "idle",
+		error: null,
+	},
 	currentGuess: "",
 	guessIndex: 0,
 	guessedWords: [],
@@ -22,7 +45,7 @@ const wordSlice = createSlice({
 	initialState,
 	reducers: {
 		typeLetter: (state, { payload }) => {
-			if (state.currentGuess.length < state.correctWord.length) {
+			if (state.currentGuess.length < state.correctWord.word.length) {
 				state.currentGuess += payload;
 			}
 		},
@@ -47,7 +70,10 @@ const wordSlice = createSlice({
 			}
 		},
 		guessWord: (state) => {
-			if (state.correctWord.length === state.currentGuess.length) {
+			if (
+				state.correctWord.word.length === state.currentGuess.length &&
+				word.check(state.currentGuess)
+			) {
 				state.guessedWords.push(state.currentGuess);
 				state.currentGuess = "";
 				state.guessIndex++;
