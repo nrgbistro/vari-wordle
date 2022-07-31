@@ -12,13 +12,21 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../build")));
 
-let currentWord = rword.generate(1, { length: "4-8" });
+const generateNewWord = () => {
+	let newWord = rword.generate(1, { length: "4-8" });
+	while (!word.check(newWord)) {
+		newWord = rword.generate(1, { length: "4-8" });
+	}
+	return newWord;
+};
+
+let currentWord = generateNewWord();
 let wordleCount = 1;
 
 (function loop() {
 	let now = new Date();
 	if (now.getHours() === 0 && now.getMinutes() === 0) {
-		currentWord = rword.generate(1, { length: "4-8" });
+		currentWord = generateNewWord();
 		wordleCount++;
 	}
 	now = new Date(); // allow for time passing
