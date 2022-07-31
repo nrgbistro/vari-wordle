@@ -1,15 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Status } from "../../components/GameGrid/Block";
+import { RootState } from "../store";
 
-const checkWord = require("check-if-word");
-const word = checkWord("en");
-
-const WORD_URL =
-	"https://d24a4e67-4a13-4045-b478-6e50a7204af1.mock.pstmn.io/api/word";
+const WORD_URL = "/api/word";
 interface wordData {
 	correctWord: {
 		word: string;
+		count: number;
 		status: "idle" | "loading" | "succeeded" | "failed";
 		error: null | string;
 	};
@@ -23,14 +21,15 @@ export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
 	try {
 		const word = await axios.get(WORD_URL);
 		return word;
-	} catch (err: any) {
-		return err.message;
+	} catch (err) {
+		return err;
 	}
 });
 
 const initialState: wordData = {
 	correctWord: {
-		word: "place",
+		word: "",
+		count: 0,
 		status: "idle",
 		error: null,
 	},
@@ -52,6 +51,7 @@ const wordSlice = createSlice({
 		addGuessedLetter: (state, { payload }) => {
 			const letter: string = payload[0].toUpperCase();
 			const newStatus: Status = payload[1];
+
 			for (let i = 0; i < state.guessedLetters.length; i++) {
 				if (state.guessedLetters[i][0] === letter) {
 					// Ensure only 'greater' statuses can replace an existing status
@@ -70,10 +70,7 @@ const wordSlice = createSlice({
 			}
 		},
 		guessWord: (state) => {
-			if (
-				state.correctWord.word.length === state.currentGuess.length &&
-				word.check(state.currentGuess)
-			) {
+			if (state.correctWord.word.length === state.currentGuess.length) {
 				state.guessedWords.push(state.currentGuess);
 				state.currentGuess = "";
 				state.guessIndex++;
@@ -82,6 +79,20 @@ const wordSlice = createSlice({
 		resetGame: (state) => {
 			state = initialState;
 		},
+	},
+	extraReducers(builder) {
+		builder
+			.addCase(fetchWord.pending, (state, action) => {
+				state.correctWord.status = "loading";
+			})
+			.addCase(fetchWord.rejected, (state, action) => {
+				state.correctWord.status = "failed";
+			})
+			.addCase(fetchWord.fulfilled, (state, action: any) => {
+				state.correctWord.status = "succeeded";
+				state.correctWord.word = action.payload.data.word;
+				state.correctWord.count = action.payload.data.count;
+			});
 	},
 });
 
@@ -93,4 +104,13 @@ export const {
 	resetGame,
 } = wordSlice.actions;
 
+export const getWordStatus = (state: RootState) =>
+	state.word.correctWord.status;
+
 export default wordSlice.reducer;
+
+export const checkWord = async (word: string) => {
+	if (word.length === 0) return;
+	const response = await axios.post("/api/word/" + word.toLowerCase());
+	return response.data;
+};

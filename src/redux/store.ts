@@ -3,7 +3,8 @@ import wordReducer from "./slices/wordSlice";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
-import thunk from "redux-thunk";
+import thunkMiddleware from "redux-thunk";
+import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
 
 const reducers = combineReducers({
 	word: wordReducer,
@@ -21,9 +22,13 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
 	reducer: persistedReducer,
 	devTools: process.env.NODE_ENV !== "production",
-	middleware: [thunk],
+	middleware: [thunkMiddleware],
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export default store;

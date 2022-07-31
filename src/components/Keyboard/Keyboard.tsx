@@ -1,15 +1,17 @@
 import { BsBackspace } from "react-icons/bs";
-import { useDispatch } from "react-redux";
 import {
 	removeLetter,
 	typeLetter,
 	guessWord,
+	checkWord,
 } from "../../redux/slices/wordSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import Key from "./Key";
 import KeyRow from "./KeyRow";
 
 const Keyboard = () => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+	const { currentGuess } = useAppSelector((state) => state.word);
 	return (
 		<div className="flex flex-col items-center gap-2 mt-auto mb-1 px-1">
 			<KeyRow>
@@ -151,7 +153,8 @@ const Keyboard = () => {
 			</KeyRow>
 			<KeyRow>
 				<Key
-					action={() => {
+					action={async () => {
+						if (!(await checkWord(currentGuess))) return;
 						dispatch(guessWord());
 					}}
 				>

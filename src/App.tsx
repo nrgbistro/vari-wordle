@@ -1,16 +1,45 @@
+import axios from "axios";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Navbar from "./components/Navbar";
-import { typeLetter, removeLetter, guessWord } from "./redux/slices/wordSlice";
+import {
+	typeLetter,
+	removeLetter,
+	guessWord,
+	getWordStatus,
+	fetchWord,
+	checkWord,
+	resetGame,
+} from "./redux/slices/wordSlice";
+import { useAppDispatch, useAppSelector } from "./redux/store";
 
 const App = () => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+	const wordStatus = useAppSelector(getWordStatus);
+	const { currentGuess, correctWord } = useAppSelector((state) => state.word);
 
 	useEffect(() => {
-		const keyHandler = (event: KeyboardEvent) => {
+		(async function checkForNewWord() {
+			if (correctWord.word.length > 0) {
+				const newWord = await axios.get("/api/word");
+				if (newWord.data.word !== correctWord.word) {
+					dispatch(resetGame());
+				}
+			}
+		})();
+	});
+
+	useEffect(() => {
+		if (wordStatus === "idle") {
+			dispatch<any>(fetchWord());
+		}
+	}, [dispatch, wordStatus]);
+
+	useEffect(() => {
+		const keyHandler = async (event: KeyboardEvent) => {
 			if (event.code === "Enter") {
+				if (!(await checkWord(currentGuess))) return;
 				dispatch(guessWord());
 			} else if (event.code === "Backspace" || event.code === "Delete") {
 				dispatch(removeLetter());
@@ -32,7 +61,7 @@ const App = () => {
 		return () => {
 			window.removeEventListener("keyup", keyHandler);
 		};
-	}, [dispatch]);
+	}, [currentGuess, dispatch]);
 
 	return (
 		<div className="min-h-screen dark:bg-gray-800 flex flex-col items-center">
