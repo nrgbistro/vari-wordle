@@ -4,6 +4,20 @@ import { Status } from "../../components/GameGrid/Block";
 import { RootState } from "../store";
 
 const WORD_URL = "/api/word";
+export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
+	try {
+		const word = await axios.get(WORD_URL);
+		return word;
+	} catch (err) {
+		return err;
+	}
+});
+
+export const checkWord = async (word: string) => {
+	if (word.length === 0) return;
+	const response = await axios.post("/api/word/" + word.toLowerCase());
+	return response.data;
+};
 interface wordData {
 	correctWord: {
 		word: string;
@@ -16,15 +30,6 @@ interface wordData {
 	guessedWords: string[];
 	guessedLetters: [string, Status][];
 }
-
-export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
-	try {
-		const word = await axios.get(WORD_URL);
-		return word;
-	} catch (err) {
-		return err;
-	}
-});
 
 const initialState: wordData = {
 	correctWord: {
@@ -108,9 +113,3 @@ export const getWordStatus = (state: RootState) =>
 	state.word.correctWord.status;
 
 export default wordSlice.reducer;
-
-export const checkWord = async (word: string) => {
-	if (word.length === 0) return;
-	const response = await axios.post("/api/word/" + word.toLowerCase());
-	return response.data;
-};
