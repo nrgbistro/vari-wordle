@@ -19,23 +19,29 @@ const App = () => {
 	const wordStatus = useAppSelector(getWordStatus);
 	const { currentGuess, correctWord } = useAppSelector((state) => state.word);
 
+	// Check for a new word
 	useEffect(() => {
-		(async function checkForNewWord() {
+		(async () => {
 			if (correctWord.word.length > 0) {
 				const newWord = await axios.get("/api/word");
+				console.log(`new word: ${newWord}, current word: ${correctWord.word}`);
 				if (newWord.data.word !== correctWord.word) {
+					console.log("resetting game");
 					dispatch(resetGame());
+					dispatch<any>(fetchWord());
 				}
 			}
 		})();
-	});
+	}, [correctWord.word, dispatch]);
 
+	// Fetch the word if it doesn't exist
 	useEffect(() => {
 		if (wordStatus === "idle") {
 			dispatch<any>(fetchWord());
 		}
 	}, [dispatch, wordStatus]);
 
+	// Create keyboard listener
 	useEffect(() => {
 		const keyHandler = async (event: KeyboardEvent) => {
 			if (event.code === "Enter") {
