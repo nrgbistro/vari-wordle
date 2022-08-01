@@ -29,6 +29,7 @@ interface wordData {
 	guessIndex: number;
 	guessedWords: string[];
 	guessedLetters: [string, Status][];
+	modal: boolean;
 }
 
 const initialState: wordData = {
@@ -42,6 +43,7 @@ const initialState: wordData = {
 	guessIndex: 0,
 	guessedWords: [],
 	guessedLetters: [],
+	modal: false,
 };
 
 const wordSlice = createSlice({
@@ -82,7 +84,14 @@ const wordSlice = createSlice({
 			}
 		},
 		resetGame: (state) => {
-			state = initialState;
+			state.correctWord = initialState.correctWord;
+			state.currentGuess = initialState.currentGuess;
+			state.guessIndex = initialState.guessIndex;
+			state.guessedLetters = initialState.guessedLetters;
+			state.guessedWords = initialState.guessedWords;
+		},
+		toggleModal: (state) => {
+			state.modal = !state.modal;
 		},
 	},
 	extraReducers(builder) {

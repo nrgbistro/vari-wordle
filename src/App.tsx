@@ -23,10 +23,10 @@ const App = () => {
 	useEffect(() => {
 		(async () => {
 			if (correctWord.word.length > 0) {
-				const newWord = await axios.get("/api/word");
+				const response = await axios.get("/api/word");
+				const newWord = response.data.word;
 				console.log(`new word: ${newWord}, current word: ${correctWord.word}`);
-				if (newWord.data.word !== correctWord.word) {
-					console.log("resetting game");
+				if (newWord !== correctWord.word) {
 					dispatch(resetGame());
 					dispatch<any>(fetchWord());
 				}
@@ -50,8 +50,8 @@ const App = () => {
 			} else if (event.code === "Backspace" || event.code === "Delete") {
 				dispatch(removeLetter());
 			}
-			// Ensure key pressed is a single letter
-			if (event.key.length > 1) return;
+			// Ensure key pressed is a single letter without ctrl pressed
+			if (event.key.length > 1 || event.ctrlKey) return;
 
 			const keyCode = event.key.charCodeAt(0);
 			if (
