@@ -11,6 +11,7 @@
 
 @layer utilities {
     .min-h-screen-safe {
-        min-height: calc(100vh - (env(safe-area-inset-top) + env(safe-area-inset-bottom)))
+        min-height: 100vh;
+        padding-bottom: env(safe-area-inset-bottom);
     }
 }
