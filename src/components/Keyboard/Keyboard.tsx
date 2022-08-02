@@ -1,19 +1,17 @@
 import { BsBackspace } from "react-icons/bs";
-import {
-	removeLetter,
-	typeLetter,
-	guessWord,
-	checkWord,
-} from "../../redux/slices/wordSlice";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { removeLetter, typeLetter } from "../../redux/slices/wordSlice";
+import { useAppDispatch } from "../../redux/store";
 import Key from "./Key";
 import KeyRow from "./KeyRow";
 
-const Keyboard = () => {
+const Keyboard = ({
+	safegGuessWord,
+}: {
+	safegGuessWord: () => Promise<void>;
+}) => {
 	const dispatch = useAppDispatch();
-	const { currentGuess } = useAppSelector((state) => state.word);
 	return (
-		<div className="flex flex-col items-center gap-2 mt-auto mb-1 px-1">
+		<div className="flex flex-col items-center gap-2 mt-auto mb-1 w-full">
 			<KeyRow>
 				<Key
 					action={() => {
@@ -153,9 +151,8 @@ const Keyboard = () => {
 			</KeyRow>
 			<KeyRow>
 				<Key
-					action={async () => {
-						if (!(await checkWord(currentGuess))) return;
-						dispatch(guessWord());
+					action={() => {
+						safegGuessWord();
 					}}
 				>
 					ENTER

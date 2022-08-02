@@ -20,13 +20,8 @@ const Key: React.FC<Props> = ({ action, children }) => {
 		}
 
 		if (ref && ref.current) {
-			if (status !== Status.empty) {
-				ref.current.classList.add("text-white");
-			}
-
 			let newClassName = "";
 
-			// TODO: Fix class list updating to match redux state
 			switch (status) {
 				case Status.green:
 					newClassName = "bg-green-600";
@@ -44,6 +39,9 @@ const Key: React.FC<Props> = ({ action, children }) => {
 			ref.current.className =
 				"rounded-md sm:min-w-[40px] sm:grow-0 grow items-center " +
 				newClassName;
+			if (status !== Status.empty) {
+				ref.current.classList.add("text-white");
+			}
 		}
 	}, [guessedLetters, children]);
 

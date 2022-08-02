@@ -40,11 +40,12 @@ const Block: React.FC<Props> = ({ status, x, y }) => {
 		if (ref && ref.current) {
 			if (status !== Status.empty) {
 				ref.current.classList.replace("border-gray-600", "border-transparent");
+				ref.current.classList.add("text-white");
 			}
 
 			switch (status) {
 				case Status.yellow:
-					ref.current.classList.add("bg-yellow-300/75");
+					ref.current.classList.add("bg-yellow-400");
 					dispatch(addGuessedLetter([getLetter(x, y), Status.yellow]));
 					break;
 				case Status.green:
