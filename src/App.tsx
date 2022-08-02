@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Popup from "./components/modals/PopupMessage";
+import Modal from "./components/modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
 	typeLetter,
@@ -21,7 +22,7 @@ export const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
 const App = () => {
 	const dispatch = useAppDispatch();
 	const wordStatus = useAppSelector(getWordStatus);
-	const { currentGuess, correctWord, guessIndex } = useAppSelector(
+	const { currentGuess, correctWord, guessIndex, modal } = useAppSelector(
 		(state) => state.word
 	);
 	const [popupVisible, setPopupVisible] = useState(false);
@@ -107,7 +108,7 @@ const App = () => {
 	}, [correctWord.word.length, currentGuess, dispatch, safegGuessWord]);
 
 	return (
-		<div className="min-h-screen dark:bg-gray-800 flex flex-col items-center">
+		<div className="min-h-screen-safe dark:bg-gray-800 flex flex-col items-center">
 			{popupVisible ? (
 				<Popup
 					message={popupMessage}
@@ -116,6 +117,7 @@ const App = () => {
 					setDuration={setPopupDuration}
 				/>
 			) : null}
+			{modal ? <Modal /> : null}
 			<Navbar />
 			<Grid />
 			<Keyboard safegGuessWord={safegGuessWord} />
