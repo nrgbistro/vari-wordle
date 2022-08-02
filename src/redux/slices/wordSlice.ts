@@ -77,11 +77,9 @@ const wordSlice = createSlice({
 			}
 		},
 		guessWord: (state) => {
-			if (state.correctWord.word.length === state.currentGuess.length) {
-				state.guessedWords.push(state.currentGuess);
-				state.currentGuess = "";
-				state.guessIndex++;
-			}
+			state.guessedWords.push(state.currentGuess);
+			state.currentGuess = "";
+			state.guessIndex++;
 		},
 		resetGame: (state) => {
 			state.correctWord = initialState.correctWord;
@@ -116,6 +114,7 @@ export const {
 	guessWord,
 	addGuessedLetter,
 	resetGame,
+	toggleModal,
 } = wordSlice.actions;
 
 export const getWordStatus = (state: RootState) =>

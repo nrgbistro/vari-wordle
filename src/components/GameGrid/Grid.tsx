@@ -1,11 +1,11 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
+import { NUMBER_OF_TRIES } from "../../App";
 import { RootState } from "../../redux/store";
 import Row from "./Row";
 
 const Grid = () => {
 	const { correctWord } = useSelector((state: RootState) => state.word);
-	const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
 
 	let grid: ReactElement[] = [];
 
