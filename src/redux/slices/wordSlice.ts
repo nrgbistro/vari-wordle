@@ -87,6 +87,7 @@ const wordSlice = createSlice({
 			state.guessIndex = initialState.guessIndex;
 			state.guessedLetters = initialState.guessedLetters;
 			state.guessedWords = initialState.guessedWords;
+			state.modal = initialState.modal;
 		},
 		toggleModal: (state) => {
 			state.modal = !state.modal;
