@@ -12,6 +12,6 @@
 @layer utilities {
     .h-screen-safe {
         min-height: 100vh;
-        height: -webkit-fill-available;
+        max-height: -webkit-fill-available;
     }
 }
