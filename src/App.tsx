@@ -108,7 +108,7 @@ const App = () => {
 	}, [correctWord.word.length, currentGuess, dispatch, safegGuessWord]);
 
 	return (
-		<div className="min-h-screen-safe dark:bg-gray-800 flex flex-col items-center">
+		<div className="h-screen-safe dark:bg-gray-800 flex flex-col items-center">
 			{popupVisible ? (
 				<Popup
 					message={popupMessage}

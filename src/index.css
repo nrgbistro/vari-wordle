@@ -9,9 +9,9 @@
     }
 }
 
-/* @layer utilities {
-    .min-h-screen-safe {
+@layer utilities {
+    .h-screen-safe {
         min-height: 100vh;
-        padding-bottom: env(safe-area-inset-bottom);
+        height: -webkit-fill-available;
     }
-} */
+}
