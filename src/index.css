@@ -10,8 +10,10 @@
 }
 
 @layer utilities {
-    .min-h-screen-safe {
+    .h-screen-safe {
         min-height: 100vh;
-        padding-bottom: env(safe-area-inset-bottom);
+        max-height: -moz-available;
+        max-height: -webkit-fill-available;
+        max-height: stretch;
     }
 }

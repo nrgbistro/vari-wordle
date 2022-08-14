@@ -26,10 +26,10 @@ let wordleCount = 1;
 
 (function loop() {
 	let now = new Date();
-	// if (now.getHours() === 0 && now.getMinutes() === 0) {
-	currentWord = generateNewWord();
-	wordleCount++;
-	// }
+	if (now.getHours() === 0 && now.getMinutes() === 0) {
+		currentWord = generateNewWord();
+		wordleCount++;
+	}
 	now = new Date(); // allow for time passing
 	let delay = 60000 - (now % 60000); // exact ms to next minute interval
 	setTimeout(loop, delay);
