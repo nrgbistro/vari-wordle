@@ -17,6 +17,7 @@ const generateNewWord = () => {
 	while (!word.check(newWord)) {
 		newWord = rword.generate(1, { length: "4-8" });
 	}
+	console.log("Generated word: " + newWord);
 	return newWord;
 };
 
