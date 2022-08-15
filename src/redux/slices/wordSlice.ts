@@ -95,8 +95,7 @@ const wordSlice = createSlice({
 					i,
 					state.correctWord.word
 				);
-				if (status !== Status.guessed)
-					addGuessedLetter(state.guessedWords[state.guessIndex][i], status);
+				addGuessedLetter(state.guessedWords[state.guessIndex][i], status);
 				newStatusRow.push(status);
 			}
 
