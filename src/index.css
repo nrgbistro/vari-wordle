@@ -15,9 +15,6 @@
 }
 
 @layer utilities {
-	.pb-safe {
-		padding-bottom: max(env(safe-area-inset-bottom), 0.25em);
-	}
 	.font-variant-small {
 		font-variant: small-caps;
 	}
