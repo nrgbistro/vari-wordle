@@ -111,6 +111,7 @@ const wordSlice = createSlice({
 			state.guessIndex = initialState.guessIndex;
 			state.guessedLetters = initialState.guessedLetters;
 			state.guessedWords = initialState.guessedWords;
+			state.guessedWordsGrid = initialState.guessedWordsGrid;
 			state.gameDone = initialState.gameDone;
 			state.modal = initialState.modal;
 		},
