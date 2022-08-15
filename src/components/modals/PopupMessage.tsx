@@ -4,7 +4,7 @@ const DURATION = 2000;
 
 interface Props {
 	setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-	setDuration: React.Dispatch<React.SetStateAction<number>>;
+	setDuration?: React.Dispatch<React.SetStateAction<number>>;
 	message: string;
 	duration?: number;
 }
@@ -18,7 +18,9 @@ const Popup: React.FC<Props> = ({
 	useEffect(() => {
 		setTimeout(() => {
 			setVisible(false);
-			setDuration(DURATION);
+			if (setDuration) {
+				setDuration(DURATION);
+			}
 		}, duration);
 	}, [duration, setDuration, setVisible]);
 

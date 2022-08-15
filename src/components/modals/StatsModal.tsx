@@ -1,12 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { toggleModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import { NUMBER_OF_TRIES } from "../../App";
+import Popup from "./PopupMessage";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
+	const [popupVisible, setPopupVisible] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 	const { guessIndex, correctWord, guessedWordsGrid } = useAppSelector(
 		(state) => state.word
@@ -18,22 +20,27 @@ const Modal = () => {
 		else if (num === 3) return "🟩";
 	};
 
-	const generateShareText = () => {
+	const shareResult = () => {
 		const now = new Date();
 		let ret = `Vari-Wordle ${
 			now.getMonth() + 1
 		}/${now.getDate()}/${now.getFullYear()} ${guessIndex}/${
 			NUMBER_OF_TRIES[correctWord.word.length - 4]
-		}\n\n`;
+		}\n`;
 
 		for (let i = 0; i < guessedWordsGrid.length; i++) {
+			ret = ret + "\n";
 			for (let j = 0; j < correctWord.word.length; j++) {
 				ret = ret + getEmoji(guessedWordsGrid[i][j].valueOf());
 			}
-			ret = ret + "\n";
 		}
 
-		console.log(ret);
+		if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
+			navigator.share({ text: ret });
+		} else {
+			setPopupVisible(true);
+			navigator.clipboard.writeText(ret);
+		}
 	};
 	return (
 		<div
@@ -43,6 +50,9 @@ const Modal = () => {
 				if (e.target === ref.current) dispatch(toggleModal());
 			}}
 		>
+			{popupVisible && (
+				<Popup setVisible={setPopupVisible} message={"Copied to clipboard"} />
+			)}
 			<div className="absolute z-30 top-10 bottom-10 left-4 right-4 md:left-[50%] md:-translate-x-[50%] md:w-[500px] bg-white dark:bg-slate-800 rounded-md">
 				<div className="flex flex-col justify-between h-full">
 					<div className="flex flex-row justify-between w-full">
@@ -59,7 +69,7 @@ const Modal = () => {
 					</div>
 					<button
 						className="m-3 bg-blue-500 rounded-full h-10"
-						onClick={generateShareText}
+						onClick={shareResult}
 					>
 						Share <BsShare className="inline text-sm -translate-y-[1px]" />
 					</button>
