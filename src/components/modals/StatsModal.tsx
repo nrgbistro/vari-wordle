@@ -9,10 +9,11 @@ import Popup from "./PopupMessage";
 const Modal = () => {
 	const dispatch = useAppDispatch();
 	const [popupVisible, setPopupVisible] = useState(false);
-	const ref = useRef<HTMLDivElement>(null);
-	const { guessIndex, correctWord, guessedWordsGrid } = useAppSelector(
-		(state) => state.word
-	);
+	const [popupMessage, setPopupMessage] = useState("");
+	const shareButtonRef = useRef<HTMLButtonElement>(null);
+	const backgroundRef = useRef<HTMLDivElement>(null);
+	const { guessIndex, correctWord, guessedWordsGrid, gameDone } =
+		useAppSelector((state) => state.word);
 
 	const getEmoji = (num: number) => {
 		if (num === 1) return "⬛";
@@ -21,6 +22,12 @@ const Modal = () => {
 	};
 
 	const shareResult = () => {
+		if (!gameDone) {
+			setPopupMessage("Game not won");
+			setPopupVisible(true);
+			return;
+		}
+
 		const now = new Date();
 		let ret = `Vari-Wordle ${
 			now.getMonth() + 1
@@ -38,6 +45,7 @@ const Modal = () => {
 		if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
 			navigator.share({ text: ret });
 		} else {
+			setPopupMessage("Copied to clipboard");
 			setPopupVisible(true);
 			navigator.clipboard.writeText(ret);
 		}
@@ -45,13 +53,13 @@ const Modal = () => {
 	return (
 		<div
 			className="absolute z-20 top-0 bottom-0 right-0 left-0 bg-gray-600/50"
-			ref={ref}
+			ref={backgroundRef}
 			onClick={(e) => {
-				if (e.target === ref.current) dispatch(toggleModal());
+				if (e.target === backgroundRef.current) dispatch(toggleModal());
 			}}
 		>
 			{popupVisible && (
-				<Popup setVisible={setPopupVisible} message={"Copied to clipboard"} />
+				<Popup setVisible={setPopupVisible} message={popupMessage} />
 			)}
 			<div className="absolute z-30 top-10 bottom-10 left-4 right-4 md:left-[50%] md:-translate-x-[50%] md:w-[500px] bg-white dark:bg-slate-800 rounded-md">
 				<div className="flex flex-col justify-between h-full">
@@ -70,6 +78,7 @@ const Modal = () => {
 					<button
 						className="m-3 bg-blue-500 rounded-full h-10"
 						onClick={shareResult}
+						ref={shareButtonRef}
 					>
 						Share <BsShare className="inline text-sm -translate-y-[1px]" />
 					</button>
