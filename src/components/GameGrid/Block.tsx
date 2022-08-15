@@ -1,12 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../redux/store";
-import { addGuessedLetter } from "../../redux/slices/wordSlice";
+import { RootState, useAppSelector } from "../../redux/store";
 
 type Props = {
 	x: number;
 	y: number;
-	status: Status;
 };
 
 export const enum Status {
@@ -16,52 +14,62 @@ export const enum Status {
 	green,
 }
 
-const Block: React.FC<Props> = ({ status, x, y }) => {
+const Block: React.FC<Props> = ({ x, y }) => {
 	const ref = useRef<HTMLDivElement>(null);
 	const { guessIndex, currentGuess, guessedWords } = useSelector(
 		(state: RootState) => state.word
 	);
 	const dispatch = useDispatch();
 
-	const getLetter = (x: number, y: number): string => {
-		if (guessIndex === y) {
-			return currentGuess.split("")[x]?.toUpperCase();
-		} else if (guessIndex > y) {
-			return guessedWords[y].split("")[x]?.toUpperCase();
-		}
-		return "";
-	};
+	const statusGrid = useAppSelector((state) => state.word.guessedWordsGrid);
+
+	const getLetter = useCallback(
+		(x: number, y: number): string => {
+			if (guessIndex === y) {
+				return currentGuess.split("")[x]?.toUpperCase();
+			} else if (guessIndex > y) {
+				return guessedWords[y].split("")[x]?.toUpperCase();
+			}
+			return "";
+		},
+		[currentGuess, guessIndex, guessedWords]
+	);
 
 	useEffect(() => {
-		const getLetter = (x: number, y: number): string => {
-			return guessedWords[y].split("")[x]?.toUpperCase();
-		};
+		// Catch if the row has not been created yet
+		if (statusGrid[y] === undefined) return;
 
 		if (ref && ref.current) {
-			if (status !== Status.empty) {
+			if (statusGrid[y][x] !== Status.empty) {
 				ref.current.classList.replace("border-gray-600", "border-transparent");
 				ref.current.classList.add("text-white");
 			}
 
-			switch (status) {
+			switch (statusGrid[y][x]) {
 				case Status.yellow:
 					ref.current.classList.add("bg-yellow-400");
-					dispatch(addGuessedLetter([getLetter(x, y), Status.yellow]));
 					break;
 				case Status.green:
 					ref.current.classList.add("bg-green-600");
-					dispatch(addGuessedLetter([getLetter(x, y), Status.green]));
 					break;
 				case Status.guessed:
 					ref.current.classList.add("bg-gray-400");
 					ref.current.classList.add("dark:bg-slate-700");
-					dispatch(addGuessedLetter([getLetter(x, y), Status.guessed]));
 					break;
 				default:
 					break;
 			}
 		}
-	}, [currentGuess, dispatch, guessIndex, guessedWords, status, x, y]);
+	}, [
+		currentGuess,
+		dispatch,
+		getLetter,
+		guessIndex,
+		guessedWords,
+		statusGrid,
+		x,
+		y,
+	]);
 
 	return (
 		<div

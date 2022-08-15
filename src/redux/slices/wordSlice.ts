@@ -29,6 +29,8 @@ interface wordData {
 	guessIndex: number;
 	guessedWords: string[];
 	guessedLetters: [string, Status][];
+	guessedWordsGrid: Status[][];
+	gameDone: boolean;
 	modal: boolean;
 }
 
@@ -43,6 +45,8 @@ const initialState: wordData = {
 	guessIndex: 0,
 	guessedWords: [],
 	guessedLetters: [],
+	guessedWordsGrid: [],
+	gameDone: false,
 	modal: false,
 };
 
@@ -51,24 +55,12 @@ const wordSlice = createSlice({
 	initialState,
 	reducers: {
 		typeLetter: (state, { payload }) => {
-			if (state.currentGuess.length < state.correctWord.word.length) {
+			if (
+				state.currentGuess.length < state.correctWord.word.length &&
+				!state.gameDone
+			) {
 				state.currentGuess += payload;
 			}
-		},
-		addGuessedLetter: (state, { payload }) => {
-			const letter: string = payload[0].toUpperCase();
-			const newStatus: Status = payload[1];
-
-			for (let i = 0; i < state.guessedLetters.length; i++) {
-				if (state.guessedLetters[i][0] === letter) {
-					// Ensure only 'greater' statuses can replace an existing status
-					if (newStatus.valueOf() > state.guessedLetters[i][1].valueOf()) {
-						state.guessedLetters[i][1] = newStatus;
-					}
-					return;
-				}
-			}
-			state.guessedLetters.push([letter, newStatus]);
 		},
 		removeLetter: (state) => {
 			const length = state.currentGuess.length;
@@ -77,8 +69,40 @@ const wordSlice = createSlice({
 			}
 		},
 		guessWord: (state) => {
+			const addGuessedLetter = (letter: string, status: Status) => {
+				for (let i = 0; i < state.guessedLetters.length; i++) {
+					if (state.guessedLetters[i][0] === letter) {
+						// Ensure only 'greater' statuses can replace an existing status
+						if (status.valueOf() > state.guessedLetters[i][1].valueOf()) {
+							state.guessedLetters[i][1] = status;
+						}
+						return;
+					}
+				}
+				state.guessedLetters.push([letter, status]);
+			};
+
+			// Add guessed word store and reset currently guessed word
 			state.guessedWords.push(state.currentGuess);
 			state.currentGuess = "";
+
+			let newStatusRow: Status[] = [];
+
+			// Generate new row statuses
+			for (let i = 0; i < state.correctWord.word.length; i++) {
+				const status = getStatus(
+					state.guessedWords[state.guessIndex],
+					i,
+					state.correctWord.word
+				);
+				if (status !== Status.guessed)
+					addGuessedLetter(state.guessedWords[state.guessIndex][i], status);
+				newStatusRow.push(status);
+			}
+
+			state.guessedWordsGrid.push(newStatusRow);
+
+			// Increment guessIndex to next row
 			state.guessIndex++;
 		},
 		resetGame: (state) => {
@@ -87,10 +111,14 @@ const wordSlice = createSlice({
 			state.guessIndex = initialState.guessIndex;
 			state.guessedLetters = initialState.guessedLetters;
 			state.guessedWords = initialState.guessedWords;
+			state.gameDone = initialState.gameDone;
 			state.modal = initialState.modal;
 		},
 		toggleModal: (state) => {
 			state.modal = !state.modal;
+		},
+		completeGame: (state) => {
+			state.gameDone = true;
 		},
 	},
 	extraReducers(builder) {
@@ -109,13 +137,52 @@ const wordSlice = createSlice({
 	},
 });
 
+// Adapted from https://codereview.stackexchange.com/questions/274301/wordle-color-algorithm-in-javascript
+const getStatus = (guess: string, index: number, correctWord: string) => {
+	const word = correctWord.toLowerCase();
+	guess = guess.toLowerCase();
+
+	// correct (matched) index letter
+	if (guess[index] === word[index]) {
+		return Status.green;
+	}
+
+	let wrongWord = 0;
+	let wrongGuess = 0;
+	for (let i = 0; i < word.length; i++) {
+		// count the wrong (unmatched) letters
+		if (word[i] === guess[index] && guess[i] !== guess[index]) {
+			wrongWord++;
+		}
+		if (i <= index) {
+			if (guess[i] === guess[index] && word[i] !== guess[index]) {
+				wrongGuess++;
+			}
+		}
+
+		// an unmatched guess letter is wrong if it pairs with
+		// an unmatched correctWord letter
+		if (i >= index) {
+			if (wrongGuess === 0) {
+				break;
+			}
+			if (wrongGuess <= wrongWord) {
+				return Status.yellow;
+			}
+		}
+	}
+
+	// otherwise not any
+	return Status.guessed;
+};
+
 export const {
 	typeLetter,
 	removeLetter,
 	guessWord,
-	addGuessedLetter,
 	resetGame,
 	toggleModal,
+	completeGame,
 } = wordSlice.actions;
 
 export const getWordStatus = (state: RootState) =>

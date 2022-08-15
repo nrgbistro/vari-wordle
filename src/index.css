@@ -13,4 +13,7 @@
     .pb-safe {
       padding-bottom: max(env(safe-area-inset-bottom), .25em);
     }
+    .font-variant-small {
+    font-variant: small-caps;
+  }
   }
