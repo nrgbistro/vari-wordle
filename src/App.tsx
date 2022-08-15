@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Status } from "./components/GameGrid/Block";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
@@ -35,6 +35,17 @@ const App = () => {
 	const [popupVisible, setPopupVisible] = useState(false);
 	const [popupMessage, setPopupMessage] = useState("");
 	const [popupDuration, setPopupDuration] = useState(2000);
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (
+			navigator.userAgent.toLowerCase().match(/mobile/i) &&
+			containerRef.current
+		) {
+			containerRef.current.classList.remove("min-h-screen");
+			containerRef.current.classList.add("min-h-screen-mobile");
+		}
+	}, []);
 
 	useEffect(() => {
 		if (guessIndex > NUMBER_OF_TRIES[correctWord.word.length - 4]) {
@@ -142,7 +153,10 @@ const App = () => {
 	}, [correctWord.word.length, currentGuess, dispatch, safegGuessWord]);
 
 	return (
-		<div className="min-h-screen pb-safe dark:bg-gray-800 flex flex-col items-center">
+		<div
+			className="min-h-screen dark:bg-gray-800 flex flex-col items-center"
+			ref={containerRef}
+		>
 			{popupVisible ? (
 				<Popup
 					message={popupMessage}
