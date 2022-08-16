@@ -27,14 +27,11 @@ const Modal = () => {
 			setPopupVisible(true);
 			return;
 		}
-
-		const now = new Date();
-		let ret = `Vari-Wordle ${
-			now.getMonth() + 1
-		}/${now.getDate()}/${now.getFullYear()} ${guessIndex}/${
+		let ret = `Vari-Wordle ${correctWord.count} ${guessIndex}/${
 			NUMBER_OF_TRIES[correctWord.word.length - 4]
 		}\n`;
 
+		// Add emojis based on guessedWordsGrid
 		for (let i = 0; i < guessedWordsGrid.length; i++) {
 			ret = ret + "\n";
 			for (let j = 0; j < correctWord.word.length; j++) {

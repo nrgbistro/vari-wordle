@@ -37,7 +37,7 @@ const Block: React.FC<Props> = ({ x, y }) => {
 
 	useEffect(() => {
 		// Catch if the row has not been created yet
-		if (statusGrid[y] === undefined) return;
+		if (statusGrid === undefined || statusGrid[y] === undefined) return;
 
 		if (ref && ref.current) {
 			if (statusGrid[y][x] !== Status.empty) {

@@ -17,6 +17,7 @@
 		"dotenv": "^16.0.1",
 		"express": "^4.18.1",
 		"firebase": "^9.9.2",
+		"firebase-admin": "^11.0.1",
 		"fs": "^0.0.1-security",
 		"is-word": "^1.0.4",
 		"path": "^0.12.7",
