@@ -37,6 +37,7 @@ const App = () => {
 	const [popupDuration, setPopupDuration] = useState(2000);
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	// Adjust height for mobile
 	useEffect(() => {
 		if (
 			navigator.userAgent.toLowerCase().match(/mobile/i) &&
@@ -47,8 +48,9 @@ const App = () => {
 		}
 	}, []);
 
+	// Check for game lost
 	useEffect(() => {
-		if (guessIndex > NUMBER_OF_TRIES[correctWord.word.length - 4]) {
+		if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
 			dispatch(completeGame());
 			setPopupMessage(correctWord.word);
 			setPopupDuration(5000);
@@ -59,6 +61,7 @@ const App = () => {
 		}
 	}, [correctWord.word, dispatch, guessIndex]);
 
+	// Check for game won
 	useEffect(() => {
 		if (guessIndex === 0 || gameDone) return;
 		let wonCheck: boolean = true;

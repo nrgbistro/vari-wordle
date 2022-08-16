@@ -211,7 +211,7 @@ const Keyboard = ({
 						dispatch(removeLetter());
 					}}
 				>
-					<BsBackspace className="text-xl mx-4" />
+					<BsBackspace className="text-xl mx-auto sm:mx-4" />
 				</Key>
 			</KeyRow>
 		</div>

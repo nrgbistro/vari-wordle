@@ -53,7 +53,7 @@ const Key: React.FC<Props> = ({ action, children }) => {
 				}}
 				className="w-full"
 			>
-				<h1 className="my-4 mx-2 font-bold">{children}</h1>
+				<h1 className="my-4 sm:mx-2 font-bold font-mono mx-auto">{children}</h1>
 			</button>
 		</div>
 	);

@@ -14,7 +14,7 @@ const Grid = () => {
 	}
 
 	return (
-		<div className="flex flex-col h-full w-full md:w-[30rem] gap-1 grow items-center content-center p-2">
+		<div className="flex flex-col h-full w-full sm:w-[30rem] gap-1 grow items-center content-center p-2">
 			{correctWord !== null ? grid : null}
 		</div>
 	);
