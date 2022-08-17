@@ -1,11 +1,5 @@
 const db = require("./firebase-config.ts");
-const {
-	collection,
-	addDoc,
-	getDocs,
-	orderBy,
-	query,
-} = require("firebase/firestore");
+const { collection, addDoc, onSnapshot } = require("firebase/firestore");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -16,30 +10,32 @@ const port = process.env.PORT || 3001;
 
 let currentWord = "";
 let wordleCount = 0;
+let unsubscribe = () => {};
 
 const checkDatabase = async () => {
-	const querySnapshot = await getDocs(
-		query(collection(db, "wordBank"), orderBy("count"))
-	);
-	// First word check
-	if (querySnapshot.docs.length === 0) {
-		const newWord = generateNewWord();
-		currentWord = newWord;
-		wordleCount = 1;
-		try {
-			await addDoc(collection(db, "wordBank"), {
-				word: newWord,
-				count: wordleCount,
-			});
-		} catch (e) {
-			console.error("Error adding document: ", e);
+	unsubscribe();
+	unsubscribe = onSnapshot(collection(db, "wordBank"), async (snapshot) => {
+		if (snapshot.empty) {
+			const newWord = generateNewWord();
+			currentWord = newWord;
+			wordleCount = 1;
+			try {
+				await addDoc(collection(db, "wordBank"), {
+					word: newWord,
+					count: wordleCount,
+				});
+			} catch (e) {
+				console.error("Error adding document: ", e);
+			}
 		}
-	} else {
-		const data = querySnapshot.docs[querySnapshot.docs.length - 1].data();
+		if (snapshot.empty) return;
+		const data = snapshot.docs
+			.sort((a, b) => b.data().count - a.data().count)[0]
+			.data();
+		console.log(data);
 		currentWord = data.word;
 		wordleCount = data.count;
-	}
-	console.log("Current word: " + currentWord);
+	});
 };
 
 checkDatabase();
@@ -62,16 +58,24 @@ const generateNewWord = () => {
 (async function loop() {
 	let now = new Date();
 	if (now.getHours() === 0 && now.getMinutes() === 0) {
-		currentWord = generateNewWord();
+		const newWord = generateNewWord();
 		wordleCount++;
 		try {
 			await addDoc(collection(db, "wordBank"), {
-				word: currentWord,
+				word: newWord,
 				count: wordleCount,
 			});
 		} catch (e) {
 			console.error("Error adding document: ", e);
 		}
+		unsubscribe();
+		unsubscribe = onSnapshot(collection(db, "wordBank"), (snapshot) => {
+			const data = snapshot.docs
+				.sort((a, b) => b.data().count - a.data().count)[0]
+				.data();
+			currentWord = data.word;
+			wordleCount = data.count;
+		});
 	}
 	now = new Date(); // allow for time passing
 	let delay = 60000 - (now % 60000); // exact ms to next minute interval

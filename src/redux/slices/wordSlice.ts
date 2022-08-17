@@ -86,7 +86,7 @@ const wordSlice = createSlice({
 			state.guessedWords.push(state.currentGuess);
 			state.currentGuess = "";
 
-			let newStatusRow: Status[] = [];
+			const newStatusRow: Status[] = [];
 
 			// Generate new row statuses
 			for (let i = 0; i < state.correctWord.word.length; i++) {
