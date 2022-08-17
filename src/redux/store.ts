@@ -1,26 +1,32 @@
 import { configureStore } from "@reduxjs/toolkit";
 import wordReducer from "./slices/wordSlice";
+import statisticsReducer from "./slices/statisticsSlice";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import thunkMiddleware from "redux-thunk";
 import { TypedUseSelectorHook, useSelector, useDispatch } from "react-redux";
 
-const reducers = combineReducers({
-	word: wordReducer,
-});
-
-const persistConfig = {
-	key: "root",
-	storage: storage,
+const wordPersistConfig = {
+	key: "word",
+	storage,
 	// Turn off persistence for development
 	// ...(process.env.NODE_ENV !== "production" ? { blacklist: ["word"] } : {}),
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+const statsPersistConfig = {
+	key: "statistics",
+	storage,
+	blacklist: ["*"],
+};
+
+const rootReducer = combineReducers({
+	word: persistReducer(wordPersistConfig, wordReducer),
+	statistics: persistReducer(statsPersistConfig, statisticsReducer),
+});
 
 const store = configureStore({
-	reducer: persistedReducer,
+	reducer: rootReducer,
 	devTools: process.env.NODE_ENV !== "production",
 	middleware: [thunkMiddleware],
 });

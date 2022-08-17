@@ -5,6 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import { NUMBER_OF_TRIES } from "../../App";
 import Popup from "./PopupMessage";
+import GameStats from "./gameStats";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -68,9 +69,7 @@ const Modal = () => {
 						/>
 					</div>
 					<div className="w-full text-center">
-						STATS CURRENTLY WIP
-						<br />
-						Please check back later
+						<GameStats />
 					</div>
 					<button
 						className="m-3 bg-blue-500 rounded-full h-10"

@@ -17,6 +17,13 @@ import {
 	toggleModal,
 	completeGame,
 } from "./redux/slices/wordSlice";
+import {
+	incrementGamesPlayed,
+	incrementLost,
+	incrementStreak,
+	incrementWon,
+	setStreaking,
+} from "./redux/slices/statisticsSlice";
 import { useAppDispatch, useAppSelector } from "./redux/store";
 
 export const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
@@ -37,6 +44,16 @@ const App = () => {
 	const [popupDuration, setPopupDuration] = useState(2000);
 	const containerRef = useRef<HTMLDivElement>(null);
 
+	const checkGameWon = useCallback(() => {
+		let wonCheck = true;
+		for (let i = 0; i < correctWord.word.length; i++) {
+			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
+				wonCheck = false;
+			}
+		}
+		return wonCheck;
+	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
+
 	// Adjust height for mobile
 	useEffect(() => {
 		if (
@@ -48,55 +65,69 @@ const App = () => {
 		}
 	}, []);
 
+	const lostGame = useCallback(() => {
+		dispatch(completeGame());
+		dispatch(incrementLost());
+		dispatch(setStreaking(false));
+		setPopupMessage(correctWord.word);
+		setPopupDuration(5000);
+		setPopupVisible(true);
+		setTimeout(() => {
+			dispatch(toggleModal());
+		}, 1500);
+	}, [correctWord.word, dispatch]);
+
+	const wonGame = useCallback(() => {
+		dispatch(completeGame());
+		dispatch(incrementWon());
+		dispatch(setStreaking(true));
+		dispatch(incrementStreak());
+		setPopupMessage("You won!");
+		setPopupDuration(2000);
+		setPopupVisible(true);
+		setTimeout(() => {
+			dispatch(toggleModal());
+		}, 2000);
+	}, [dispatch]);
+
 	// Check for game lost
 	useEffect(() => {
 		if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
-			dispatch(completeGame());
-			setPopupMessage(correctWord.word);
-			setPopupDuration(5000);
-			setPopupVisible(true);
-			setTimeout(() => {
-				dispatch(toggleModal());
-			}, 1500);
+			lostGame();
 		}
-	}, [correctWord.word, dispatch, guessIndex]);
+	}, [correctWord.word, dispatch, guessIndex, lostGame]);
 
 	// Check for game won
 	useEffect(() => {
 		if (guessIndex === 0 || gameDone) return;
-		let wonCheck: boolean = true;
-		for (let i = 0; i < correctWord.word.length; i++) {
-			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
-				wonCheck = false;
-			}
-		}
+		const wonCheck = checkGameWon();
 		if (wonCheck) {
-			dispatch(completeGame());
-			setPopupMessage("You won!");
-			setPopupDuration(2000);
-			setPopupVisible(true);
-			setTimeout(() => {
-				dispatch(toggleModal());
-			}, 2000);
+			wonGame();
 		}
 	}, [
+		checkGameWon,
 		correctWord.word.length,
 		dispatch,
 		gameDone,
 		guessIndex,
 		guessedWordsGrid,
+		wonGame,
 	]);
 
+	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
 		if (correctWord.word.length > 0) {
 			const response = await axios.get("/api/word");
 			const newWord = response.data.word;
 			if (newWord !== correctWord.word) {
+				if (!checkGameWon() && guessedWordsGrid.length > 0) {
+					dispatch(setStreaking(false));
+				}
 				dispatch(resetGame());
 				dispatch<any>(fetchWord());
 			}
 		}
-	}, [correctWord.word, dispatch]);
+	}, [checkGameWon, correctWord.word, dispatch, guessedWordsGrid.length]);
 
 	const safegGuessWord = useCallback(async () => {
 		if (gameDone) return;
@@ -110,8 +141,17 @@ const App = () => {
 			setPopupVisible(true);
 			return;
 		}
+		if (guessedWordsGrid.length === 0) {
+			dispatch(incrementGamesPlayed());
+		}
 		dispatch(guessWord());
-	}, [correctWord.word.length, currentGuess, dispatch, gameDone]);
+	}, [
+		correctWord.word.length,
+		currentGuess,
+		dispatch,
+		gameDone,
+		guessedWordsGrid.length,
+	]);
 
 	// Check for a new word on first load and on each window focus event
 	useEffect(() => {
