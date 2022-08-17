@@ -1,5 +1,5 @@
 const db = require("./firebase-config.ts");
-const { collection, addDoc, onSnapshot } = require("firebase/firestore");
+const { collection, addDoc, onSnapshot, query } = require("firebase/firestore");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -14,20 +14,21 @@ let unsubscribe = () => {};
 
 const checkDatabase = async () => {
 	unsubscribe();
-	unsubscribe = onSnapshot(collection(db, "wordBank"), async (snapshot) => {
-		if (snapshot.empty) {
-			const newWord = generateNewWord();
-			currentWord = newWord;
-			wordleCount = 1;
-			try {
-				await addDoc(collection(db, "wordBank"), {
-					word: newWord,
-					count: wordleCount,
-				});
-			} catch (e) {
-				console.error("Error adding document: ", e);
-			}
+	const querySnapshot = query(collection(db, "wordBank"));
+	if (querySnapshot.empty) {
+		const newWord = generateNewWord();
+		currentWord = newWord;
+		wordleCount = 1;
+		try {
+			await addDoc(collection(db, "wordBank"), {
+				word: newWord,
+				count: wordleCount,
+			});
+		} catch (e) {
+			console.error("Error adding document: ", e);
 		}
+	}
+	unsubscribe = onSnapshot(collection(db, "wordBank"), async (snapshot) => {
 		if (snapshot.empty) return;
 		const data = snapshot.docs
 			.sort((a, b) => b.data().count - a.data().count)[0]

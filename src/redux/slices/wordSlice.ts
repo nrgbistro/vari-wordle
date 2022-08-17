@@ -104,16 +104,7 @@ const wordSlice = createSlice({
 			// Increment guessIndex to next row
 			state.guessIndex++;
 		},
-		resetGame: (state) => {
-			state.correctWord = initialState.correctWord;
-			state.currentGuess = initialState.currentGuess;
-			state.guessIndex = initialState.guessIndex;
-			state.guessedLetters = initialState.guessedLetters;
-			state.guessedWords = initialState.guessedWords;
-			state.guessedWordsGrid = initialState.guessedWordsGrid;
-			state.gameDone = initialState.gameDone;
-			state.modal = initialState.modal;
-		},
+		resetGame: () => initialState,
 		toggleModal: (state) => {
 			state.modal = !state.modal;
 		},
