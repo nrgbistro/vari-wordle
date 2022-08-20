@@ -7,6 +7,7 @@ import Popup from "./PopupMessage";
 import GameStats from "./gameStats";
 import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
+import useDarkMode from "use-dark-mode";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -17,8 +18,11 @@ const Modal = () => {
 	const { guessIndex, correctWord, guessedWordsGrid, gameDone } =
 		useAppSelector((state) => state.word);
 
+	const darkMode = useDarkMode();
+	console.log(darkMode);
+
 	const getEmoji = (num: number) => {
-		if (num === 1) return "⬛";
+		if (num === 1) return darkMode.value ? "⬛" : "⬜";
 		if (num === 2) return "🟨";
 		else if (num === 3) return "🟩";
 	};

@@ -49,9 +49,10 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 app.use(express.static(path.resolve(__dirname, "../build")));
 
 const whitelist = [
-	"http://localhost:3000",
-	"https://vari-wordle.herokuapp.com",
-	"https://vari-wordle.nrgserver.me",
+	"http://localhost:3000/",
+	"http://localhost:3001/",
+	"https://vari-wordle.herokuapp.com/",
+	"https://vari-wordle.nrgserver.me/",
 ];
 const corsOptions = {
 	origin: (origin, cb) => {
