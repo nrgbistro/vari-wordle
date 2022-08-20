@@ -26,7 +26,7 @@ const GuessDistribution = () => {
 					(selected && "bg-green-500")
 				}
 			>
-				<p className="mx-2">{number}</p>
+				<p className="mx-3 my-1 text-xl">{number}</p>
 			</button>
 		);
 	};
@@ -44,6 +44,7 @@ const GuessDistribution = () => {
 			x: { suggestedMax: 5 },
 		},
 		responsive: true,
+		maintainAspectRatio: false,
 		plugins: {
 			legend: { display: false },
 			title: {
@@ -80,9 +81,9 @@ const GuessDistribution = () => {
 	const paginationData = [4, 5, 6, 7, 8];
 
 	return (
-		<div className="mx-10">
+		<div className="mx-10 h-[300px] mb-20">
 			<h2 className="w-full text-center">{"Guess Distribution"}</h2>
-			<Chart type="bar" data={data} options={options} />
+			<Chart type="bar" data={data} options={options} className="h-fit" />
 			<div className="flex flex-row justify-center gap-4 mt-3">
 				{paginationData.map((num, i) => (
 					<Paginator number={num} selected={num === currentPage} key={i} />

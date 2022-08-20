@@ -19,7 +19,6 @@ const Modal = () => {
 		useAppSelector((state) => state.word);
 
 	const darkMode = useDarkMode();
-	console.log(darkMode);
 
 	const getEmoji = (num: number) => {
 		if (num === 1) return darkMode.value ? "⬛" : "⬜";

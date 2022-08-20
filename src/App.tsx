@@ -59,6 +59,8 @@ const App = () => {
 	useEffect(() => {
 		if (
 			navigator.userAgent.toLowerCase().match(/mobile/i) &&
+			navigator.userAgent.match(/ipad|ipod|iphone/i) &&
+			"ontouchend" in document &&
 			containerRef.current
 		) {
 			containerRef.current.classList.remove("min-h-screen");
