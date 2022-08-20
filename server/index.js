@@ -1,5 +1,6 @@
-const db = require("./firebase-config.ts");
+const db = require("./firebase-serverside.ts");
 const { collection, addDoc, onSnapshot, query } = require("firebase/firestore");
+const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -46,6 +47,24 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../build")));
+
+const whitelist = [
+	"http://localhost:3000",
+	"https://vari-wordle.herokuapp.com",
+	"https://vari-wordle.nrgserver.me",
+];
+const corsOptions = {
+	origin: (origin, cb) => {
+		if (whitelist.includes(origin) || !origin) {
+			cb(null, true);
+		} else {
+			cb(new Error("Not allowd by CORS"));
+		}
+	},
+	optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 const generateNewWord = () => {
 	let newWord = rword.generate(1, { length: "4-8" });
