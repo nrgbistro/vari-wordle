@@ -47,8 +47,8 @@ const GuessDistribution = () => {
 		plugins: {
 			legend: { display: false },
 			title: {
-				display: false,
-				text: "Guess Distribution - Word Length " + currentPage,
+				display: true,
+				text: `${currentPage} Character Words`,
 			},
 			tooltip: { enabled: true },
 		},
@@ -81,11 +81,9 @@ const GuessDistribution = () => {
 
 	return (
 		<div className="mx-10">
-			<h2 className="w-full text-center">
-				{"Guess Distribution (Length " + currentPage + ")"}
-			</h2>
+			<h2 className="w-full text-center">{"Guess Distribution"}</h2>
 			<Chart type="bar" data={data} options={options} />
-			<div className="flex flex-row justify-center gap-4">
+			<div className="flex flex-row justify-center gap-4 mt-3">
 				{paginationData.map((num, i) => (
 					<Paginator number={num} selected={num === currentPage} key={i} />
 				))}
