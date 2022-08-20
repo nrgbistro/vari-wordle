@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import { NUMBER_OF_TRIES } from "../../App";
+import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import { RootState } from "../../redux/store";
 import Row from "./Row";
 

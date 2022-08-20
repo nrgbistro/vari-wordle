@@ -14,19 +14,19 @@ import {
 	fetchWord,
 	checkWord,
 	resetGame,
-	toggleModal,
 	completeGame,
+	openModal,
 } from "./redux/slices/wordSlice";
 import {
+	addGuess,
 	incrementGamesPlayed,
 	incrementLost,
 	incrementStreak,
 	incrementWon,
+	NUMBER_OF_TRIES,
 	setStreaking,
 } from "./redux/slices/statisticsSlice";
 import { useAppDispatch, useAppSelector } from "./redux/store";
-
-export const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -45,6 +45,7 @@ const App = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const checkGameWon = useCallback(() => {
+		if (guessIndex === 0 || gameDone) return false;
 		let wonCheck = true;
 		for (let i = 0; i < correctWord.word.length; i++) {
 			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
@@ -52,7 +53,7 @@ const App = () => {
 			}
 		}
 		return wonCheck;
-	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
+	}, [correctWord.word.length, gameDone, guessIndex, guessedWordsGrid]);
 
 	// Adjust height for mobile
 	useEffect(() => {
@@ -73,7 +74,7 @@ const App = () => {
 		setPopupDuration(5000);
 		setPopupVisible(true);
 		setTimeout(() => {
-			dispatch(toggleModal());
+			dispatch(openModal());
 		}, 1500);
 	}, [correctWord.word, dispatch]);
 
@@ -82,24 +83,34 @@ const App = () => {
 		dispatch(incrementWon());
 		dispatch(setStreaking(true));
 		dispatch(incrementStreak());
+		dispatch(addGuess([correctWord.word.length, guessIndex - 1]));
 		setPopupMessage("You won!");
 		setPopupDuration(2000);
 		setPopupVisible(true);
 		setTimeout(() => {
-			dispatch(toggleModal());
+			dispatch(openModal());
 		}, 2000);
-	}, [dispatch]);
+	}, [correctWord.word.length, dispatch, guessIndex]);
 
 	// Check for game lost
 	useEffect(() => {
-		if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
+		if (
+			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4] &&
+			checkGameWon()
+		) {
 			lostGame();
 		}
-	}, [correctWord.word, dispatch, guessIndex, lostGame]);
+	}, [
+		checkGameWon,
+		correctWord.word,
+		dispatch,
+		gameDone,
+		guessIndex,
+		lostGame,
+	]);
 
 	// Check for game won
 	useEffect(() => {
-		if (guessIndex === 0 || gameDone) return;
 		const wonCheck = checkGameWon();
 		if (wonCheck) {
 			wonGame();

@@ -33,8 +33,8 @@ const GameStats = () => {
 
 	return (
 		<div className="flex flex-row w-full justify-center gap-6">
-			{data.map(({ data, text }) => (
-				<Item topField={data.toString()} name={text} />
+			{data.map(({ data, text }, index) => (
+				<Item topField={data.toString()} name={text} key={index} />
 			))}
 		</div>
 	);

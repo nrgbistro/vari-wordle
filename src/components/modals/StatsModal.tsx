@@ -3,9 +3,10 @@ import { toggleModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
-import { NUMBER_OF_TRIES } from "../../App";
 import Popup from "./PopupMessage";
 import GameStats from "./gameStats";
+import GuessDistribution from "./GuessDistribution";
+import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -71,8 +72,11 @@ const Modal = () => {
 					<div className="w-full text-center">
 						<GameStats />
 					</div>
+					<div>
+						<GuessDistribution />
+					</div>
 					<button
-						className="m-3 bg-blue-500 rounded-full h-10"
+						className="m-3 bg-blue-500 rounded-full h-10 text-white"
 						onClick={shareResult}
 						ref={shareButtonRef}
 					>

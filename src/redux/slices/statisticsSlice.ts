@@ -9,6 +9,19 @@ interface StatsData {
 	maxStreak: number;
 	guessDistribution: number[][];
 }
+export const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
+
+const generateInitialGuessDistribution = (): number[][] => {
+	let ret = [];
+	for (let i = 4; i <= 8; i++) {
+		let temp = [];
+		for (let j = 0; j < NUMBER_OF_TRIES[i - 4]; j++) {
+			temp.push(0);
+		}
+		ret.push(temp);
+	}
+	return ret;
+};
 
 const initialState: StatsData = {
 	gamesPlayed: 0,
@@ -17,7 +30,7 @@ const initialState: StatsData = {
 	streaking: false,
 	currentStreak: 0,
 	maxStreak: 0,
-	guessDistribution: [],
+	guessDistribution: generateInitialGuessDistribution(),
 };
 
 const StatisticsSlice = createSlice({
@@ -42,6 +55,10 @@ const StatisticsSlice = createSlice({
 		setStreaking: (state, { payload }) => {
 			state.streaking = payload;
 		},
+		// Payload shape: [{wordLength}, {numberOfTries}]
+		addGuess: (state, { payload }) => {
+			state.guessDistribution[payload[0] - 4][payload[1]]++;
+		},
 	},
 });
 
@@ -51,6 +68,7 @@ export const {
 	incrementGamesPlayed,
 	setStreaking,
 	incrementStreak,
+	addGuess,
 } = StatisticsSlice.actions;
 
 export default StatisticsSlice.reducer;

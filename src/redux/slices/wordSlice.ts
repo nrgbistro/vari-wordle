@@ -108,6 +108,9 @@ const wordSlice = createSlice({
 		toggleModal: (state) => {
 			state.modal = !state.modal;
 		},
+		openModal: (state) => {
+			state.modal = true;
+		},
 		completeGame: (state) => {
 			state.gameDone = true;
 		},
@@ -174,6 +177,7 @@ export const {
 	resetGame,
 	toggleModal,
 	completeGame,
+	openModal,
 } = wordSlice.actions;
 
 export const getWordStatus = (state: RootState) =>
