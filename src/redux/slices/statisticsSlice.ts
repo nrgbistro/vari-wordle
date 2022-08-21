@@ -57,6 +57,9 @@ const StatisticsSlice = createSlice({
 		},
 		// Payload shape: [{wordLength}, {numberOfTries}]
 		addGuess: (state, { payload }) => {
+			if (state.guessDistribution.length === 0) {
+				state.guessDistribution = generateInitialGuessDistribution();
+			}
 			state.guessDistribution[payload[0] - 4][payload[1]]++;
 		},
 	},

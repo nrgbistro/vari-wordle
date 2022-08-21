@@ -98,7 +98,7 @@ const App = () => {
 	useEffect(() => {
 		if (
 			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4] &&
-			checkGameWon()
+			!checkGameWon()
 		) {
 			lostGame();
 		}
