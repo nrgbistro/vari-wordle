@@ -20,7 +20,6 @@ import {
 import {
 	addGuess,
 	incrementGamesPlayed,
-	incrementLost,
 	incrementStreak,
 	incrementWon,
 	NUMBER_OF_TRIES,
@@ -45,7 +44,7 @@ const App = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const checkGameWon = useCallback(() => {
-		if (guessIndex === 0 || gameDone) return false;
+		if (guessIndex === 0) return false;
 		let wonCheck = true;
 		for (let i = 0; i < correctWord.word.length; i++) {
 			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
@@ -53,7 +52,7 @@ const App = () => {
 			}
 		}
 		return wonCheck;
-	}, [correctWord.word.length, gameDone, guessIndex, guessedWordsGrid]);
+	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
 
 	// Adjust height for mobile
 	useEffect(() => {
@@ -70,7 +69,6 @@ const App = () => {
 
 	const lostGame = useCallback(() => {
 		dispatch(completeGame());
-		dispatch(incrementLost());
 		dispatch(setStreaking(false));
 		setPopupMessage(correctWord.word);
 		setPopupDuration(5000);
@@ -94,38 +92,16 @@ const App = () => {
 		}, 2000);
 	}, [correctWord.word.length, dispatch, guessIndex]);
 
-	// Check for game lost
+	// Check for game won or lost
 	useEffect(() => {
-		if (
-			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4] &&
-			checkGameWon()
+		if(checkGameWon()) {
+			wonGame();
+		} else if (
+			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]
 		) {
 			lostGame();
 		}
-	}, [
-		checkGameWon,
-		correctWord.word,
-		dispatch,
-		gameDone,
-		guessIndex,
-		lostGame,
-	]);
-
-	// Check for game won
-	useEffect(() => {
-		const wonCheck = checkGameWon();
-		if (wonCheck) {
-			wonGame();
-		}
-	}, [
-		checkGameWon,
-		correctWord.word.length,
-		dispatch,
-		gameDone,
-		guessIndex,
-		guessedWordsGrid,
-		wonGame,
-	]);
+	}, [checkGameWon, correctWord.word, dispatch, gameDone, guessIndex, lostGame, wonGame]);
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
