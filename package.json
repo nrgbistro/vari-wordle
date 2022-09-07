@@ -43,7 +43,8 @@
 		"concurrently": "^7.3.0",
 		"nodemon": "^2.0.19",
 		"postcss": "^8.4.14",
-		"tailwindcss": "^3.1.6"
+		"tailwindcss": "^3.1.6",
+		"ts-node": "^10.9.1"
 	},
 	"scripts": {
 		"dev": "concurrently \"nodemon server/index.js\" \"react-scripts start\"",
