@@ -12,10 +12,10 @@ import {
 	guessWord,
 	getWordStatus,
 	fetchWord,
-	checkWord,
 	resetGame,
 	completeGame,
 	openModal,
+	fetchValidWords,
 } from "./redux/slices/wordSlice";
 import {
 	addGuess,
@@ -38,6 +38,7 @@ const App = () => {
 		guessedWordsGrid,
 		gameDone,
 	} = useAppSelector((state) => state.word);
+	const validWords = useAppSelector((state) => state.word.validWords);
 	const [popupVisible, setPopupVisible] = useState(false);
 	const [popupMessage, setPopupMessage] = useState("");
 	const [popupDuration, setPopupDuration] = useState(2000);
@@ -54,8 +55,15 @@ const App = () => {
 		return wonCheck;
 	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
 
+	const getValidWords = useCallback(async () => {
+		if (validWords.status === "idle") {
+			dispatch<any>(fetchValidWords());
+		}
+	}, [dispatch, validWords]);
+
 	// Adjust height for mobile
 	useEffect(() => {
+		getValidWords();
 		if (
 			navigator.userAgent.toLowerCase().match(/mobile/i) &&
 			navigator.userAgent.match(/ipad|ipod|iphone/i) &&
@@ -65,7 +73,7 @@ const App = () => {
 			containerRef.current.classList.remove("min-h-screen");
 			containerRef.current.classList.add("min-h-screen-mobile");
 		}
-	}, []);
+	}, [getValidWords]);
 
 	const lostGame = useCallback(() => {
 		dispatch(completeGame());
@@ -94,14 +102,20 @@ const App = () => {
 
 	// Check for game won or lost
 	useEffect(() => {
-		if(checkGameWon()) {
+		if (checkGameWon()) {
 			wonGame();
-		} else if (
-			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]
-		) {
+		} else if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
 			lostGame();
 		}
-	}, [checkGameWon, correctWord.word, dispatch, gameDone, guessIndex, lostGame, wonGame]);
+	}, [
+		checkGameWon,
+		correctWord.word,
+		dispatch,
+		gameDone,
+		guessIndex,
+		lostGame,
+		wonGame,
+	]);
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
@@ -125,7 +139,7 @@ const App = () => {
 			setPopupVisible(true);
 			return;
 		}
-		if (!(await checkWord(currentGuess))) {
+		if (!validWords.words.includes(currentGuess.toLowerCase())) {
 			setPopupMessage("Not in word list");
 			setPopupVisible(true);
 			return;
@@ -140,6 +154,7 @@ const App = () => {
 		dispatch,
 		gameDone,
 		guessedWordsGrid.length,
+		validWords.words,
 	]);
 
 	// Check for a new word on first load and on each window focus event

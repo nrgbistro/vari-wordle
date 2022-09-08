@@ -3,25 +3,36 @@ import axios from "axios";
 import { Status } from "../../components/GameGrid/Block";
 import { RootState } from "../store";
 
-const WORD_URL = "/api/word";
 export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
 	try {
-		const word = await axios.get(WORD_URL);
+		const word = await axios.get("/api/word");
 		return word;
 	} catch (err) {
 		return err;
 	}
 });
 
-export const checkWord = async (word: string) => {
-	if (word.length === 0) return;
-	const response = await axios.post("/api/word/" + word.toLowerCase());
-	return response.data;
-};
+export const fetchValidWords = createAsyncThunk(
+	"word/fetchValidWords",
+	async () => {
+		try {
+			const word = await axios.get("/api/validWords");
+			return word;
+		} catch (err) {
+			return err;
+		}
+	}
+);
+
 interface wordData {
 	correctWord: {
 		word: string;
 		count: number;
+		status: "idle" | "loading" | "succeeded" | "failed";
+		error: null | string;
+	};
+	validWords: {
+		words: string[];
 		status: "idle" | "loading" | "succeeded" | "failed";
 		error: null | string;
 	};
@@ -38,6 +49,11 @@ const initialState: wordData = {
 	correctWord: {
 		word: "",
 		count: 0,
+		status: "idle",
+		error: null,
+	},
+	validWords: {
+		words: [],
 		status: "idle",
 		error: null,
 	},
@@ -122,11 +138,24 @@ const wordSlice = createSlice({
 			})
 			.addCase(fetchWord.rejected, (state, action) => {
 				state.correctWord.status = "failed";
+				state.correctWord.error = action.error.toString();
 			})
 			.addCase(fetchWord.fulfilled, (state, action: any) => {
 				state.correctWord.status = "succeeded";
 				state.correctWord.word = action.payload.data.word;
 				state.correctWord.count = action.payload.data.count;
+			})
+			.addCase(fetchValidWords.pending, (state, action) => {
+				state.validWords.status = "loading";
+			})
+			.addCase(fetchValidWords.rejected, (state, action) => {
+				state.validWords.status = "failed";
+				state.validWords.error = action.error.toString();
+			})
+			.addCase(fetchValidWords.fulfilled, (state, action: any) => {
+				state.validWords.status = "succeeded";
+				console.log(action.payload);
+				state.validWords.words = action.payload.data;
 			});
 	},
 });
