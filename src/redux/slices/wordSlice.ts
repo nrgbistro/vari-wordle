@@ -154,7 +154,6 @@ const wordSlice = createSlice({
 			})
 			.addCase(fetchValidWords.fulfilled, (state, action: any) => {
 				state.validWords.status = "succeeded";
-				console.log(action.payload);
 				state.validWords.words = action.payload.data;
 			});
 	},

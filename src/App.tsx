@@ -61,9 +61,12 @@ const App = () => {
 		}
 	}, [dispatch, validWords]);
 
-	// Adjust height for mobile
 	useEffect(() => {
 		getValidWords();
+	}, [getValidWords]);
+
+	// Adjust height for mobile
+	useEffect(() => {
 		if (
 			navigator.userAgent.toLowerCase().match(/mobile/i) &&
 			navigator.userAgent.match(/ipad|ipod|iphone/i) &&
@@ -73,7 +76,7 @@ const App = () => {
 			containerRef.current.classList.remove("min-h-screen");
 			containerRef.current.classList.add("min-h-screen-mobile");
 		}
-	}, [getValidWords]);
+	}, []);
 
 	const lostGame = useCallback(() => {
 		dispatch(completeGame());
@@ -102,6 +105,7 @@ const App = () => {
 
 	// Check for game won or lost
 	useEffect(() => {
+		if (gameDone) return;
 		if (checkGameWon()) {
 			wonGame();
 		} else if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
@@ -119,18 +123,23 @@ const App = () => {
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
-		if (correctWord.word.length > 0) {
-			const response = await axios.get("/api/word");
-			const newWord = response.data.word;
-			if (newWord !== correctWord.word) {
-				if (!checkGameWon() && guessedWordsGrid.length > 0) {
-					dispatch(setStreaking(false));
-				}
-				dispatch(resetGame());
-				dispatch<any>(fetchWord());
+		if (correctWord.status === "succeeded") return;
+		const response = await axios.get("/api/word");
+		const newWord = response.data.word;
+		if (newWord !== correctWord.word) {
+			if (!checkGameWon() && guessedWordsGrid.length > 0) {
+				dispatch(setStreaking(false));
 			}
+			dispatch(resetGame());
+			dispatch<any>(fetchWord());
 		}
-	}, [checkGameWon, correctWord.word, dispatch, guessedWordsGrid.length]);
+	}, [
+		checkGameWon,
+		correctWord.status,
+		correctWord.word,
+		dispatch,
+		guessedWordsGrid.length,
+	]);
 
 	const safegGuessWord = useCallback(async () => {
 		if (gameDone) return;
