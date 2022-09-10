@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 interface StatsData {
 	gamesPlayed: number;
 	won: number;
-	lost: number;
 	streaking: boolean;
 	currentStreak: number;
 	maxStreak: number;
@@ -26,7 +25,6 @@ const generateInitialGuessDistribution = (): number[][] => {
 const initialState: StatsData = {
 	gamesPlayed: 0,
 	won: 0,
-	lost: 0,
 	streaking: false,
 	currentStreak: 0,
 	maxStreak: 0,
@@ -42,9 +40,6 @@ const StatisticsSlice = createSlice({
 		},
 		incrementWon: (state) => {
 			state.won++;
-		},
-		incrementLost: (state) => {
-			state.lost++;
 		},
 		incrementStreak: (state) => {
 			if (!state.streaking) state.currentStreak = 0;
@@ -67,7 +62,6 @@ const StatisticsSlice = createSlice({
 
 export const {
 	incrementWon,
-	incrementLost,
 	incrementGamesPlayed,
 	setStreaking,
 	incrementStreak,

@@ -4,14 +4,14 @@ const cors = require("cors");
 const express = require("express");
 const path = require("path");
 const app = express();
-const isWord = require("is-word");
-const word = isWord("american-english");
+const fs = require("fs");
 const { rword } = require("rword");
 const port = process.env.PORT || 3001;
 
 let currentWord = "";
 let wordleCount = 0;
 let unsubscribe = () => {};
+let validWords = null;
 
 const checkDatabase = async () => {
 	unsubscribe();
@@ -70,13 +70,18 @@ app.use(cors(corsOptions));
 
 const generateNewWord = () => {
 	let newWord = rword.generate(1, { length: "4-8" });
-	while (!word.check(newWord)) {
+	// Ensure validWords array has been created
+	if (!validWords) {
+		setTimeout(() => {}, 200);
+	}
+	while (!validWords.includes(newWord)) {
 		newWord = rword.generate(1, { length: "4-8" });
 	}
 	console.log("Generated word: " + newWord);
 	return newWord;
 };
 
+// Loop to generate new word at midnight
 (async function loop() {
 	let now = new Date();
 	if (now.getHours() === 0 && now.getMinutes() === 0) {
@@ -104,13 +109,28 @@ const generateNewWord = () => {
 	setTimeout(loop, delay);
 })();
 
-// create a GET route
+// Load filtered words list
+(async function getWords() {
+	return new Promise((resolve, reject) => {
+		fs.readFile(
+			path.resolve(__dirname, "words_filtered.txt"),
+			"UTF-8",
+			(err, data) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(data.split("\r\n"));
+			}
+		);
+	});
+})().then((data) => (validWords = data));
+
 app.get("/api/word", (req, res) => {
 	res.json({ word: currentWord, count: wordleCount });
 });
 
-app.post("/api/word/:word", (req, res) => {
-	res.send(word.check(req.params.word));
+app.get("/api/validWords", (req, res) => {
+	res.json(validWords);
 });
 
 app.get("*", (req, res) => {

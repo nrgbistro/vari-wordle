@@ -12,15 +12,14 @@ import {
 	guessWord,
 	getWordStatus,
 	fetchWord,
-	checkWord,
 	resetGame,
 	completeGame,
 	openModal,
+	fetchValidWords,
 } from "./redux/slices/wordSlice";
 import {
 	addGuess,
 	incrementGamesPlayed,
-	incrementLost,
 	incrementStreak,
 	incrementWon,
 	NUMBER_OF_TRIES,
@@ -39,13 +38,14 @@ const App = () => {
 		guessedWordsGrid,
 		gameDone,
 	} = useAppSelector((state) => state.word);
+	const validWords = useAppSelector((state) => state.word.validWords);
 	const [popupVisible, setPopupVisible] = useState(false);
 	const [popupMessage, setPopupMessage] = useState("");
 	const [popupDuration, setPopupDuration] = useState(2000);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const checkGameWon = useCallback(() => {
-		if (guessIndex === 0 || gameDone) return false;
+		if (guessIndex === 0) return false;
 		let wonCheck = true;
 		for (let i = 0; i < correctWord.word.length; i++) {
 			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
@@ -53,7 +53,17 @@ const App = () => {
 			}
 		}
 		return wonCheck;
-	}, [correctWord.word.length, gameDone, guessIndex, guessedWordsGrid]);
+	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
+
+	const getValidWords = useCallback(async () => {
+		if (validWords.status === "idle") {
+			dispatch<any>(fetchValidWords());
+		}
+	}, [dispatch, validWords]);
+
+	useEffect(() => {
+		getValidWords();
+	}, [getValidWords]);
 
 	// Adjust height for mobile
 	useEffect(() => {
@@ -70,7 +80,6 @@ const App = () => {
 
 	const lostGame = useCallback(() => {
 		dispatch(completeGame());
-		dispatch(incrementLost());
 		dispatch(setStreaking(false));
 		setPopupMessage(correctWord.word);
 		setPopupDuration(5000);
@@ -94,12 +103,12 @@ const App = () => {
 		}, 2000);
 	}, [correctWord.word.length, dispatch, guessIndex]);
 
-	// Check for game lost
+	// Check for game won or lost
 	useEffect(() => {
-		if (
-			guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4] &&
-			!checkGameWon()
-		) {
+		if (gameDone) return;
+		if (checkGameWon()) {
+			wonGame();
+		} else if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
 			lostGame();
 		}
 	}, [
@@ -109,36 +118,20 @@ const App = () => {
 		gameDone,
 		guessIndex,
 		lostGame,
-	]);
-
-	// Check for game won
-	useEffect(() => {
-		const wonCheck = checkGameWon();
-		if (wonCheck) {
-			wonGame();
-		}
-	}, [
-		checkGameWon,
-		correctWord.word.length,
-		dispatch,
-		gameDone,
-		guessIndex,
-		guessedWordsGrid,
 		wonGame,
 	]);
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
-		if (correctWord.word.length > 0) {
-			const response = await axios.get("/api/word");
-			const newWord = response.data.word;
-			if (newWord !== correctWord.word) {
-				if (!checkGameWon() && guessedWordsGrid.length > 0) {
-					dispatch(setStreaking(false));
-				}
-				dispatch(resetGame());
-				dispatch<any>(fetchWord());
+		if (correctWord.word.length <= 0) return;
+		const response = await axios.get("/api/word");
+		const newWord = response.data.word;
+		if (newWord !== correctWord.word) {
+			if (!checkGameWon() && guessedWordsGrid.length > 0) {
+				dispatch(setStreaking(false));
 			}
+			dispatch(resetGame());
+			dispatch<any>(fetchWord());
 		}
 	}, [checkGameWon, correctWord.word, dispatch, guessedWordsGrid.length]);
 
@@ -149,7 +142,7 @@ const App = () => {
 			setPopupVisible(true);
 			return;
 		}
-		if (!(await checkWord(currentGuess))) {
+		if (!validWords.words.includes(currentGuess.toLowerCase())) {
 			setPopupMessage("Not in word list");
 			setPopupVisible(true);
 			return;
@@ -164,6 +157,7 @@ const App = () => {
 		dispatch,
 		gameDone,
 		guessedWordsGrid.length,
+		validWords.words,
 	]);
 
 	// Check for a new word on first load and on each window focus event
@@ -172,7 +166,7 @@ const App = () => {
 		window.onfocus = () => {
 			checkForNewWord();
 		};
-	}, [checkForNewWord, correctWord.word, dispatch]);
+	}, [checkForNewWord]);
 
 	// Fetch the word on first load
 	useEffect(() => {
