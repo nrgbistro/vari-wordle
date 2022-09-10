@@ -170,10 +170,10 @@ const App = () => {
 
 	// Fetch the word on first load
 	useEffect(() => {
-		if (wordStatus === "idle") {
+		if (wordStatus === "idle" || correctWord.word.length === 0) {
 			dispatch<any>(fetchWord());
 		}
-	}, [dispatch, wordStatus]);
+	}, [correctWord.word.length, dispatch, wordStatus]);
 
 	// Create keyboard listener
 	useEffect(() => {
