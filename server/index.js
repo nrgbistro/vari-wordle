@@ -1,5 +1,5 @@
-const db = require("./firebase-serverside.ts");
-const { collection, addDoc, onSnapshot, query } = require("firebase/firestore");
+const db = require("./firebase.ts");
+// const { collection, addDoc, onSnapshot, query } = require("firebase/firestore");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
@@ -15,13 +15,13 @@ let validWords = null;
 
 const checkDatabase = async () => {
 	unsubscribe();
-	const querySnapshot = query(collection(db, "wordBank"));
+	const querySnapshot = db.collection("wordBank");
 	if (querySnapshot.empty) {
 		const newWord = generateNewWord();
 		currentWord = newWord;
 		wordleCount = 1;
 		try {
-			await addDoc(collection(db, "wordBank"), {
+			await db.collection("wordBank").add({
 				word: newWord,
 				count: wordleCount,
 			});
@@ -29,12 +29,11 @@ const checkDatabase = async () => {
 			console.error("Error adding document: ", e);
 		}
 	}
-	unsubscribe = onSnapshot(collection(db, "wordBank"), async (snapshot) => {
+	unsubscribe = db.collection("wordBank").onSnapshot(async (snapshot) => {
 		if (snapshot.empty) return;
 		const data = snapshot.docs
 			.sort((a, b) => b.data().count - a.data().count)[0]
 			.data();
-		console.log(data);
 		currentWord = data.word;
 		wordleCount = data.count;
 	});
@@ -88,7 +87,7 @@ const generateNewWord = () => {
 		const newWord = generateNewWord();
 		wordleCount++;
 		try {
-			await addDoc(collection(db, "wordBank"), {
+			await db.collection("wordBank").add({
 				word: newWord,
 				count: wordleCount,
 			});
@@ -96,7 +95,7 @@ const generateNewWord = () => {
 			console.error("Error adding document: ", e);
 		}
 		unsubscribe();
-		unsubscribe = onSnapshot(collection(db, "wordBank"), (snapshot) => {
+		unsubscribe = db.collection("wordBank").onSnapshot((snapshot) => {
 			const data = snapshot.docs
 				.sort((a, b) => b.data().count - a.data().count)[0]
 				.data();
@@ -119,7 +118,7 @@ const generateNewWord = () => {
 				if (err) {
 					reject(err);
 				}
-				resolve(data.split("\r\n"));
+				resolve(data.split("\r\n")[0]);
 			}
 		);
 	});
