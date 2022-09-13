@@ -3,11 +3,13 @@ import { toggleModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
-import Popup from "./PopupMessage";
-import GameStats from "./gameStats";
+import Popup from "../PopupMessage";
+import GameStats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
+import { UserAuth } from "../../context/AuthContext";
+import GoogleButton from 'react-google-button';
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -52,6 +54,17 @@ const Modal = () => {
 			navigator.clipboard.writeText(ret);
 		}
 	};
+
+	const {googleSignIn} = UserAuth();
+
+	const handleSignIn = async () => {
+		try {
+			await googleSignIn();
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
 	return (
 		<div
 			className="absolute z-20 top-0 bottom-0 right-0 left-0 bg-gray-600/50"
@@ -78,13 +91,16 @@ const Modal = () => {
 					<div>
 						<GuessDistribution />
 					</div>
-					<button
-						className="m-3 bg-blue-500 rounded-full h-10 text-white"
-						onClick={shareResult}
-						ref={shareButtonRef}
-					>
-						Share <BsShare className="inline text-sm -translate-y-[1px]" />
-					</button>
+					<div className="w-full flex flex-row">
+						<GoogleButton onClick={handleSignIn} className="w-full" />
+						<button
+							className="m-3 bg-blue-500 rounded-full h-10 text-white w-full"
+							onClick={shareResult}
+							ref={shareButtonRef}
+						>
+							Share <BsShare className="inline text-sm -translate-y-[1px]" />
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

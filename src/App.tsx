@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Status } from "./components/GameGrid/Block";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
-import Popup from "./components/modals/PopupMessage";
+import Popup from "./components/PopupMessage";
 import Modal from "./components/modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
@@ -26,6 +26,7 @@ import {
 	setStreaking,
 } from "./redux/slices/statisticsSlice";
 import { useAppDispatch, useAppSelector } from "./redux/store";
+import { AuthContextProvider } from "./context/AuthContext";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -203,23 +204,25 @@ const App = () => {
 	}, [correctWord.word.length, currentGuess, dispatch, safegGuessWord]);
 
 	return (
-		<div
-			className="min-h-screen dark:bg-gray-800 flex flex-col items-center"
-			ref={containerRef}
-		>
-			{popupVisible ? (
-				<Popup
-					message={popupMessage}
-					setVisible={setPopupVisible}
-					duration={popupDuration}
-					setDuration={setPopupDuration}
-				/>
-			) : null}
-			{modal ? <Modal /> : null}
-			<Navbar />
-			<Grid />
-			<Keyboard safegGuessWord={safegGuessWord} />
-		</div>
+		<AuthContextProvider>
+			<div
+				className="min-h-screen dark:bg-gray-800 flex flex-col items-center"
+				ref={containerRef}
+			>
+				{popupVisible ? (
+					<Popup
+						message={popupMessage}
+						setVisible={setPopupVisible}
+						duration={popupDuration}
+						setDuration={setPopupDuration}
+					/>
+				) : null}
+				{modal ? <Modal /> : null}
+				<Navbar />
+				<Grid />
+				<Keyboard safegGuessWord={safegGuessWord} />
+			</div>
+		</AuthContextProvider>
 	);
 };
 
