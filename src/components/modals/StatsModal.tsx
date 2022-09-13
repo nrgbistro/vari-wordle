@@ -8,8 +8,7 @@ import GameStats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
-import { UserAuth } from "../../context/AuthContext";
-import GoogleButton from 'react-google-button';
+import { supabase } from "../../supabase";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -55,15 +54,23 @@ const Modal = () => {
 		}
 	};
 
-	const {googleSignIn} = UserAuth();
+	const [loading, setLoading] = useState(false);
+	const [email, setEmail] = useState("nolangelinas@gmail.com");
 
 	const handleSignIn = async () => {
+		if (loading || email.length === 0) return;
 		try {
-			await googleSignIn();
-		} catch (err) {
-			console.error(err);
+			setLoading(true);
+			const { data, error } = await supabase.auth.signInWithOtp({ email });
+			if (error) throw error;
+			alert("Check your email for the login link!");
+		} catch (error: any) {
+			console.log(error);
+			alert(error.error_description || error.message);
+		} finally {
+			setLoading(false);
 		}
-	}
+	};
 
 	return (
 		<div
@@ -91,10 +98,25 @@ const Modal = () => {
 					<div>
 						<GuessDistribution />
 					</div>
-					<div className="w-full flex flex-row">
-						<GoogleButton onClick={handleSignIn} className="w-full" />
+					<div className="w-full flex flex-row justify-center p-1">
+						<form
+							onSubmit={handleSignIn}
+							className="flex flex-row w-full gap-1 h-full justify-center items-center ml-1"
+						>
+							<input
+								id="email"
+								className="text-black rounded-full h-10 w-64 pl-4"
+								type="email"
+								placeholder="Your email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+							/>
+							<button className="w-28" aria-live="polite">
+								Send magic link
+							</button>
+						</form>
 						<button
-							className="m-3 bg-blue-500 rounded-full h-10 text-white w-full"
+							className="m-1 bg-blue-500 rounded-full h-10 text-white w-full"
 							onClick={shareResult}
 							ref={shareButtonRef}
 						>
