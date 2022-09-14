@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react";
+import { useContext, createContext, useState } from "react";
 import supabase from "../supabase";
 
 let AuthContext: any;
@@ -21,8 +21,10 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 		}
 	};
 
+	const getUser = () => user;
+
 	return (
-		<AuthContext.Provider value={{ magicSignIn }}>
+		<AuthContext.Provider value={{ magicSignIn, getUser }}>
 			{children}
 		</AuthContext.Provider>
 	);
