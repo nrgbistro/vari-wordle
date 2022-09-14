@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { toggleModal } from "../../redux/slices/wordSlice";
+import { setModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
@@ -77,7 +77,7 @@ const Modal = () => {
 			className="absolute z-20 top-0 bottom-0 right-0 left-0 bg-gray-600/50"
 			ref={backgroundRef}
 			onClick={(e) => {
-				if (e.target === backgroundRef.current) dispatch(toggleModal());
+				if (e.target === backgroundRef.current) dispatch(setModal(false));
 			}}
 		>
 			{popupVisible && (
@@ -89,7 +89,7 @@ const Modal = () => {
 						<h2 className="mx-2 text-3xl font-variant-small">statistics</h2>
 						<AiOutlineClose
 							className="m-2 text-2xl cursor-pointer"
-							onClick={() => dispatch(toggleModal())}
+							onClick={() => dispatch(setModal(false))}
 						/>
 					</div>
 					<div className="w-full text-center">

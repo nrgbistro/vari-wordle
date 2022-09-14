@@ -1,4 +1,4 @@
-import { toggleModal } from "../redux/slices/wordSlice";
+import { setModal } from "../redux/slices/wordSlice";
 import { useAppDispatch } from "../redux/store";
 import ThemeToggle from "./ThemeToggle";
 import { GiHamburgerMenu } from "react-icons/gi";
@@ -8,7 +8,7 @@ const Navbar = () => {
 	return (
 		<header className="border-b-black/50 border-b-2 h-12 sm:h-14 w-full">
 			<button
-				onClick={() => dispatch(toggleModal())}
+				onClick={() => dispatch(setModal(true))}
 				className="text-3xl absolute top-2 md:top-3 left-2"
 			>
 				<GiHamburgerMenu />

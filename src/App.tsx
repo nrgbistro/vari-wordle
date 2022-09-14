@@ -14,7 +14,7 @@ import {
 	fetchWord,
 	resetGame,
 	completeGame,
-	openModal,
+	setModal,
 	fetchValidWords,
 } from "./redux/slices/wordSlice";
 import {
@@ -86,7 +86,7 @@ const App = () => {
 		setPopupDuration(5000);
 		setPopupVisible(true);
 		setTimeout(() => {
-			dispatch(openModal());
+			dispatch(setModal(true));
 		}, 1500);
 	}, [correctWord.word, dispatch]);
 
@@ -100,7 +100,7 @@ const App = () => {
 		setPopupDuration(2000);
 		setPopupVisible(true);
 		setTimeout(() => {
-			dispatch(openModal());
+			dispatch(setModal(true));
 		}, 2000);
 	}, [correctWord.word.length, dispatch, guessIndex]);
 
@@ -124,7 +124,8 @@ const App = () => {
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
-		if (correctWord.word.length <= 0 || correctWord.status === "loading") return;
+		if (correctWord.word.length <= 0 || correctWord.status === "loading")
+			return;
 		const response = await axios.get("/api/word");
 		const newWord = response.data.word;
 		if (newWord !== correctWord.word) {
@@ -134,7 +135,13 @@ const App = () => {
 			dispatch(resetGame());
 			dispatch<any>(fetchWord());
 		}
-	}, [checkGameWon, correctWord.status, correctWord.word, dispatch, guessedWordsGrid.length]);
+	}, [
+		checkGameWon,
+		correctWord.status,
+		correctWord.word,
+		dispatch,
+		guessedWordsGrid.length,
+	]);
 
 	const safegGuessWord = useCallback(async () => {
 		if (gameDone) return;

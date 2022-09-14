@@ -121,11 +121,8 @@ const wordSlice = createSlice({
 			state.guessIndex++;
 		},
 		resetGame: () => initialState,
-		toggleModal: (state) => {
-			state.modal = !state.modal;
-		},
-		openModal: (state) => {
-			state.modal = true;
+		setModal: (state, { payload }) => {
+			state.modal = payload;
 		},
 		completeGame: (state) => {
 			state.gameDone = true;
@@ -203,9 +200,8 @@ export const {
 	removeLetter,
 	guessWord,
 	resetGame,
-	toggleModal,
+	setModal,
 	completeGame,
-	openModal,
 } = wordSlice.actions;
 
 export const getWordStatus = (state: RootState) =>
