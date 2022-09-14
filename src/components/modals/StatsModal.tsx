@@ -8,7 +8,7 @@ import GameStats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
-import { supabase } from "../../supabase";
+import { UserAuth } from "../../context/AuthContext";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -57,19 +57,13 @@ const Modal = () => {
 	const [loading, setLoading] = useState(false);
 	const [email, setEmail] = useState("nolangelinas@gmail.com");
 
-	const handleSignIn = async () => {
+	const auth: any = UserAuth();
+	const handleSignIn = async (e: any) => {
+		e.preventDefault();
 		if (loading || email.length === 0) return;
-		try {
-			setLoading(true);
-			const { data, error } = await supabase.auth.signInWithOtp({ email });
-			if (error) throw error;
-			alert("Check your email for the login link!");
-		} catch (error: any) {
-			console.log(error);
-			alert(error.error_description || error.message);
-		} finally {
-			setLoading(false);
-		}
+		setLoading(true);
+		await auth.magicSignIn(email);
+		setLoading(false);
 	};
 
 	return (

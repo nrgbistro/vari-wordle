@@ -1,40 +1,16 @@
-const supabase = require("./supabase.ts");
+const fs = require("fs");
+const { rword } = require("rword");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");
+const supabase = require("./supabase.ts");
 const app = express();
-const fs = require("fs");
-const { rword } = require("rword");
 const port = process.env.PORT || 3001;
 
 let currentWord = "";
 let wordleCount = 0;
-let subscription = () => {};
 let validWords = null;
-
-const connectSupabase = async () => {
-	const res = await supabase
-		.from("wordData")
-		.select("word, count")
-		.order("count", { ascending: false });
-	if (res.data.length === 0) {
-		currentWord = generateNewWord();
-		wordleCount = 1;
-		pushWord(currentWord, wordleCount);
-	} else {
-		currentWord = res.data[0].word;
-		wordleCount = res.data[0].count;
-		console.log(currentWord);
-	}
-	subscription = supabase
-		.channel("wordData")
-		.on("postgres_changes", { event: "*", schema: "*" }, (payload) => {
-			console.log("Change received!", payload);
-		})
-		.subscribe();
-};
-
-connectSupabase();
+let subscription = null;
 
 // This displays message that the server running and listening to specified port
 app.listen(port, () => console.log(`Listening on port ${port}`));
@@ -63,11 +39,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const generateNewWord = () => {
+	console.log(`generating`);
 	let newWord = rword.generate(1, { length: "4-8" });
 	// Ensure validWords array has been created
 	if (!validWords) {
-		setTimeout(() => {}, 200);
+		setTimeout(() => {}, 5000);
 	}
+	console.log(validWords.length);
 	while (!validWords.includes(newWord)) {
 		newWord = rword.generate(1, { length: "4-8" });
 	}
@@ -75,22 +53,20 @@ const generateNewWord = () => {
 	return newWord;
 };
 
+// Pushes a new word to supabase and subscribes to changes
 const pushWord = async (newWord, count) => {
+	console.log("Pushing new word: " + newWord);
 	try {
-		await supabase.from("wordData").insert({
+		const result = await supabase.from("wordData").insert({
 			word: newWord,
 			count: count,
 		});
+		console.log(result);
 	} catch (e) {
 		console.error("Error adding document: ", e);
+	} finally {
+		subscribe();
 	}
-	// 	if (snapshot.empty) return;
-	// 	const data = snapshot.docs
-	// 		.sort((a, b) => b.data().count - a.data().count)[0]
-	// 		.data();
-	// 	currentWord = data.word;
-	// 	wordleCount = data.count;
-	// });
 };
 
 // Loop to generate new word at midnight
@@ -99,29 +75,50 @@ const pushWord = async (newWord, count) => {
 	if (now.getHours() === 0 && now.getMinutes() === 0) {
 		const newWord = generateNewWord();
 		wordleCount++;
-		// try {
-		//   await db.collection("wordBank").add({
-		// 	word: newWord,
-		// 	count: wordleCount,
-		//   });
-		// } catch (e) {
-		//   console.error("Error adding document: ", e);
-		// }
-		// subscription();
-		// subscription = db.collection("wordBank").onSnapshot((snapshot) => {
-		//   const data = snapshot.docs
-		// 	.sort((a, b) => b.data().count - a.data().count)[0]
-		// 	.data();
-		//   currentWord = data.word;
-		//   wordleCount = data.count;
-		// });
+		await pushWord(newWord, wordleCount);
 	}
 	now = new Date(); // allow for time passing
 	let delay = 60000 - (now % 60000); // exact ms to next minute interval
 	setTimeout(loop, delay);
 })();
 
-// Load filtered words list
+// Runs once on server start to get current word from supabase
+(async function connectSupabase() {
+	const res = await supabase
+		.from("wordData")
+		.select("word, count")
+		.order("count", { ascending: false })
+		.limit(1);
+	if (res.data.length === 0) {
+		console.log("No words found");
+		currentWord = generateNewWord();
+		wordleCount = 1;
+		await pushWord(currentWord, wordleCount);
+	} else {
+		currentWord = res.data[0].word;
+		wordleCount = res.data[0].count;
+	}
+	subscribe();
+})();
+
+function subscribe() {
+	if (subscription) {
+		supabase.removeChannel(subscription);
+	}
+	subscription = supabase
+		.channel("wordData")
+		.on("postgres_changes", { event: "*", schema: "*" }, (payload) => {
+			console.log("Change received!", payload);
+			const data = payload.new;
+			if (data.count >= wordleCount) {
+				currentWord = data.word;
+				wordleCount = data.count;
+			}
+		})
+		.subscribe();
+}
+
+// Load filtered words list from file
 (async function getWords() {
 	return new Promise((resolve, reject) => {
 		fs.readFile(
@@ -131,11 +128,13 @@ const pushWord = async (newWord, count) => {
 				if (err) {
 					reject(err);
 				}
-				resolve(data.split("\r\n")[0]);
+				resolve(data.split("\r\n"));
 			}
 		);
 	});
-})().then((data) => (validWords = data));
+})().then((data) => {
+	validWords = data;
+});
 
 app.get("/api/word", (req, res) => {
 	res.json({ word: currentWord, count: wordleCount });

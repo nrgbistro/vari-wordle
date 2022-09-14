@@ -1,40 +1,33 @@
-import {useContext, createContext, useEffect, useState} from "react";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import {auth} from "../firebase";
+import { useContext, createContext, useState, useEffect } from "react";
+import supabase from "../supabase";
 
-interface IAuthContext {
-    googleSignIn: () => void;
-}
+let AuthContext: any;
+AuthContext = createContext(null);
 
-const googleSignIn = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
-}
+export const AuthContextProvider = ({ children }: { children: any }) => {
+	const [user, setUser] = useState({});
 
-const defaultState: IAuthContext = {
-    googleSignIn,
-};
-const AuthContext = createContext(defaultState);
+	const magicSignIn = async (email: string) => {
+		console.log(email);
+		try {
+			setTimeout(() => {}, 5000);
+			const res = await supabase.auth.signInWithOtp({ email });
+			console.log(res);
+			if (res.data.user) {
+				setUser(res.data.user);
+			}
+		} catch (error: any) {
+			console.log(error);
+		}
+	};
 
-export const AuthContextProvider = ({children}: {children: any}) => {
-const [user, setUser] = useState({});
-
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser!);
-            console.log(user);
-        });
-        return () => unsubscribe();
-    }, [user])
-    
-    return (
-        <AuthContext.Provider value={{googleSignIn}}>
-            {children}
-        </AuthContext.Provider>
-    )
+	return (
+		<AuthContext.Provider value={{ magicSignIn }}>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 
 export const UserAuth = () => {
-    return useContext(AuthContext);
-}
+	return useContext(AuthContext);
+};
