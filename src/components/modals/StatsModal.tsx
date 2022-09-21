@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { setModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
@@ -9,6 +9,19 @@ import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
 import { UserAuth } from "../../context/AuthContext";
+import supabase from "../../supabase";
+
+interface User {
+	email: string;
+	avatar: string;
+	name: string;
+}
+
+const defaultUser: User = {
+	email: "",
+	avatar: "",
+	name: "",
+};
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -55,15 +68,39 @@ const Modal = () => {
 	};
 
 	const [loading, setLoading] = useState(false);
-	const [email, setEmail] = useState("nolangelinas@gmail.com");
+	const [user, setUser] = useState<User>(defaultUser);
 
-	const auth: any = UserAuth();
+	const { googleSignIn }: any = UserAuth();
 	const handleSignIn = async (e: any) => {
 		e.preventDefault();
-		if (loading || email.length === 0) return;
+		if (loading) return;
 		setLoading(true);
-		await auth.magicSignIn(email);
+		await googleSignIn();
 		setLoading(false);
+	};
+
+	useEffect(() => {
+		const getUser = async () => {
+			const {
+				data: { user },
+			} = await supabase.auth.getUser();
+			return user;
+		};
+		getUser().then((e) => {
+			console.log(e);
+			if (e) {
+				const newUser: User = {
+					email: e.user_metadata.email,
+					avatar: e.user_metadata.avatar_url,
+					name: e.user_metadata.full_name,
+				};
+				setUser(newUser);
+			}
+		});
+	}, []);
+
+	const AccountIcon = () => {
+		return <img src={user.avatar} alt={"profile"}></img>;
 	};
 
 	return (
@@ -93,22 +130,18 @@ const Modal = () => {
 						<GuessDistribution />
 					</div>
 					<div className="w-full flex flex-row justify-center p-1">
-						<form
-							onSubmit={handleSignIn}
-							className="flex flex-row w-full gap-1 h-full justify-center items-center ml-1"
-						>
-							<input
-								id="email"
-								className="text-black rounded-full h-10 w-64 pl-4"
-								type="email"
-								placeholder="Your email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-							/>
-							<button className="w-28" aria-live="polite">
+						{user ? (
+							<AccountIcon />
+						) : (
+							<button
+								className="w-28"
+								aria-live="polite"
+								onClick={handleSignIn}
+							>
 								Send magic link
 							</button>
-						</form>
+						)}
+
 						<button
 							className="m-1 bg-blue-500 rounded-full h-10 text-white w-full"
 							onClick={shareResult}

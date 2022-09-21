@@ -5,26 +5,29 @@ let AuthContext: any;
 AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
-	const [user, setUser] = useState({});
-
-	const magicSignIn = async (email: string) => {
-		console.log(email);
-		try {
-			setTimeout(() => {}, 5000);
-			const res = await supabase.auth.signInWithOtp({ email });
-			console.log(res);
-			if (res.data.user) {
-				setUser(res.data.user);
-			}
-		} catch (error: any) {
-			console.log(error);
-		}
+	const googleSignIn = async () => {
+		await supabase.auth.signInWithOAuth({
+			provider: "google",
+			options: {
+				redirectTo: "http://localhost:3000",
+			},
+		});
 	};
 
-	const getUser = () => user;
+	// supabase.auth.onAuthStateChange((event, session) => {
+	// 	if (session?.user !== undefined) {
+	// 		const metadata = session.user.user_metadata;
+	// 		const newUser = {
+	// 			email: metadata.email,
+	// 			avatar: metadata.avatar_url,
+	// 			name: metadata.full_name,
+	// 		};
+	// 		setUser(newUser);
+	// 	}
+	// });
 
 	return (
-		<AuthContext.Provider value={{ magicSignIn, getUser }}>
+		<AuthContext.Provider value={{ googleSignIn }}>
 			{children}
 		</AuthContext.Provider>
 	);
