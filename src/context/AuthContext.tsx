@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext } from "react";
 import supabase from "../supabase";
 
 let AuthContext: any;
@@ -13,18 +13,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 			},
 		});
 	};
-
-	// supabase.auth.onAuthStateChange((event, session) => {
-	// 	if (session?.user !== undefined) {
-	// 		const metadata = session.user.user_metadata;
-	// 		const newUser = {
-	// 			email: metadata.email,
-	// 			avatar: metadata.avatar_url,
-	// 			name: metadata.full_name,
-	// 		};
-	// 		setUser(newUser);
-	// 	}
-	// });
 
 	return (
 		<AuthContext.Provider value={{ googleSignIn }}>

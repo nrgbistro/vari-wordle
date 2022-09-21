@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { AiOutlineClose } from "react-icons/ai";
@@ -87,7 +87,6 @@ const Modal = () => {
 			return user;
 		};
 		getUser().then((e) => {
-			console.log(e);
 			if (e) {
 				const newUser: User = {
 					email: e.user_metadata.email,
@@ -100,7 +99,11 @@ const Modal = () => {
 	}, []);
 
 	const AccountIcon = () => {
-		return <img src={user.avatar} alt={"profile"}></img>;
+		return (
+			<div className="w-full bg-red-500 rounded-full">
+				<p>{user.name}</p>
+			</div>
+		);
 	};
 
 	return (
