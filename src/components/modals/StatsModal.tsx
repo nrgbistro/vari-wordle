@@ -9,7 +9,7 @@ import GuessDistribution from "./GuessDistribution";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
 import { UserAuth } from "../../context/AuthContext";
-import GoogleButton from 'react-google-button';
+import GoogleButton from "react-google-button";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -55,7 +55,7 @@ const Modal = () => {
 		}
 	};
 
-	const {googleSignIn} = UserAuth();
+	const { googleSignIn } = UserAuth();
 
 	const handleSignIn = async () => {
 		try {
@@ -63,7 +63,7 @@ const Modal = () => {
 		} catch (err) {
 			console.error(err);
 		}
-	}
+	};
 
 	return (
 		<div
@@ -92,7 +92,7 @@ const Modal = () => {
 						<GuessDistribution />
 					</div>
 					<div className="w-full flex flex-row">
-						<GoogleButton onClick={handleSignIn} className="w-full" />
+						{/* <GoogleButton onClick={handleSignIn} className="w-full" /> */}
 						<button
 							className="m-3 bg-blue-500 rounded-full h-10 text-white w-full"
 							onClick={shareResult}
