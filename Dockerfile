@@ -2,7 +2,7 @@
 FROM alpine
 
 #Install Node
-RUN apk add --update nodejs npm yarn
+RUN apk add --update nodejs yarn
 
 # set working directory
 WORKDIR /app
