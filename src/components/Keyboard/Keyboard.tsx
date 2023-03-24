@@ -11,7 +11,7 @@ const Keyboard = ({
 }) => {
 	const dispatch = useAppDispatch();
 	return (
-		<div className="flex flex-col items-center gap-2 mt-auto mb-1 w-full">
+		<div className="flex flex-col items-center gap-2 mt-auto mb-1 w-full noselect">
 			<KeyRow>
 				<Key
 					action={() => {
