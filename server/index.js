@@ -1,5 +1,4 @@
 const db = require("./firebase.ts");
-// const { collection, addDoc, onSnapshot, query } = require("firebase/firestore");
 const cors = require("cors");
 const express = require("express");
 const path = require("path");

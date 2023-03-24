@@ -1,5 +1,8 @@
 # pull official base image
-FROM node:18-alpine
+FROM alpine
+
+#Install Node
+RUN apk add --update nodejs npm yarn
 
 # set working directory
 WORKDIR /app
