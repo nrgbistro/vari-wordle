@@ -2,27 +2,28 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-    
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - name: get-npm-version
-      id: package-version
-      uses: martinbeentjes/npm-get-version-action@main
-      
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build --tag ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}} .
-      
-    - name: Login to ghcr.io
-      run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
-      
-    - name: Push image to GitHub Container Repository
-      run: docker push ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}}
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build --tag ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}} .
+
+      - name: Login to ghcr.io
+        run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
+
+      - name: Push image to GitHub Container Repository
+        run: docker push ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}}
