@@ -19,6 +19,6 @@ RUN yarn install --force-cache
 COPY . ./
 
 RUN yarn build
-EXPOSE 3001
+EXPOSE 3000
 # start app
-CMD ["yarn", "start"]
+ENTRYPOINT ["yarn start"]
