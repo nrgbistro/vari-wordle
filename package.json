@@ -1,6 +1,6 @@
 {
 	"name": "vari-wordle",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"private": false,
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.3",
