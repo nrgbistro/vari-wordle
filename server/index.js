@@ -89,6 +89,8 @@ const generateNewWord = () => {
 				word: newWord,
 				count: wordleCount,
 			});
+			console.log("Added new word to database: " + newWord);
+			console.log("New word count: " + wordleCount);
 		} catch (e) {
 			console.error("Error adding document: ", e);
 		}
