@@ -48,6 +48,7 @@ app.use(express.static(path.resolve(__dirname, "../build")));
 
 const whitelist = [
 	"http://localhost:3000/",
+	"http://localhost:3001/",
 	"https://vari-wordle.herokuapp.com",
 	"https://vari-wordle.nrgserver.me/",
 ];
