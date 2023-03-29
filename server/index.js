@@ -5,7 +5,7 @@ const path = require("path");
 const app = express();
 const fs = require("fs");
 const { rword } = require("rword");
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 let currentWord = "";
 let wordleCount = 0;
@@ -48,9 +48,8 @@ app.use(express.static(path.resolve(__dirname, "../build")));
 
 const whitelist = [
 	"http://localhost:3000/",
-	"http://localhost:3001/",
 	"https://vari-wordle.herokuapp.com",
-	"https://vari-wordle.nrgserver.me",
+	"https://vari-wordle.nrgserver.me/",
 ];
 const corsOptions = {
 	origin: (origin, cb) => {

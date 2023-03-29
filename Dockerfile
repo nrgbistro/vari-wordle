@@ -21,4 +21,4 @@ COPY . ./
 RUN yarn build
 EXPOSE 3000
 # start app
-ENTRYPOINT ["yarn start"]
+ENTRYPOINT ["yarn", "start"]
