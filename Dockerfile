@@ -19,6 +19,6 @@ RUN yarn install --force-cache
 COPY . ./
 
 RUN yarn build
-EXPOSE 3000
+EXPOSE 3001
 # start app
 ENTRYPOINT ["yarn", "start"]
