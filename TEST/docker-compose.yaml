@@ -1,0 +1,7 @@
+version: '3'
+services:
+  vari_wordle:
+      image: ghcr.io/nrgbistro/vari-wordle/vari-wordle:1.0.3
+      container_name: vari-wordle
+      ports:
+          - '2999:3001'

@@ -1,8 +1,9 @@
 # pull official base image
-FROM alpine
+FROM node:16.17.0-bullseye-slim
+ENV NODE_ENV production
 
 #Install Node
-RUN apk add --update nodejs yarn
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
 
 # set working directory
 WORKDIR /app
@@ -13,12 +14,14 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 COPY yarn.lock ./
-RUN yarn install --force-cache
+RUN yarn install --frozen-lockfile
 
 # add app
-COPY . ./
+COPY --chown=node:node . ./
 
 RUN yarn build
+USER node
 EXPOSE 3001
+
 # start app
 ENTRYPOINT ["yarn", "start"]
