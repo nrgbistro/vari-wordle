@@ -6285,11 +6285,6 @@ is-weakset@^2.0.1:
     call-bind "^1.0.2"
     get-intrinsic "^1.1.1"
 
-is-word@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/is-word/-/is-word-1.0.4.tgz#be60141c8d93d67cc1ae341a650142ced12ba367"
-  integrity sha512-AKiRceZqb0c8o028B72FoF2/HesPHsMxFQu/pDRaKGTBU/rCF/CnSd9D55H2nvJkPab+xs98iPexI/PwiFerlw==
-
 is-wsl@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/is-wsl/-/is-wsl-2.2.0.tgz#74a4c76e77ca9fd3f932f290c17ea326cd157271"

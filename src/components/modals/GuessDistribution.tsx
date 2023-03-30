@@ -81,24 +81,28 @@ const GuessDistribution = () => {
 
 	const paginationData = [4, 5, 6, 7, 8];
 
-	function ErrorFallback({error, resetErrorBoundary}:{error: any, resetErrorBoundary: any}) {
+	function ErrorFallback({
+		error,
+		resetErrorBoundary,
+	}: {
+		error: any;
+		resetErrorBoundary: any;
+	}) {
 		return (
-		  <div role="alert">
-			<p>Something went wrong:</p>
-			<pre>{error.message}</pre>
-			<button onClick={resetErrorBoundary}>Try again</button>
-		  </div>
-		)
-	  }
+			<div role="alert">
+				<p>Something went wrong:</p>
+				<pre>{error.message}</pre>
+				<button onClick={resetErrorBoundary}>Try again</button>
+			</div>
+		);
+	}
 
 	return (
 		<div className="mx-10 h-[300px] mb-20">
 			<h2 className="w-full text-center">{"Guess Distribution"}</h2>
-			<ErrorBoundary
-         	 FallbackComponent={ErrorFallback}
-        >
-			<Chart type="bar" data={data} options={options} className="h-fit" />
-    		</ErrorBoundary>
+			<ErrorBoundary FallbackComponent={ErrorFallback}>
+				<Chart type="bar" data={data} options={options} className="h-fit" />
+			</ErrorBoundary>
 
 			<div className="flex flex-row justify-center gap-4 mt-3">
 				{paginationData.map((num, i) => (
