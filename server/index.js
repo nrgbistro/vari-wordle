@@ -120,6 +120,7 @@ const generateNewWord = () => {
 					reject(err);
 				}
 				resolve(data.split("\r\n"));
+				console.log("Valid Words Length: " + data.length);
 			}
 		);
 	});
