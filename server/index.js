@@ -81,7 +81,7 @@ const generateNewWord = () => {
 // Loop to generate new word at midnight
 (async function loop() {
 	let now = new Date();
-	if (now.getHours() === 0 && now.getMinutes() === 0) {
+	if (now.getHours() < 1 && now.getMinutes() < 1) {
 		const newWord = generateNewWord();
 		wordleCount++;
 		try {
