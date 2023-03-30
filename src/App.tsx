@@ -124,7 +124,8 @@ const App = () => {
 
 	// Check API for a new word
 	const checkForNewWord = useCallback(async () => {
-		if (correctWord.word.length <= 0 || correctWord.status === "loading") return;
+		if (correctWord.word.length <= 0 || correctWord.status === "loading")
+			return;
 		const response = await axios.get("/api/word");
 		const newWord = response.data.word;
 		if (newWord !== correctWord.word) {
@@ -134,7 +135,13 @@ const App = () => {
 			dispatch(resetGame());
 			dispatch<any>(fetchWord());
 		}
-	}, [checkGameWon, correctWord.status, correctWord.word, dispatch, guessedWordsGrid.length]);
+	}, [
+		checkGameWon,
+		correctWord.status,
+		correctWord.word,
+		dispatch,
+		guessedWordsGrid.length,
+	]);
 
 	const safegGuessWord = useCallback(async () => {
 		if (gameDone) return;

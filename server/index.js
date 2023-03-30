@@ -119,7 +119,7 @@ const generateNewWord = () => {
 				if (err) {
 					reject(err);
 				}
-				resolve(data.split("\r\n")[0]);
+				resolve(data.split("\r\n"));
 			}
 		);
 	});
