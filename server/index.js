@@ -119,7 +119,7 @@ const generateNewWord = () => {
 				if (err) {
 					reject(err);
 				}
-				resolve(data.split("\r\n"));
+				resolve(data.split(","));
 				console.log("Valid Words Length: " + data.length);
 			}
 		);
