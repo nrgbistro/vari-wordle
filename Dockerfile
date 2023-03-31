@@ -1,5 +1,8 @@
 # pull official base image
-FROM node AS build
+FROM node:16-alpine AS node
+
+
+FROM node AS builder
 
 # set working directory
 WORKDIR /app
@@ -13,17 +16,33 @@ COPY yarn.lock ./yarn.lock
 
 # Installs all node packages
 RUN yarn install --frozen-lockfile
-RUN yarn global add react-scripts typescript
+# RUN yarn global add react-scripts
 
+COPY . ./
 
-# build app for production with minification
-ENV NODE_ENV production
 RUN yarn build
 
-FROM nginx:1.13.12-alpine
+FROM node as final
 
-COPY --from=build /app/build /usr/share/nginx/html
+ENV NODE_ENV production
 
-EXPOSE 80
+RUN apk --no-cache -U upgrade
 
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+RUN mkdir -p /home/node/app/build && chown -R node:node /home/node/app
+
+WORKDIR /home/node/app
+
+USER node
+
+# copy deps
+COPY package.json ./package.json
+COPY yarn.lock ./yarn.lock
+
+RUN yarn install --prod --immutable --frozen-lockfile
+
+COPY --chown=node:node --from=builder /app/build ./build
+COPY --chown=node:node --from=builder /app/server ./server
+
+EXPOSE 3001
+
+ENTRYPOINT ["yarn", "start"]
