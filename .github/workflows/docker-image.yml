@@ -27,10 +27,10 @@ jobs:
           dir: "server/"
 
       - name: Build Docker image
-        run: docker build --tag ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}} .
+        run: docker build -t ghcr.io/nrgbistro/vari-wordle/vari-wordle -t ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{steps.package-version.outputs.current-version}} .
 
       - name: Login to ghcr.io
         run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
 
       - name: Push image to ghcr.io
-        run: docker push ghcr.io/nrgbistro/vari-wordle/vari-wordle:${{ steps.package-version.outputs.current-version}}
+        run: docker push -a ghcr.io/nrgbistro/vari-wordle/vari-wordle

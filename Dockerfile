@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:16-alpine AS node
+FROM node:18-alpine AS node
 
 
 FROM node AS builder
