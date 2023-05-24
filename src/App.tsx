@@ -39,6 +39,14 @@ const App = () => {
 		guessedWordsGrid,
 		gameDone,
 	} = useAppSelector((state) => state.word);
+
+	// Fetch the word on first load
+	useEffect(() => {
+		if (wordStatus === "idle" || correctWord.word.length === 0) {
+			dispatch<any>(fetchWord());
+		}
+	}, [correctWord, dispatch, wordStatus]);
+
 	const validWords = useAppSelector((state) => state.word.validWords);
 	const [popupVisible, setPopupVisible] = useState(false);
 	const [popupMessage, setPopupMessage] = useState("");
@@ -48,13 +56,13 @@ const App = () => {
 	const checkGameWon = useCallback(() => {
 		if (guessIndex === 0) return false;
 		let wonCheck = true;
-		for (let i = 0; i < correctWord.word.length; i++) {
+		for (let i = 0; i < correctWord.word?.length; i++) {
 			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
 				wonCheck = false;
 			}
 		}
 		return wonCheck;
-	}, [correctWord.word.length, guessIndex, guessedWordsGrid]);
+	}, [correctWord.word?.length, guessIndex, guessedWordsGrid]);
 
 	const getValidWords = useCallback(async () => {
 		if (validWords.status === "idle") {
@@ -102,7 +110,7 @@ const App = () => {
 		setTimeout(() => {
 			dispatch(openModal());
 		}, 2000);
-	}, [correctWord.word.length, dispatch, guessIndex]);
+	}, [correctWord.word, dispatch, guessIndex]);
 
 	// Check for game won or lost
 	useEffect(() => {
@@ -175,13 +183,6 @@ const App = () => {
 			checkForNewWord();
 		};
 	}, [checkForNewWord]);
-
-	// Fetch the word on first load
-	useEffect(() => {
-		if (wordStatus === "idle" || correctWord.word.length === 0) {
-			dispatch<any>(fetchWord());
-		}
-	}, [correctWord.word.length, dispatch, wordStatus]);
 
 	// Create keyboard listener
 	useEffect(() => {

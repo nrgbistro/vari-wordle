@@ -11,7 +11,7 @@ const wordPersistConfig = {
 	key: "word",
 	storage,
 	// Turn off persistence for development
-	// ...(process.env.NODE_ENV !== "production" ? { blacklist: ["word"] } : {}),
+	...(process.env.NODE_ENV !== "production" ? { blacklist: ["word"] } : {}),
 };
 
 const statsPersistConfig = {
