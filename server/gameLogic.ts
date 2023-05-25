@@ -28,7 +28,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 })().then((data) => (validWords = data));
 
 // Creates a new random word and writes it to the database
-const generateNewWord = async (newCount: number) => {
+const generateNewWord = async (
+	newCount: number,
+	pushToDatabase: boolean = true
+) => {
 	let newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
 	// Ensure validWords array has been created
 	if (!validWords) {
@@ -38,25 +41,25 @@ const generateNewWord = async (newCount: number) => {
 		newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
 	}
 	console.log("Generated word: " + newWord);
-
-	currentWord = newWord;
-	try {
-		await db.collection("wordBank").add({
-			word: newWord,
-			count: newCount,
-		});
-	} catch (e) {
-		console.error("Error adding document: ", e);
+	if (pushToDatabase) {
+		try {
+			await db.collection("wordBank").add({
+				word: newWord,
+				count: newCount,
+			});
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		}
 	}
 	return newWord;
 };
 
-// Checks if database is empty, if so, adds a new word
+// If database is empty, adds the first word
 (async function initializeDatabase() {
 	const wordBankRef = db.collection("wordBank");
 	const querySnapshot = await wordBankRef.get();
 	if (querySnapshot.empty) {
-		await generateNewWord(1);
+		currentWord = await generateNewWord(1);
 	}
 	unsubscribe = db.collection("wordBank").onSnapshot(async (snapshot) => {
 		if (snapshot.empty) return;
@@ -71,19 +74,10 @@ const generateNewWord = async (newCount: number) => {
 // Loop to generate new word at midnight
 export async function gameLoop() {
 	let now = new Date();
+	console.log("new minute: " + now.getMinutes());
 	if (now.getHours() < 1 && now.getMinutes() < 1) {
 		wordleCount++;
-		const newWord = generateNewWord(wordleCount);
-		try {
-			await db.collection("wordBank").add({
-				word: newWord,
-				count: wordleCount,
-			});
-			console.log("Added new word to database: " + newWord);
-			console.log("New word count: " + wordleCount);
-		} catch (e) {
-			console.error("Error adding document: ", e);
-		}
+		generateNewWord(wordleCount, false);
 		unsubscribe();
 		unsubscribe = db.collection("wordBank").onSnapshot((snapshot) => {
 			const data = snapshot.docs
@@ -95,5 +89,6 @@ export async function gameLoop() {
 	}
 	now = new Date(); // allow for time passing
 	let delay = 60000 - now.getMilliseconds(); // exact ms to next minute interval
+	console.log("delay: " + delay);
 	setTimeout(gameLoop, delay);
 }

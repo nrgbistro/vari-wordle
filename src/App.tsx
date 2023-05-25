@@ -217,14 +217,14 @@ const App = () => {
 				className="min-h-screen dark:bg-gray-800 flex flex-col items-center"
 				ref={containerRef}
 			>
-				{popupVisible ? (
+				{popupVisible && (
 					<Popup
 						message={popupMessage}
 						setVisible={setPopupVisible}
 						duration={popupDuration}
 						setDuration={setPopupDuration}
 					/>
-				) : null}
+				)}
 				{modal ? <Modal /> : null}
 				<Navbar />
 				<Grid />

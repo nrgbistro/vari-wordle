@@ -7,7 +7,7 @@
 		"backend": "nodemon server/index.ts",
 		"start": "ts-node ./server/index.ts",
 		"build": "react-scripts build",
-		"test": "react-scripts test",
+		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules react-scripts test",
 		"eject": "react-scripts eject"
 	},
 	"dependencies": {
@@ -52,6 +52,7 @@
 		"autoprefixer": "^10.4.7",
 		"chai": "^4.3.7",
 		"concurrently": "^8.0.0",
+		"cross-env": "^7.0.3",
 		"mocha": "^10.2.0",
 		"nodemon": "^2.0.19",
 		"postcss": "^8.4.14",
