@@ -7,6 +7,7 @@ import {
 	Tooltip,
 	Legend,
 } from "chart.js";
+import ChartAreaBorder from "../../chartjs-plugins/ChartAreaBorder";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { ErrorBoundary } from "react-error-boundary";
@@ -20,7 +21,8 @@ ChartJS.register(
 	BarElement,
 	Title,
 	Tooltip,
-	Legend
+	Legend,
+	ChartAreaBorder
 );
 
 const GuessDistribution = () => {
@@ -96,6 +98,10 @@ const GuessDistribution = () => {
 		return darkMode.value ? "white" : "black";
 	};
 
+	const gridColorSelector = () => {
+		return darkMode.value ? "white" : "black";
+	};
+
 	const options = {
 		indexAxis: "y" as const,
 		elements: {
@@ -117,6 +123,7 @@ const GuessDistribution = () => {
 				},
 			},
 			x: {
+				grid: { color: gridColorSelector() },
 				suggestedMax: 5,
 				title: {
 					display: true,
@@ -139,15 +146,19 @@ const GuessDistribution = () => {
 				text: `${currentPage} Character Words`,
 				color: textColorSelector(),
 			},
+			chartAreaBorder: {
+				borderColor: gridColorSelector(),
+				borderWidth: 2,
+			},
 		},
 	};
 
 	return (
 		<div className="flex flex-col gap-2 mx-2">
-			<h2 className="w-full text-center">Guess Distribution</h2>
+			<h2 className="w-full text-center text-2xl">Guess Distribution</h2>
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
-				<div className="h-[30vh] mr-0">
-					<Bar data={data} options={options} />
+				<div className="h-[30vh]">
+					<Bar data={data} options={options} plugins={[ChartAreaBorder]} />
 				</div>
 			</ErrorBoundary>
 

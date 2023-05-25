@@ -25,7 +25,7 @@ const GameStats = () => {
 	];
 
 	const Item = ({ topField, name }: { topField: string; name: string }) => (
-		<div className="flex flex-col h-fit w-14">
+		<div className="flex flex-col justify-center items-center h-fit w-14">
 			<h2 className="text-4xl">{topField === "NaN" ? 0 : topField}</h2>
 			<p className="text-sm leading-tight">{name}</p>
 		</div>
