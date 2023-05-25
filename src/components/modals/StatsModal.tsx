@@ -79,9 +79,11 @@ const Modal = () => {
 			<div className="absolute z-30 top-10 bottom-10 left-4 right-4 sm:left-[50%] sm:-translate-x-[50%] sm:w-[500px] bg-white dark:bg-slate-800 rounded-md">
 				<div className="flex flex-col justify-between h-full">
 					<div className="flex flex-row justify-between w-full">
+						{/* Invisible to keep the modal centered */}
+						<AiOutlineClose className="mx-2 text-3xl font-variant-small opacity-0" />
 						<h2 className="mx-2 text-3xl font-variant-small">statistics</h2>
 						<AiOutlineClose
-							className="m-2 text-2xl cursor-pointer"
+							className="m-2 text-2xl hoverscale"
 							onClick={() => dispatch(toggleModal())}
 						/>
 					</div>

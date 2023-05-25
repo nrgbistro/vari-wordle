@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const DURATION = 2000;
+const DURATION = 3500;
 
 interface Props {
 	setVisible: React.Dispatch<React.SetStateAction<boolean>>;

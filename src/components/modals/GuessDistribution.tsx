@@ -44,7 +44,7 @@ const GuessDistribution = () => {
 			<button
 				onClick={() => setCurrentPage(number)}
 				className={
-					"border-black dark:border-white border-2 rounded-md " +
+					"border-black dark:border-white border-2 rounded-md hoverscale " +
 					(selected && "bg-correct-100")
 				}
 			>
