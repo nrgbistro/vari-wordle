@@ -98,7 +98,6 @@ const GuessDistribution = () => {
 
 	const options = {
 		indexAxis: "y" as const,
-		devicePixelRatio: 4,
 		elements: {
 			bar: {
 				borderWidth: 2,
@@ -121,7 +120,7 @@ const GuessDistribution = () => {
 				suggestedMax: 5,
 				title: {
 					display: true,
-					text: "Number of Wins",
+					text: "Number of Wins          ", // 10 spaces to align with the center
 					color: textColorSelector(),
 				},
 				ticks: {
@@ -130,6 +129,7 @@ const GuessDistribution = () => {
 				},
 			},
 		},
+		devicePixelRatio: 4,
 		responsive: true,
 		maintainAspectRatio: false,
 		plugins: {
@@ -143,15 +143,15 @@ const GuessDistribution = () => {
 	};
 
 	return (
-		<div className="mr-6 ml-4">
+		<div className="flex flex-col gap-2 mx-2">
 			<h2 className="w-full text-center">Guess Distribution</h2>
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
-				<div className="h-[30vh]">
+				<div className="h-[30vh] mr-0">
 					<Bar data={data} options={options} />
 				</div>
 			</ErrorBoundary>
 
-			<div className="flex flex-row justify-center gap-4 mt-3">
+			<div className="flex flex-row sm:justify-center justify-around gap-0 sm:gap-4">
 				{paginationData.map((num, i) => (
 					<Paginator number={num} selected={num === currentPage} key={i} />
 				))}

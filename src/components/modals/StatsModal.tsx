@@ -5,7 +5,7 @@ import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import Popup from "../PopupMessage";
-import GameStats from "./Stats";
+import Stats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
 import useDarkMode from "use-dark-mode";
 // import { UserAuth } from "../../context/AuthContext";
@@ -76,7 +76,7 @@ const Modal = () => {
 			{popupVisible && (
 				<Popup setVisible={setPopupVisible} message={popupMessage} />
 			)}
-			<div className="absolute z-30 top-10 bottom-10 left-4 right-4 md:left-[50%] md:-translate-x-[50%] md:w-[500px] bg-white dark:bg-slate-800 rounded-md">
+			<div className="absolute z-30 top-10 bottom-10 left-4 right-4 sm:left-[50%] sm:-translate-x-[50%] sm:w-[500px] bg-white dark:bg-slate-800 rounded-md">
 				<div className="flex flex-col justify-between h-full">
 					<div className="flex flex-row justify-between w-full">
 						<h2 className="mx-2 text-3xl font-variant-small">statistics</h2>
@@ -85,12 +85,8 @@ const Modal = () => {
 							onClick={() => dispatch(toggleModal())}
 						/>
 					</div>
-					<div className="w-full text-center">
-						<GameStats />
-					</div>
-					<div>
-						<GuessDistribution />
-					</div>
+					<Stats />
+					<GuessDistribution />
 					<div className="w-full flex flex-row justify-center">
 						{/* <GoogleButton onClick={handleSignIn} className="w-full" /> */}
 						<button
