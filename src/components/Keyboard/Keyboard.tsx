@@ -23,7 +23,8 @@ const Keyboard = ({
 						action={() => {
 							dispatch(typeLetter(letter));
 						}}
-						label={letter}
+						accessibleLabel={letter}
+						key={letter}
 					>
 						{letter}
 					</Key>
@@ -35,7 +36,8 @@ const Keyboard = ({
 						action={() => {
 							dispatch(typeLetter(letter));
 						}}
-						label={letter}
+						accessibleLabel={letter}
+						key={letter}
 					>
 						{letter}
 					</Key>
@@ -46,7 +48,7 @@ const Keyboard = ({
 					action={() => {
 						safegGuessWord();
 					}}
-					label="Enter"
+					accessibleLabel="Enter"
 				>
 					ENTER
 				</Key>
@@ -55,7 +57,8 @@ const Keyboard = ({
 						action={() => {
 							dispatch(typeLetter(letter));
 						}}
-						label={letter}
+						accessibleLabel={letter}
+						key={letter}
 					>
 						{letter}
 					</Key>
@@ -64,7 +67,7 @@ const Keyboard = ({
 					action={() => {
 						dispatch(removeLetter());
 					}}
-					label="Backspace"
+					accessibleLabel="Backspace"
 				>
 					<BsBackspace className="text-xl mx-auto sm:mx-4" />
 				</Key>
