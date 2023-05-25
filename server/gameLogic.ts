@@ -29,17 +29,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Creates a new random word and writes it to the database
 const generateNewWord = async (newCount: number) => {
-	let newWord = randomWords(1)[0];
+	let newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
 	// Ensure validWords array has been created
 	if (!validWords) {
 		setTimeout(() => {}, 200);
 	}
-	while (
-		newWord.length < 4 ||
-		newWord.length > 8 ||
-		!validWords?.includes(newWord)
-	) {
-		newWord = randomWords(1)[0];
+	while (newWord.length < 4 || !validWords?.includes(newWord)) {
+		newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
 	}
 	console.log("Generated word: " + newWord);
 
