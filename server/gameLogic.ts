@@ -74,7 +74,7 @@ const generateNewWord = async (
 // Loop to generate new word at midnight
 export async function gameLoop() {
 	let now = new Date();
-	console.log("new minute: " + now.getMinutes());
+	// console.log("new minute: " + now.getMinutes());
 	if (now.getHours() < 1 && now.getMinutes() < 1) {
 		wordleCount++;
 		generateNewWord(wordleCount, false);
@@ -89,6 +89,6 @@ export async function gameLoop() {
 	}
 	now = new Date(); // allow for time passing
 	let delay = 60000 - now.getMilliseconds(); // exact ms to next minute interval
-	console.log("delay: " + delay);
+	// console.log("delay: " + delay);
 	setTimeout(gameLoop, delay);
 }
