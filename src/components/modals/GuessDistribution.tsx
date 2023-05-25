@@ -45,7 +45,7 @@ const GuessDistribution = () => {
 				onClick={() => setCurrentPage(number)}
 				className={
 					"border-black dark:border-white border-2 rounded-md " +
-					(selected && "bg-green-500")
+					(selected && "bg-correct-100")
 				}
 			>
 				<p className="mx-3 my-1 text-xl">{number}</p>
@@ -70,8 +70,6 @@ const GuessDistribution = () => {
 			{
 				label: "Wins",
 				data: guessDistribution[currentPage - 4],
-				borderColor: "rgba(255, 255, 255, 0)",
-				backgroundColor: "rgba(100, 200, 5, 0.9)",
 			},
 		],
 	};
@@ -104,10 +102,10 @@ const GuessDistribution = () => {
 
 	const options = {
 		indexAxis: "y" as const,
-		elements: {
+		datasets: {
 			bar: {
-				borderWidth: 2,
-				borderRadius: 50,
+				backgroundColor: "rgba(83, 141, 78, 1)",
+				borderRadius: 25,
 			},
 		},
 		scales: {
