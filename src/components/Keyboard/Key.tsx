@@ -5,9 +5,10 @@ import { Status } from "../GameGrid/Block";
 
 type Props = PropsWithChildren<{
 	action?: Function;
+	label: string;
 }>;
 
-const Key: React.FC<Props> = ({ action, children }) => {
+const Key: React.FC<Props> = ({ action, children, label }) => {
 	const { guessedLetters } = useSelector((state: RootState) => state.word);
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -52,6 +53,7 @@ const Key: React.FC<Props> = ({ action, children }) => {
 					action ? action() : console.log("No action defined");
 				}}
 				className="w-full"
+				aria-label={label}
 			>
 				<h1 className="my-4 sm:mx-2 font-bold font-mono mx-auto">{children}</h1>
 			</button>

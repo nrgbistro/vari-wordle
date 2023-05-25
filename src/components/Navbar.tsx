@@ -10,6 +10,7 @@ const Navbar = () => {
 			<button
 				onClick={() => dispatch(toggleModal())}
 				className="text-3xl absolute top-2 md:top-3 left-2 hoverscale"
+				aria-label="Open menu"
 			>
 				<GiHamburgerMenu />
 			</button>

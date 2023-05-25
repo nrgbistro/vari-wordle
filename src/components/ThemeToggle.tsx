@@ -9,6 +9,7 @@ const ThemeToggle = () => {
 		<button
 			onClick={darkMode.toggle}
 			className="absolute right-6 top-[10px] text-2xl hoverscale"
+			aria-label="Toggle theme"
 		>
 			{darkMode.value ? <BsMoonFill /> : <BsSunFill />}
 		</button>
