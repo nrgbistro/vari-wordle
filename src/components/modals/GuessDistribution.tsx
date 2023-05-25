@@ -48,7 +48,13 @@ const GuessDistribution = () => {
 					(selected && "bg-correct-100")
 				}
 			>
-				<p className="mx-3 my-1 text-xl">{number}</p>
+				<p
+					className={
+						"mx-3 my-1 text-xl " + (selected && !darkMode.value && "text-white") // Set font to white if dark mode is off to improve font readability
+					}
+				>
+					{number}
+				</p>
 			</button>
 		);
 	};

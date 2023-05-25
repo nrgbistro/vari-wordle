@@ -4,7 +4,7 @@ import { Status } from "./components/GameGrid/Block";
 import Grid from "./components/GameGrid/Grid";
 import Keyboard from "./components/Keyboard/Keyboard";
 import Popup from "./components/PopupMessage";
-import Modal from "./components/modals/StatsModal";
+import Modal from "./components/Modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
 	typeLetter,
