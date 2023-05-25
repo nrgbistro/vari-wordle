@@ -1,15 +1,15 @@
 import { useRef, useState } from "react";
 import { toggleModal } from "../../redux/slices/wordSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import Popup from "../PopupMessage";
 import GameStats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
-import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import useDarkMode from "use-dark-mode";
-import { UserAuth } from "../../context/AuthContext";
-import GoogleButton from "react-google-button";
+// import { UserAuth } from "../../context/AuthContext";
+// import GoogleButton from "react-google-button";
 
 const Modal = () => {
 	const dispatch = useAppDispatch();
@@ -55,15 +55,15 @@ const Modal = () => {
 		}
 	};
 
-	const { googleSignIn } = UserAuth();
+	// const { googleSignIn } = UserAuth();
 
-	const handleSignIn = async () => {
-		try {
-			await googleSignIn();
-		} catch (err) {
-			console.error(err);
-		}
-	};
+	// const handleSignIn = async () => {
+	// 	try {
+	// 		await googleSignIn();
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// };
 
 	return (
 		<div
@@ -91,10 +91,10 @@ const Modal = () => {
 					<div>
 						<GuessDistribution />
 					</div>
-					<div className="w-full flex flex-row">
+					<div className="w-full flex flex-row justify-center">
 						{/* <GoogleButton onClick={handleSignIn} className="w-full" /> */}
 						<button
-							className="m-3 bg-blue-500 rounded-full h-10 text-white w-full"
+							className="m-3 bg-blue-500 rounded-full h-10 text-white px-8"
 							onClick={shareResult}
 							ref={shareButtonRef}
 						>

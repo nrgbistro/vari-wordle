@@ -1,9 +1,27 @@
-import "chart.js/auto";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+} from "chart.js";
 import { useState } from "react";
-import { Chart } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import { ErrorBoundary } from "react-error-boundary";
 import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import { useAppSelector } from "../../redux/store";
+import useDarkMode from "use-dark-mode";
+
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend
+);
 
 const GuessDistribution = () => {
 	const word = useAppSelector((state) => state.word.correctWord.word);
@@ -11,6 +29,7 @@ const GuessDistribution = () => {
 		(state) => state.statistics.guessDistribution
 	);
 	const [currentPage, setCurrentPage] = useState(word.length);
+	const darkMode = useDarkMode();
 
 	const Paginator = ({
 		number,
@@ -32,35 +51,11 @@ const GuessDistribution = () => {
 		);
 	};
 
-	const options = {
-		indexAxis: "y" as const,
-		elements: {
-			bar: {
-				borderWidth: 2,
-				borderRadius: 50,
-			},
-		},
-		scales: {
-			y: { grid: { display: false } },
-			x: { suggestedMax: 5 },
-		},
-		responsive: true,
-		maintainAspectRatio: false,
-		plugins: {
-			legend: { display: false },
-			title: {
-				display: true,
-				text: `${currentPage} Character Words`,
-			},
-			tooltip: { enabled: true },
-		},
-	};
-
 	const generateLabels = (num: number) => {
 		let ret = [];
 		const length = NUMBER_OF_TRIES[num - 4];
 		for (let i = 1; i <= length; i++) {
-			ret.push("" + i);
+			ret.push(i + " ");
 		}
 		return ret;
 	};
@@ -97,11 +92,63 @@ const GuessDistribution = () => {
 		);
 	}
 
+	const textColorSelector = () => {
+		return darkMode.value ? "white" : "black";
+	};
+
+	const options = {
+		indexAxis: "y" as const,
+		devicePixelRatio: 4,
+		elements: {
+			bar: {
+				borderWidth: 2,
+				borderRadius: 50,
+			},
+		},
+		scales: {
+			y: {
+				grid: { display: false },
+				title: {
+					display: true,
+					text: "Number of Games",
+					color: textColorSelector(),
+				},
+				ticks: {
+					color: textColorSelector(),
+				},
+			},
+			x: {
+				suggestedMax: 5,
+				title: {
+					display: true,
+					text: "Number of Wins",
+					color: textColorSelector(),
+				},
+				ticks: {
+					color: textColorSelector(),
+					stepSize: 1,
+				},
+			},
+		},
+		responsive: true,
+		maintainAspectRatio: false,
+		plugins: {
+			legend: { display: false },
+			title: {
+				display: true,
+				text: `${currentPage} Character Words`,
+				color: textColorSelector(),
+			},
+		},
+	};
+
 	return (
-		<div className="mx-10 h-[300px] mb-20">
-			<h2 className="w-full text-center">{"Guess Distribution"}</h2>
+		<div className="mr-6 ml-4">
+			<h2 className="w-full text-center">Guess Distribution</h2>
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
-				<Chart type="bar" data={data} options={options} className="h-fit" />
+				<div className="h-[30vh]">
+					<Bar data={data} options={options} />
+				</div>
 			</ErrorBoundary>
 
 			<div className="flex flex-row justify-center gap-4 mt-3">
