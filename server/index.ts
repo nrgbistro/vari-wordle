@@ -15,7 +15,7 @@ const port = process.env.PORT || 3001;
 
 let currentWord = "";
 let wordleCount = 0;
-let unsubscribe = () => {}; // Allows us to unsubscribe from the database listener
+let unsubscribe = () => {}; // Stores the database listener; call to unsubscribe
 
 // Loads the most recent word in the database, adds first word if database only contains placeholder
 (async function initializeGame() {
