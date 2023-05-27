@@ -1,3 +1,5 @@
+// Quick script to filter out words that are too long or too short for the game
+
 const fs = require("fs");
 const readline = require("readline");
 

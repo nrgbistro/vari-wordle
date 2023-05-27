@@ -1,20 +1,39 @@
 import cors from "cors";
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
-import { validWords, currentWord, wordleCount, gameLoop } from "./gameLogic.js";
+import schedule from "node-schedule";
+import {
+	generateNewWord,
+	getRecentDocument,
+	validWords,
+	wordBankRef,
+	__dirname,
+} from "./gameHelpers.js";
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-// This displays message that the server running and listening to specified port
-app.listen(port, () =>
-	console.log(
-		`Development server can be accessed here: http://localhost:${port}`
-	)
-);
+let currentWord = "";
+let wordleCount = 0;
+let unsubscribe = () => {}; // Allows us to unsubscribe from the database listener
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Loads the most recent word in the database, adds first word if database only contains placeholder
+(async function initializeGame() {
+	const querySnapshot = await wordBankRef().get();
+	if (getRecentDocument(querySnapshot.docs).count < 1) {
+		currentWord = await generateNewWord(1);
+	}
+	unsubscribe = wordBankRef().onSnapshot(async (snapshot) => {
+		if (snapshot.empty) return;
+		const data = getRecentDocument(snapshot.docs);
+		currentWord = data.word;
+		wordleCount = data.count;
+	});
+})();
+
+// This displays message that the server is running and listening to specified port
+app.listen(port, () => console.log(`Using port ${port}`));
+
 // Have Node serve the files for our built React app
 app.use(express.static(path.resolve(__dirname, "../build")));
 
@@ -49,4 +68,14 @@ app.get("/", (req, res) => {
 	res.sendFile(path.resolve(__dirname, "../build", "index.html"));
 });
 
-gameLoop();
+// Generate a new word at midnight every day
+schedule.scheduleJob("0 0 * * *", () => {
+	wordleCount++;
+	generateNewWord(wordleCount);
+	unsubscribe();
+	unsubscribe = wordBankRef().onSnapshot((snapshot) => {
+		const data = getRecentDocument(snapshot.docs);
+		currentWord = data.word;
+		wordleCount = data.count;
+	});
+});
