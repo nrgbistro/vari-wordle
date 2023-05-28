@@ -69,7 +69,8 @@ app.get("/", (req, res) => {
 });
 
 // Generate a new word at midnight every day
-schedule.scheduleJob("0 0 * * *", () => {
+schedule.scheduleJob("*/5 * * * *", () => {
+	console.log("Generating new word");
 	wordleCount++;
 	generateNewWord(wordleCount);
 	unsubscribe();

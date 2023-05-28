@@ -38,11 +38,16 @@ USER node
 COPY package.json ./package.json
 COPY yarn.lock ./yarn.lock
 
+COPY tsconfig.json ./tsconfig.json
+
 RUN yarn install --prod --immutable --frozen-lockfile
 
 COPY --chown=node:node --from=builder /app/build ./build
 COPY --chown=node:node --from=builder /app/server ./server
 
 EXPOSE 3001
+
+ENV DANGEROUSLY_DISABLE_HOST_CHECK=true
+ENV NODE_ENV=development
 
 ENTRYPOINT ["yarn", "start"]

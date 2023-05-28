@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "concurrently \"nodemon server/index.ts\" \"react-scripts start\"",
 		"backend": "nodemon server/index.ts",
-		"start": "ts-node ./server/index.ts",
+		"start": "ts-node -T ./server/index.ts",
 		"build": "react-scripts build",
 		"test": "cross-env NODE_OPTIONS=--experimental-vm-modules react-scripts test",
 		"eject": "react-scripts eject"
