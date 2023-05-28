@@ -3,6 +3,8 @@
 	"version": "1.1.0",
 	"private": false,
 	"scripts": {
+		"docker-dev-start": "cd docker && docker-compose --env-file ../.env up -d",
+		"docker-dev-build": "docker build -t vari-wordle-dev .",
 		"dev": "concurrently \"nodemon server/index.ts\" \"react-scripts start\"",
 		"backend": "nodemon server/index.ts",
 		"start": "ts-node -T ./server/index.ts",
@@ -45,9 +47,9 @@
 	},
 	"devDependencies": {
 		"@types/cors": "^2.8.13",
-		"@types/node-schedule": "^2.1.0",
 		"@types/jest": "^29.0.0",
 		"@types/node": "^20.0.0",
+		"@types/node-schedule": "^2.1.0",
 		"@types/react": "^18.0.15",
 		"@types/react-dom": "^18.0.6",
 		"@types/react-redux": "^7.1.24",
