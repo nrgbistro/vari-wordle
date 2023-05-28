@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
 import { fileURLToPath } from "url";
-import { db } from "./firebase/firebase.js";
+import { db } from "./firebase.js";
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config();

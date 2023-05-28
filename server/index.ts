@@ -17,18 +17,24 @@ let currentWord = "";
 let wordleCount = 0;
 let unsubscribe = () => {}; // Stores the database listener; call to unsubscribe
 
+const getUnsubscribe = () => {
+	return wordBankRef().onSnapshot(
+		async (snapshot: FirebaseFirestore.QuerySnapshot) => {
+			if (snapshot.empty) return;
+			const data = getRecentDocument(snapshot.docs);
+			currentWord = data.word;
+			wordleCount = data.count;
+		}
+	);
+};
+
 // Loads the most recent word in the database, adds first word if database only contains placeholder
 (async function initializeGame() {
 	const querySnapshot = await wordBankRef().get();
 	if (getRecentDocument(querySnapshot.docs).count < 1) {
 		currentWord = await generateNewWord(1);
 	}
-	unsubscribe = wordBankRef().onSnapshot(async (snapshot) => {
-		if (snapshot.empty) return;
-		const data = getRecentDocument(snapshot.docs);
-		currentWord = data.word;
-		wordleCount = data.count;
-	});
+	unsubscribe = getUnsubscribe();
 })();
 
 // This displays message that the server is running and listening to specified port
@@ -70,13 +76,8 @@ app.get("/", (req, res) => {
 
 // Generate a new word at midnight every day
 schedule.scheduleJob("*/5 * * * *", () => {
-	console.log("Generating new word");
 	wordleCount++;
 	generateNewWord(wordleCount);
-	unsubscribe();
-	unsubscribe = wordBankRef().onSnapshot((snapshot) => {
-		const data = getRecentDocument(snapshot.docs);
-		currentWord = data.word;
-		wordleCount = data.count;
-	});
+	unsubscribe(); // Unscribe from the old listener to prevent conflicts
+	unsubscribe = getUnsubscribe();
 });
