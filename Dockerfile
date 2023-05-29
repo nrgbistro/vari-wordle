@@ -41,6 +41,7 @@ COPY yarn.lock ./yarn.lock
 COPY tsconfig.json ./tsconfig.json
 
 RUN yarn install --prod --immutable --frozen-lockfile
+RUN yarn global add ts-node
 
 COPY --chown=node:node --from=builder /app/build ./build
 COPY --chown=node:node --from=builder /app/server ./server
