@@ -225,7 +225,7 @@ const App = () => {
 						setDuration={setPopupDuration}
 					/>
 				)}
-				{modal ? <Modal /> : null}
+				{modal && <Modal />}
 				<Navbar />
 				<Grid />
 				<Keyboard safegGuessWord={safegGuessWord} />
