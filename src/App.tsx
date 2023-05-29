@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Status } from "./components/gameGrid/Block";
-import Grid from "./components/gameGrid/Grid";
-import Keyboard from "./components/keyboard/Keyboard";
+import { Status } from "./components/gameGridTMP/Block";
+import Grid from "./components/gameGridTMP/Grid";
+import Keyboard from "./components/keyboardTMP/Keyboard";
 import Popup from "./components/PopupMessage";
-import Modal from "./components/modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
 	typeLetter,
@@ -27,6 +26,7 @@ import {
 } from "./redux/slices/statisticsSlice";
 import { useAppDispatch, useAppSelector } from "./redux/store";
 import { AuthContextProvider } from "./context/AuthContext";
+import Modal from "./components/modalsTMP/StatsModal";
 
 const App = () => {
 	const dispatch = useAppDispatch();
