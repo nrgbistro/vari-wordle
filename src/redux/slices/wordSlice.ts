@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Status } from "../../components/GameGrid/Block";
+import { Status } from "../../components/gameGrid/Block";
 import { RootState } from "../store";
 
 export const fetchWord = createAsyncThunk("word/fetchWord", async () => {

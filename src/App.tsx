@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Status } from "./components/GameGrid/Block";
-import Grid from "./components/GameGrid/Grid";
-import Keyboard from "./components/Keyboard/Keyboard";
+import { Status } from "./components/gameGrid/Block";
+import Grid from "./components/gameGrid/Grid";
+import Keyboard from "./components/keyboard/Keyboard";
 import Popup from "./components/PopupMessage";
-import Modal from "./components/Modals/StatsModal";
+import Modal from "./components/modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
 	typeLetter,

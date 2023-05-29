@@ -5,9 +5,9 @@ import { NUMBER_OF_TRIES } from "../../redux/slices/statisticsSlice";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsShare } from "react-icons/bs";
 import Popup from "../PopupMessage";
+import useDarkMode from "use-dark-mode";
 import Stats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
-import useDarkMode from "use-dark-mode";
 // import { UserAuth } from "../../context/AuthContext";
 // import GoogleButton from "react-google-button";
 
