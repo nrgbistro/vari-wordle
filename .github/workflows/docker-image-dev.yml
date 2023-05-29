@@ -1,0 +1,28 @@
+name: Docker Image CI Development
+
+on:
+  push:
+    branches: ["dev"]
+  pull_request:
+    branches: ["dev"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get Package Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev -t ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev:${{steps.package-version.outputs.current-version}} .
+
+      - name: Login to ghcr.io
+        run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
+
+      - name: Push image to ghcr.io
+        run: docker push -a ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev
