@@ -1,7 +1,7 @@
 import { PropsWithChildren, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { Status } from "../gameGridTMP/Block";
+import { Status } from "../gameGrid/Block";
 
 type Props = PropsWithChildren<{
 	action?: Function;
