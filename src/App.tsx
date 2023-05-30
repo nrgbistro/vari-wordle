@@ -28,6 +28,14 @@ import { useAppDispatch, useAppSelector } from "./redux/store";
 import { AuthContextProvider } from "./context/AuthContext";
 import Modal from "./components/modals/StatsModal";
 
+if (process.env.NODE_ENV === "production") {
+	import("logrocket").then((LogRocket) => {
+		LogRocket.init("nrgworx/vari-wordle");
+	});
+} else {
+	console.log("Not in production, not logging to LogRocket");
+}
+
 const App = () => {
 	const dispatch = useAppDispatch();
 	const wordStatus = useAppSelector(getWordStatus);
