@@ -25,10 +25,10 @@ const Key: React.FC<Props> = ({ action, children, accessibleLabel }) => {
 
 			switch (status) {
 				case Status.green:
-					newClassName = "bg-green-600";
+					newClassName = "dark:bg-correct-100 bg-present-900";
 					break;
 				case Status.yellow:
-					newClassName = "bg-yellow-400";
+					newClassName = "dark:bg-present-100 bg-present-900";
 					break;
 				case Status.guessed:
 					newClassName = "bg-gray-600 dark:bg-slate-600/50";
@@ -38,8 +38,10 @@ const Key: React.FC<Props> = ({ action, children, accessibleLabel }) => {
 					break;
 			}
 			ref.current.className =
-				"rounded-md sm:min-w-[40px] sm:grow-0 grow items-center " +
-				newClassName;
+				"rounded-md sm:min-w-[40px] sm:grow-0 grow items-center".concat(
+					" ",
+					newClassName
+				);
 			if (status !== Status.empty) {
 				ref.current.classList.add("text-white");
 			}

@@ -46,11 +46,13 @@ const Block: React.FC<Props> = ({ x, y }) => {
 			}
 
 			switch (statusGrid[y][x]) {
-				case Status.yellow:
-					ref.current.classList.add("bg-yellow-400");
-					break;
 				case Status.green:
-					ref.current.classList.add("bg-green-600");
+					ref.current.classList.add("dark:bg-correct-100");
+					ref.current.classList.add("bg-correct-900");
+					break;
+				case Status.yellow:
+					ref.current.classList.add("dark:bg-present-100");
+					ref.current.classList.add("bg-present-900");
 					break;
 				case Status.guessed:
 					ref.current.classList.add("bg-gray-400");
