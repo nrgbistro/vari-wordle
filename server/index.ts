@@ -47,6 +47,7 @@ const whitelist = [
 	"http://localhost:3000",
 	"http://localhost:3001",
 	"https://vari-wordle.nrgserver.me/",
+	"https://dev-vari-wordle.nrgserver.me/",
 ];
 const corsOptions = {
 	origin: (origin: any, cb: any) => {
