@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Status } from "./components/gameGrid/Block";
-import Grid from "./components/gameGrid/Grid";
-import Keyboard from "./components/keyboard/Keyboard";
-import Popup from "./components/PopupMessage";
-import Navbar from "./components/Navbar";
+import { Status } from "../components/gameGrid/Block";
+import Grid from "../components/gameGrid/Grid";
+import Keyboard from "../components/keyboard/Keyboard";
+import Popup from "../components/PopupMessage";
+import Navbar from "../components/Navbar";
 import {
 	typeLetter,
 	removeLetter,
@@ -15,7 +15,7 @@ import {
 	completeGame,
 	openModal,
 	fetchValidWords,
-} from "./redux/slices/wordSlice";
+} from "../redux/slices/wordSlice";
 import {
 	addGuess,
 	incrementGamesPlayed,
@@ -23,10 +23,10 @@ import {
 	incrementWon,
 	NUMBER_OF_TRIES,
 	setStreaking,
-} from "./redux/slices/statisticsSlice";
-import { useAppDispatch, useAppSelector } from "./redux/store";
-import { AuthContextProvider } from "./context/AuthContext";
-import Modal from "./components/modals/StatsModal";
+} from "../redux/slices/statisticsSlice";
+import { useAppDispatch, useAppSelector } from "../redux/store";
+import { AuthContextProvider } from "../context/AuthContext";
+import Modal from "../components/modals/StatsModal";
 
 if (process.env.NODE_ENV === "production") {
 	import("logrocket").then((LogRocket) => {
