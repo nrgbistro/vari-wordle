@@ -58,7 +58,7 @@ export const generateNewWord = async (
 	while (newWord.length < 4 || !validWords?.includes(newWord)) {
 		newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
 	}
-	console.log("Generated word: " + newWord);
+	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {
 		try {
 			await wordBankRef().add({
@@ -70,4 +70,18 @@ export const generateNewWord = async (
 		}
 	}
 	return newWord;
+};
+
+const getDateAndTime = (): string => {
+	const date = new Date();
+	return (
+		date.getMonth() +
+		1 +
+		"/" +
+		date.getDate() +
+		"/" +
+		date.getFullYear() +
+		" @ " +
+		new Date().toLocaleTimeString()
+	);
 };
