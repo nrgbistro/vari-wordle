@@ -24,9 +24,8 @@ RUN yarn build
 
 FROM node as final
 
-ENV NODE_ENV production
-
 RUN apk --no-cache -U upgrade
+RUN apk add --no-cache tzdata
 
 RUN mkdir -p /home/node/app/build && chown -R node:node /home/node/app
 
@@ -43,15 +42,14 @@ COPY tsconfig.json ./tsconfig.json
 RUN yarn install --prod --immutable --frozen-lockfile
 RUN yarn global add ts-node
 
-RUN apt update && apt install tzdata -y
 
 COPY --chown=node:node --from=builder /app/build ./build
 COPY --chown=node:node --from=builder /app/server ./server
 
 EXPOSE 3001
 
-ENV DANGEROUSLY_DISABLE_HOST_CHECK=true
-ENV NODE_ENV=development
-ENV TZ=America/New_York
+ENV DANGEROUSLY_DISABLE_HOST_CHECK true
+ENV NODE_ENV development
+ENV TZ America/New_York
 
 ENTRYPOINT ["yarn", "start"]
