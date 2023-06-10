@@ -27,13 +27,10 @@ import {
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { AuthContextProvider } from "../context/AuthContext";
 import Modal from "../components/modals/StatsModal";
+import LogRocket from "logrocket";
 
 if (process.env.NODE_ENV === "production") {
-	import("logrocket").then((LogRocket) => {
-		LogRocket.init("nrgworx/vari-wordle");
-	});
-} else {
-	console.log("Not in production, not logging to LogRocket");
+	LogRocket.init("nrgworx/vari-wordle");
 }
 
 const App = () => {
