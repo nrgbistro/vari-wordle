@@ -1,46 +1,45 @@
-# Getting Started with Create React App
+# Vari-Wordle
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+Vari-Wordle is a [Wordle](https://www.nytimes.com/games/wordle/index.html)* clone that allows users to play the game with a variety of different word lengths. The game is built using React and Typescript with an express backend. It's connected to a firestore that stores the current and historical words. The game is self-hosted using docker.
 
 ## Available Scripts
-
 In the project directory, you can run:
 
-### `npm start`
+### `yarn start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in production mode.\
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser. Requires the `build` directory to be present
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+CURRENTLY BROKEN - Launches the test runner in the interactive watch mode.
 
-### `npm run build`
+### `yarn build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `yarn dev`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Runs the app in the development mode with nodemon.\
+Concurrently starts the server and the client and proxies api requests to the local server.
 
-### `npm run eject`
+### `yarn backend`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Runs the server in the development mode with nodemon.\
+Used to test changes made to the server without needing to start the client.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `yarn docker-dev-build`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Builds the docker image for development.\
+This command helps locally testing the Dockerfile.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### `yarn docker-dev-start`
 
-## Learn More
+Runs the docker image for development.\
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+\* all credit to New York Times for the original game
