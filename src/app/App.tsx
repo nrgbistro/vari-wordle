@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from "../redux/store";
 import { AuthContextProvider } from "../context/AuthContext";
 import Modal from "../components/modals/StatsModal";
 import LogRocket from "logrocket";
+import { isIos, isIosPWA } from "./appHelpers";
 
 if (process.env.NODE_ENV === "production") {
 	LogRocket.init("nrgworx/vari-wordle");
@@ -79,16 +80,14 @@ const App = () => {
 		getValidWords();
 	}, [getValidWords]);
 
-	// Adjust height for mobile
+	// Adjust height and spacing for mobile
 	useEffect(() => {
-		if (
-			navigator.userAgent.toLowerCase().match(/mobile/i) &&
-			navigator.userAgent.match(/ipad|ipod|iphone/i) &&
-			"ontouchend" in document &&
-			containerRef.current
-		) {
-			containerRef.current.classList.remove("min-h-screen");
-			containerRef.current.classList.add("min-h-screen-mobile");
+		if (isIos()) {
+			containerRef.current?.classList.remove("min-h-screen");
+			containerRef.current?.classList.add("min-h-screen-mobile");
+		}
+		if (isIosPWA()) {
+			// containerRef.current?.classList.add("pb-6");
 		}
 	}, []);
 
@@ -233,7 +232,10 @@ const App = () => {
 				{modal && <Modal />}
 				<Navbar />
 				<Grid />
-				<Keyboard safegGuessWord={safegGuessWord} />
+				<Keyboard
+					safegGuessWord={safegGuessWord}
+					className={isIosPWA() ? "mb-20" : ""}
+				/>
 			</div>
 		</AuthContextProvider>
 	);

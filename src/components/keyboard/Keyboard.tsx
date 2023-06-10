@@ -6,8 +6,10 @@ import KeyRow from "./KeyRow";
 
 const Keyboard = ({
 	safegGuessWord,
+	className = "",
 }: {
 	safegGuessWord: () => Promise<void>;
+	className?: string;
 }) => {
 	const dispatch = useAppDispatch();
 
@@ -16,7 +18,12 @@ const Keyboard = ({
 	const row3 = "ZXCVBNM";
 
 	return (
-		<div className="flex flex-col items-center gap-2 mt-auto mb-1 w-full noselect">
+		<div
+			className={"flex flex-col items-center gap-2 mt-auto mb-1 px-1 w-full noselect".concat(
+				" ",
+				className
+			)}
+		>
 			<KeyRow>
 				{row1.split("").map((letter) => (
 					<Key
