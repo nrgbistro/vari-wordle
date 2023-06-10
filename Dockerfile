@@ -48,6 +48,7 @@ COPY --chown=node:node --from=builder /app/server ./server
 
 EXPOSE 3001
 
+# Default environment variables
 ENV DANGEROUSLY_DISABLE_HOST_CHECK true
 ENV NODE_ENV development
 ENV TZ America/New_York
