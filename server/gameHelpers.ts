@@ -1,4 +1,4 @@
-import randomWords from "random-words";
+import { generate } from "random-words";
 import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
@@ -50,13 +50,13 @@ export const generateNewWord = async (
 	newCount: number,
 	pushToDatabase: boolean = true
 ) => {
-	let newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
+	let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	// Ensure validWords array has been created
 	if (!validWords) {
-		setTimeout(() => {}, 200);
+		setTimeout(() => {}, 500);
 	}
-	while (newWord.length < 4 || !validWords?.includes(newWord)) {
-		newWord = randomWords({ exactly: 1, maxLength: 8 })[0];
+	while (!validWords?.includes(newWord)) {
+		newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {
