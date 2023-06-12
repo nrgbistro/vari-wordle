@@ -27,12 +27,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../redux/store";
 import { AuthContextProvider } from "../context/AuthContext";
 import Modal from "../components/modals/StatsModal";
-import LogRocket from "logrocket";
 import { isIos, isIosPWA } from "./appHelpers";
-
-if (process.env.NODE_ENV === "production") {
-	LogRocket.init("nrgworx/vari-wordle");
-}
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -85,9 +80,6 @@ const App = () => {
 		if (isIos()) {
 			containerRef.current?.classList.remove("min-h-screen");
 			containerRef.current?.classList.add("min-h-screen-mobile");
-		}
-		if (isIosPWA()) {
-			// containerRef.current?.classList.add("pb-6");
 		}
 	}, []);
 

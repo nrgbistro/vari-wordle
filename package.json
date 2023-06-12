@@ -28,6 +28,7 @@
 		"fs": "^0.0.1-security",
 		"line-reader": "^0.4.0",
 		"logrocket": "^4.0.3",
+		"logrocket-react": "^5.0.1",
 		"node-schedule": "^2.1.1",
 		"path": "^0.12.7",
 		"path-browserify": "^1.0.1",
@@ -49,6 +50,7 @@
 	"devDependencies": {
 		"@types/cors": "^2.8.13",
 		"@types/jest": "^29.5.1",
+		"@types/logrocket-react": "^3.0.0",
 		"@types/node": "^20.0.0",
 		"@types/node-schedule": "^2.1.0",
 		"@types/react": "^18.0.15",
