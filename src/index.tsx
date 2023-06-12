@@ -1,3 +1,5 @@
+import LogRocket from "logrocket";
+import setupLogRocketReact from "logrocket-react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -12,6 +14,11 @@ const root = ReactDOM.createRoot(
 );
 
 const persistor = persistStore(store);
+
+if (process.env.NODE_ENV === "production") {
+	LogRocket.init("nrgworx/vari-wordle");
+	setupLogRocketReact(LogRocket);
+}
 
 root.render(
 	<React.StrictMode>
