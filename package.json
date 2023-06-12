@@ -1,6 +1,6 @@
 {
 	"name": "vari-wordle",
-	"version": "1.1.4",
+	"version": "1.1.5",
 	"private": false,
 	"scripts": {
 		"docker-dev-start": "docker-compose --env-file .env up -d",
@@ -14,9 +14,6 @@
 	},
 	"dependencies": {
 		"@reduxjs/toolkit": "^1.8.3",
-		"@testing-library/jest-dom": "^5.16.4",
-		"@testing-library/react": "^14.0.0",
-		"@testing-library/user-event": "^14.2.0",
 		"axios": "^1.4.0",
 		"chart.js": "^4.0.0",
 		"cors": "^2.8.5",
@@ -48,6 +45,9 @@
 		"web-vitals": "^3.0.0"
 	},
 	"devDependencies": {
+		"@testing-library/jest-dom": "^5.16.4",
+		"@testing-library/react": "^14.0.0",
+		"@testing-library/user-event": "^14.2.0",
 		"@types/cors": "^2.8.13",
 		"@types/jest": "^29.5.1",
 		"@types/logrocket-react": "^3.0.0",
