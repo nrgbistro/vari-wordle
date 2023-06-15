@@ -15,7 +15,7 @@ const port = process.env.PORT || 3001;
 
 let currentWord = "";
 let wordleCount = 0;
-let unsubscribe = () => {}; // Stores the database listener; call to unsubscribe
+let unsubscribe: () => void; // Stores the database listener; call to unsubscribe
 
 const getUnsubscribe = () => {
 	return wordBankRef().onSnapshot(
@@ -63,15 +63,15 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get("/api/word", (req, res) => {
+app.get("/api/word", (_req, res) => {
 	res.json({ word: currentWord, count: wordleCount });
 });
 
-app.get("/api/validWords", (req, res) => {
+app.get("/api/validWords", (_req, res) => {
 	res.json(validWords);
 });
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
 	res.sendFile(path.resolve(__dirname, "../build", "index.html"));
 });
 

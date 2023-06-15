@@ -11,9 +11,9 @@ interface StatsData {
 export const NUMBER_OF_TRIES = [6, 6, 7, 8, 9];
 
 const generateInitialGuessDistribution = (): number[][] => {
-	let ret = [];
+	const ret = [];
 	for (let i = 4; i <= 8; i++) {
-		let temp = [];
+		const temp = [];
 		for (let j = 0; j < NUMBER_OF_TRIES[i - 4]; j++) {
 			temp.push(0);
 		}

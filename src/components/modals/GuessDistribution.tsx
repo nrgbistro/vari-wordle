@@ -60,7 +60,7 @@ const GuessDistribution = () => {
 	};
 
 	const generateLabels = (num: number) => {
-		let ret = [];
+		const ret = [];
 		const length = NUMBER_OF_TRIES[num - 4];
 		for (let i = 1; i <= length; i++) {
 			ret.push(i + " ");

@@ -1,9 +1,8 @@
-import { AnyObject } from "chart.js/dist/types/basic";
-import { Chart } from "chart.js/dist/types/index";
+import { Chart } from "chart.js";
 
 const chartAreaBorder = {
 	id: "chartAreaBorder",
-	beforeDraw(chart: Chart, args: Object, options: AnyObject) {
+	beforeDraw(chart: Chart, _args: unknown, options: any) {
 		const {
 			ctx,
 			chartArea: { left, top, width, height },

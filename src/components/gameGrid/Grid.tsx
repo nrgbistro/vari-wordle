@@ -7,7 +7,7 @@ import Row from "./Row";
 const Grid = () => {
 	const { correctWord } = useSelector((state: RootState) => state.word);
 
-	let grid: ReactElement[] = [];
+	const grid: ReactElement[] = [];
 
 	for (let i = 0; i < NUMBER_OF_TRIES[correctWord.word.length - 4]; i++) {
 		grid.push(<Row y={i} key={i} />);

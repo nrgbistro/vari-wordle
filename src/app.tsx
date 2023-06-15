@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Status } from "./components/gameGrid/Block";
 import Grid from "./components/gameGrid/Grid";
 import Keyboard from "./components/keyboard/Keyboard";
@@ -39,7 +39,7 @@ const App = () => {
 		modal,
 		guessedWordsGrid,
 		gameDone,
-	} = useAppSelector((state: any) => state.word);
+	} = useAppSelector((state) => state.word);
 
 	// Fetch the word on first load
 	useEffect(() => {
@@ -48,7 +48,7 @@ const App = () => {
 		}
 	}, [correctWord, dispatch, wordStatus]);
 
-	const validWords = useAppSelector((state: any) => state.word.validWords);
+	const validWords = useAppSelector((state) => state.word.validWords);
 	const [popupVisible, setPopupVisible] = useState(false);
 	const [popupMessage, setPopupMessage] = useState("");
 	const [popupDuration, setPopupDuration] = useState(2000);

@@ -4,7 +4,7 @@ import { RootState } from "../../redux/store";
 import { Status } from "../gameGrid/Block";
 
 type Props = PropsWithChildren<{
-	action?: Function;
+	action?: () => void;
 	accessibleLabel: string;
 }>;
 

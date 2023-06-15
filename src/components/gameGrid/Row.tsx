@@ -3,7 +3,7 @@ import { RootState } from "../../redux/store";
 import Block from "./Block";
 
 const Row = ({ y }: { y: number }) => {
-	let row = [];
+	const row = [];
 	const { correctWord } = useSelector((state: RootState) => state.word);
 
 	for (let j = 0; j < correctWord.word.length; j++) {
