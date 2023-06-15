@@ -1,10 +1,4 @@
-import {
-	AnyComponent,
-	createElement,
-	FunctionalComponent,
-	RenderableProps,
-	ComponentChild,
-} from "preact";
+import { AnyComponent } from "preact";
 
 export {
 	Attributes,
