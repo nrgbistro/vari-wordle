@@ -1,0 +1,11 @@
+node_modules
+build
+.dockerignore
+Dockerfile
+Dockerfile.prod
+*.md
+.gitignore
+.github
+.env
+server/filterWords.ts
+server/words.txt

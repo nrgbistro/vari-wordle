@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	div {
+		@apply box-border;
+	}
+	:root {
+		--sat: env(safe-area-inset-top);
+		--sar: env(safe-area-inset-right);
+		--sab: env(safe-area-inset-bottom);
+		--sal: env(safe-area-inset-left);
+	}
+	body {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+}
+
+@layer utilities {
+	.font-variant-small {
+		font-variant: small-caps;
+	}
+	.min-h-screen-mobile {
+		min-height: -webkit-fill-available;
+		min-height: -moz-available;
+		min-height: stretch;
+	}
+
+	.noselect {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+		user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+	}
+}
+
+.hoverscale {
+	@apply cursor-pointer;
+	@apply hover:scale-110;
+	@apply ease-in-out;
+	@apply transition-all;
+	@apply duration-100;
+	@apply transform-gpu;
+}
