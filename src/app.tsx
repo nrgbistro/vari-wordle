@@ -27,7 +27,7 @@ import {
 import { useAppDispatch, useAppSelector } from "./redux/store";
 import { AuthContextProvider } from "./context/AuthContext";
 import Modal from "./components/modals/StatsModal";
-import { isIos, isIosPWA } from "./appHelpers";
+import { checkGameWon, guessAllowedCheck, isIos, isIosPWA } from "./appHelpers";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -54,16 +54,9 @@ const App = () => {
 	const [popupDuration, setPopupDuration] = useState(2000);
 	const containerRef = useRef<HTMLDivElement>(null);
 
-	const checkGameWon = useCallback(() => {
-		if (guessIndex === 0) return false;
-		let wonCheck = true;
-		for (let i = 0; i < correctWord.word?.length; i++) {
-			if (guessedWordsGrid[guessIndex - 1][i] !== Status.green) {
-				wonCheck = false;
-			}
-		}
-		return wonCheck;
-	}, [correctWord.word?.length, guessIndex, guessedWordsGrid]);
+	const checkGameWonCached = useCallback(() => {
+		return checkGameWon(guessIndex, correctWord.word, guessedWordsGrid);
+	}, [correctWord.word, guessIndex, guessedWordsGrid]);
 
 	const getValidWords = useCallback(async () => {
 		if (validWords.status === "idle") {
@@ -111,13 +104,13 @@ const App = () => {
 	// Check for game won or lost
 	useEffect(() => {
 		if (gameDone) return;
-		if (checkGameWon()) {
+		if (checkGameWonCached()) {
 			wonGame();
 		} else if (guessIndex >= NUMBER_OF_TRIES[correctWord.word.length - 4]) {
 			lostGame();
 		}
 	}, [
-		checkGameWon,
+		checkGameWonCached,
 		correctWord.word,
 		dispatch,
 		gameDone,
@@ -133,14 +126,14 @@ const App = () => {
 		const response = await axios.get("/api/word");
 		const newWord = response.data.word;
 		if (newWord !== correctWord.word) {
-			if (!checkGameWon() && guessedWordsGrid.length > 0) {
+			if (!checkGameWonCached() && guessedWordsGrid.length > 0) {
 				dispatch(setStreaking(false));
 			}
 			dispatch(resetGame());
 			dispatch<any>(fetchWord());
 		}
 	}, [
-		checkGameWon,
+		checkGameWonCached,
 		correctWord.status,
 		correctWord.word,
 		dispatch,
@@ -148,14 +141,16 @@ const App = () => {
 	]);
 
 	const safegGuessWord = useCallback(async () => {
-		if (gameDone) return;
-		if (currentGuess.length !== correctWord.word.length) {
-			setPopupMessage("Not enough letters");
-			setPopupVisible(true);
-			return;
-		}
-		if (!validWords.words.includes(currentGuess.toLowerCase())) {
-			setPopupMessage("Not in word list");
+		const result = guessAllowedCheck(
+			gameDone,
+			currentGuess,
+			correctWord.word,
+			validWords.words
+		);
+
+		if (!result) return;
+		if (typeof result === "string") {
+			setPopupMessage(result);
 			setPopupVisible(true);
 			return;
 		}
@@ -164,7 +159,7 @@ const App = () => {
 		}
 		dispatch(guessWord());
 	}, [
-		correctWord.word.length,
+		correctWord.word,
 		currentGuess,
 		dispatch,
 		gameDone,
