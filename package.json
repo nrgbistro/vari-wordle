@@ -4,8 +4,8 @@
 	"version": "1.2.0",
 	"type": "module",
 	"scripts": {
-		"docker-dev-start": "docker-compose --env-file .env up -d",
-		"docker-dev-build": "docker build -t vari-wordle-dev .",
+		"docker-start": "docker-compose --env-file .env up -d",
+		"docker-build": "docker build -t vari-wordle-dev .",
 		"dev": "concurrently \"ts-node-esm server/index.ts\" \"vite\"",
 		"build": "tsc && vite build",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
