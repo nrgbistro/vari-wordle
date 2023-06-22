@@ -133,7 +133,7 @@ const wordSlice = createSlice({
 	},
 	extraReducers(builder) {
 		builder
-			.addCase(fetchWord.pending, (state, _action) => {
+			.addCase(fetchWord.pending, (state) => {
 				state.correctWord.status = "loading";
 			})
 			.addCase(fetchWord.rejected, (state, action) => {
@@ -145,7 +145,7 @@ const wordSlice = createSlice({
 				state.correctWord.word = action.payload.data.word;
 				state.correctWord.count = action.payload.data.count;
 			})
-			.addCase(fetchValidWords.pending, (state, _action) => {
+			.addCase(fetchValidWords.pending, (state) => {
 				state.validWords.status = "loading";
 			})
 			.addCase(fetchValidWords.rejected, (state, action) => {

@@ -1,4 +1,10 @@
-import { useContext, createContext, useEffect, useState } from "react";
+import {
+	useContext,
+	createContext,
+	useEffect,
+	useState,
+	ReactNode,
+} from "react";
 import {
 	GoogleAuthProvider,
 	onAuthStateChanged,
@@ -20,12 +26,16 @@ const defaultState: IAuthContext = {
 };
 const AuthContext = createContext(defaultState);
 
-export const AuthContextProvider = ({ children }: { children: any }) => {
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 	const [user, setUser] = useState({});
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-			setUser(currentUser!);
+			if (currentUser !== null) {
+				setUser(currentUser);
+			} else {
+				setUser({});
+			}
 		});
 		return () => unsubscribe();
 	}, [user]);
