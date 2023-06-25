@@ -48,12 +48,14 @@ export const getRecentDocument = (
 // Creates a new random word and writes it to the database
 export const generateNewWord = async (
 	newCount: number,
-	pushToDatabase: boolean = true
+	pushToDatabase = true
 ) => {
 	let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	// Ensure validWords array has been created
 	if (!validWords) {
-		setTimeout(() => {}, 500);
+		setTimeout(() => {
+			console.log("Waiting for validWords array to be created...");
+		}, 500);
 	}
 	while (!validWords?.includes(newWord)) {
 		newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
