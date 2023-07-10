@@ -2,10 +2,8 @@ import { generate } from "random-words";
 import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import { db } from "./firebase.js";
+import { db } from "./firebase.mts";
 
-export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config();
 
 interface WordBankDocument {
@@ -50,15 +48,16 @@ export const generateNewWord = async (
 	newCount: number,
 	pushToDatabase = true
 ) => {
-	let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
+	// let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	// Ensure validWords array has been created
+	let newWord = "";
 	if (!validWords) {
 		setTimeout(() => {
 			console.log("Waiting for validWords array to be created...");
 		}, 500);
 	}
 	while (!validWords?.includes(newWord)) {
-		newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
+		// newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {

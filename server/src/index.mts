@@ -7,8 +7,7 @@ import {
 	getRecentDocument,
 	validWords,
 	wordBankRef,
-	__dirname,
-} from "./gameHelpers.js";
+} from "./gameHelpers.mts";
 
 const app = express();
 const port = process.env.PORT || 3001;

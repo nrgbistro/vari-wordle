@@ -1,7 +1,7 @@
 // Quick script to filter out words that are too long or too short for the game
 
-const fs = require("fs");
-const readline = require("readline");
+import fs from "fs";
+import readline from "readline";
 
 const rl = readline.createInterface({
 	input: fs.createReadStream("./words_alpha.txt"),
