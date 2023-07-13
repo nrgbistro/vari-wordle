@@ -9,8 +9,9 @@ const Navbar = () => {
 		<header className="border-b-black/50 border-b-2 h-12 sm:h-14 w-full">
 			<button
 				onClick={() => dispatch(toggleModal())}
-				className="text-3xl absolute top-2 md:top-3 left-2 hoverscale"
+				className="text-3xl absolute top-2 md:top-3 left-2 hover-scale"
 				aria-label="Open menu"
+				title="Open menu"
 			>
 				<GiHamburgerMenu />
 			</button>

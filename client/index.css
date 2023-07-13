@@ -41,7 +41,7 @@
                                     supported by Chrome, Edge, Opera and Firefox */
 	}
 
-	.hoverscale {
+		.hover-scale {
 		@apply cursor-pointer;
 		@apply hover:scale-110;
 		@apply ease-in-out;

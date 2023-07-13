@@ -83,7 +83,7 @@ const Modal = () => {
 						<AiOutlineClose className="mx-2 text-3xl font-variant-small opacity-0" />
 						<h2 className="mx-2 text-3xl font-variant-small">statistics</h2>
 						<AiOutlineClose
-							className="m-2 text-2xl hoverscale"
+							className="m-2 text-2xl hover-scale"
 							onClick={() => dispatch(toggleModal())}
 						/>
 					</div>
