@@ -7,7 +7,8 @@ import {
 	getRecentDocument,
 	validWords,
 	wordBankRef,
-} from "./gameHelpers.mts";
+	__dirname,
+} from "./gameHelpers.ts";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -78,6 +79,6 @@ app.get("/", (_req, res) => {
 schedule.scheduleJob("0 0 * * *", () => {
 	wordleCount++;
 	generateNewWord(wordleCount);
-	unsubscribe(); // Unscribe from the old listener to prevent conflicts
+	unsubscribe(); // unsubscribe from the old listener to prevent conflicts
 	unsubscribe = getUnsubscribe();
 });
