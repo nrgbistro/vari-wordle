@@ -10,8 +10,11 @@
 		"@vari-wordle/server"
 	],
 	"scripts": {
-		"start": "yarn --cwd server start",
-		"build": "yarn --cwd client build",
-		"dev": "yarn --cwd server dev"
+		"start": "concurrently -n \"server,client\" -c \"blue,magenta\"  \"yarn --cwd server start\" \"yarn --cwd client start\"",
+		"build": "concurrently -n \"server,client\" -c \"blue,magenta\"  \"yarn --cwd server build\" \"yarn --cwd client build\"",
+		"dev": "concurrently -n \"server,client\" -c \"blue,magenta\"  \"yarn --cwd server dev\" \"yarn --cwd client dev\""
+	},
+	"devDependencies": {
+		"concurrently": "^8.2.0"
 	}
 }
