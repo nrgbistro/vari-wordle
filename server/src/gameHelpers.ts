@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
 import { db } from "./firebase.ts";
-
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -54,16 +53,16 @@ export const generateNewWord = async (
 	newCount: number,
 	pushToDatabase = true
 ) => {
-	// let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
+	let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	// Ensure validWords array has been created
-	let newWord = "";
+	// let newWord = "";
 	if (!validWords) {
 		setTimeout(() => {
 			console.log("Waiting for validWords array to be created...");
 		}, 500);
 	}
-	while (!validWords?.includes(newWord)) {
-		// newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
+	while (!validWords.includes(newWord)) {
+		newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {

@@ -55,7 +55,7 @@ const corsOptions = {
 			cb(null, true);
 		} else {
 			console.log(`origin: ${origin}`);
-			cb(new Error("Not allowd by CORS"));
+			cb(new Error("Not allowed by CORS"));
 		}
 	},
 	optionsSuccessStatus: 200,
