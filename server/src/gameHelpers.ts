@@ -3,8 +3,6 @@ import path from "path";
 import * as dotenv from "dotenv";
 import { db } from "./firebase";
 
-// const __filename = fileURLToPath(import.meta.url);
-// export const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -19,7 +17,7 @@ export let validWords: any = null;
 (async function getWords() {
 	return new Promise((resolve, reject) => {
 		fs.readFile(
-			path.resolve(__dirname, "words_filtered.txt"),
+			path.resolve(__dirname, "static/words_filtered.txt"),
 			"utf-8",
 			(err, data) => {
 				if (err) {
