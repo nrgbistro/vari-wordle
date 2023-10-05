@@ -52,7 +52,6 @@ const generateNewWordHelper = () => {
 			maxLength: 8,
 		})[0];
 	});
-	// console.log("generated word: ", ret);
 	return ret;
 };
 

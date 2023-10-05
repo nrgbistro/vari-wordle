@@ -42,7 +42,6 @@ const App = () => {
 
 	// Ensure changes to the app don't break local storage by using package version
 	useEffect(() => {
-		console.log(localStorage.getItem("version"));
 		if (localStorage.getItem("version") !== APP_VERSION) {
 			localStorage.clear();
 			localStorage.setItem("version", APP_VERSION);
