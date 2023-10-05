@@ -1,13 +1,10 @@
-import { generate } from "random-words";
 import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
-import { db } from "./firebase.ts";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { db } from "./firebase";
 
-const __filename = fileURLToPath(import.meta.url);
-export const __dirname = dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// export const __dirname = dirname(__filename);
 
 dotenv.config();
 
@@ -48,21 +45,33 @@ export const getRecentDocument = (
 		.data();
 };
 
+const generateNewWordHelper = () => {
+	let ret = "";
+	import("random-words").then((randomWords) => {
+		ret = randomWords.generate({
+			exactly: 1,
+			minLength: 4,
+			maxLength: 8,
+		})[0];
+	});
+	// console.log("generated word: ", ret);
+	return ret;
+};
+
 // Creates a new random word and writes it to the database
 export const generateNewWord = async (
 	newCount: number,
 	pushToDatabase = true
 ) => {
-	let newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
-	// Ensure validWords array has been created
-	// let newWord = "";
+	let newWord = generateNewWordHelper();
 	if (!validWords) {
+		// Ensure validWords array has been created
 		setTimeout(() => {
 			console.log("Waiting for validWords array to be created...");
 		}, 500);
 	}
 	while (!validWords.includes(newWord)) {
-		newWord = generate({ exactly: 1, minLength: 4, maxLength: 8 })[0];
+		newWord = generateNewWordHelper();
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {

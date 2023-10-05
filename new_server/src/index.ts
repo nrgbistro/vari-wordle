@@ -1,14 +1,12 @@
 import cors from "cors";
 import express from "express";
-import path from "path";
 import schedule from "node-schedule";
-// import {
-// 	generateNewWord,
-// 	getRecentDocument,
-// 	validWords,
-// 	wordBankRef,
-// 	__dirname,
-// } from "./gameHelpers.ts";
+import {
+	generateNewWord,
+	getRecentDocument,
+	validWords,
+	wordBankRef,
+} from "./gameHelpers";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -17,37 +15,35 @@ let currentWord = "";
 let wordleCount = 0;
 let unsubscribe: () => void; // Stores the database listener; call to unsubscribe
 
-// const getUnsubscribe = () => {
-// 	return wordBankRef().onSnapshot(
-// 		async (snapshot: FirebaseFirestore.QuerySnapshot) => {
-// 			if (snapshot.empty) return;
-// 			const data = getRecentDocument(snapshot.docs);
-// 			currentWord = data.word;
-// 			wordleCount = data.count;
-// 		}
-// 	);
-// };
+const getUnsubscribe = () => {
+	return wordBankRef().onSnapshot(
+		async (snapshot: FirebaseFirestore.QuerySnapshot) => {
+			if (snapshot.empty) return;
+			const data = getRecentDocument(snapshot.docs);
+			currentWord = data.word;
+			wordleCount = data.count;
+		}
+	);
+};
 
 // Loads the most recent word in the database, adds first word if database only contains placeholder
-// (async function initializeGame() {
-// 	const querySnapshot = await wordBankRef().get();
-// 	if (getRecentDocument(querySnapshot.docs).count < 1) {
-// 		currentWord = await generateNewWord(1);
-// 	}
-// 	unsubscribe = getUnsubscribe();
-// })();
+(async function initializeGame() {
+	const querySnapshot = await wordBankRef().get();
+	if (getRecentDocument(querySnapshot.docs).count < 1) {
+		currentWord = await generateNewWord(1);
+	}
+	unsubscribe = getUnsubscribe();
+})();
 
 // This displays message that the server is running and listening to specified port
 app.listen(port, () => console.log(`Using port ${port}`));
-
-// Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, "../build")));
 
 const whitelist = [
 	"http://localhost:3001",
 	"https://vari-wordle.nrgserver.me/",
 	"https://dev-vari-wordle.nrgserver.me/",
 ];
+
 const corsOptions = {
 	origin: (origin: any, cb: any) => {
 		if (whitelist.includes(origin) || !origin) {
@@ -67,7 +63,7 @@ app.get("/api/word", (_req, res) => {
 });
 
 app.get("/api/validWords", (_req, res) => {
-	// res.json(validWords);
+	res.json(validWords);
 });
 
 app.get("/", (_req, res) => {
@@ -77,7 +73,7 @@ app.get("/", (_req, res) => {
 // Generate a new word at midnight every day
 schedule.scheduleJob("0 0 * * *", () => {
 	wordleCount++;
-	// generateNewWord(wordleCount);
+	generateNewWord(wordleCount);
 	unsubscribe(); // unsubscribe from the old listener to prevent conflicts
-	// unsubscribe = getUnsubscribe();
+	unsubscribe = getUnsubscribe();
 });
