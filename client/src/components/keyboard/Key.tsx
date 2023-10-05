@@ -25,7 +25,7 @@ const Key: React.FC<Props> = ({ action, children, accessibleLabel }) => {
 
 			switch (status) {
 				case Status.green:
-					newClassName = "dark:bg-correct-100 bg-present-900";
+					newClassName = "dark:bg-correct-100 bg-correct-900";
 					break;
 				case Status.yellow:
 					newClassName = "dark:bg-present-100 bg-present-900";
