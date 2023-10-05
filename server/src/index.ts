@@ -1,14 +1,12 @@
 import cors from "cors";
 import express from "express";
-import path from "path";
 import schedule from "node-schedule";
 import {
 	generateNewWord,
 	getRecentDocument,
 	validWords,
 	wordBankRef,
-	__dirname,
-} from "./gameHelpers.ts";
+} from "./gameHelpers";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -40,15 +38,12 @@ const getUnsubscribe = () => {
 // This displays message that the server is running and listening to specified port
 app.listen(port, () => console.log(`Using port ${port}`));
 
-// Have Node serve the files for our built React app
-app.use(express.static(path.resolve(__dirname, "../build")));
-
 const whitelist = [
-	"http://localhost:3000",
 	"http://localhost:3001",
 	"https://vari-wordle.nrgserver.me/",
 	"https://dev-vari-wordle.nrgserver.me/",
 ];
+
 const corsOptions = {
 	origin: (origin: any, cb: any) => {
 		if (whitelist.includes(origin) || !origin) {
@@ -72,7 +67,7 @@ app.get("/api/validWords", (_req, res) => {
 });
 
 app.get("/", (_req, res) => {
-	res.sendFile(path.resolve(__dirname, "../build", "index.html"));
+	res.send("Vari-Wordle Backend Up!");
 });
 
 // Generate a new word at midnight every day
