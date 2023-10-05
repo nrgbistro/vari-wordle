@@ -15,7 +15,10 @@ export default defineConfig({
 		},
 	},
 	build: {
-		outDir: "build",
+		outDir: "dist",
+	},
+	define: {
+		APP_VERSION: JSON.stringify(process.env.npm_package_version),
 	},
 	test: {
 		globals: true,

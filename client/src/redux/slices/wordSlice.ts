@@ -16,8 +16,8 @@ export const fetchValidWords = createAsyncThunk(
 	"word/fetchValidWords",
 	async () => {
 		try {
-			const word = await axios.get("/api/validWords");
-			return word;
+			const words = await axios.get("/api/validWords");
+			return words;
 		} catch (err) {
 			return err;
 		}

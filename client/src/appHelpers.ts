@@ -35,6 +35,7 @@ export const guessAllowedCheck = (
 	correctWord: string,
 	validWords: string[]
 ) => {
+	console.log(validWords);
 	if (gameDone) return false;
 	if (currentGuess.length !== correctWord.length) {
 		return "Not enough letters";
