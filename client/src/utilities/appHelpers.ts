@@ -1,4 +1,4 @@
-import { Status } from "./components/gameGrid/Block";
+import { Status } from "../components/gameGrid/Block";
 
 // Mobile Formatting
 export const isIosPWA = () => {

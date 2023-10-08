@@ -5,10 +5,10 @@ import Key from "./Key";
 import KeyRow from "./KeyRow";
 
 const Keyboard = ({
-	safegGuessWord,
+	safeGuessWord: safegGuessWord,
 	className = "",
 }: {
-	safegGuessWord: () => Promise<void>;
+	safeGuessWord: () => Promise<void>;
 	className?: string;
 }) => {
 	const dispatch = useAppDispatch();

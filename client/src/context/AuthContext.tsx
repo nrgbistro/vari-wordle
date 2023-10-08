@@ -10,7 +10,7 @@ import {
 	onAuthStateChanged,
 	signInWithPopup,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../utilities/firebase";
 
 interface IAuthContext {
 	googleSignIn: () => void;

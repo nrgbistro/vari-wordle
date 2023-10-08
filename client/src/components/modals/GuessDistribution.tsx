@@ -7,7 +7,7 @@ import {
 	Tooltip,
 	Legend,
 } from "chart.js";
-import ChartAreaBorder from "../../chartjs-plugins/ChartAreaBorder";
+import ChartAreaBorder from "../../utilities/ChartAreaBorder";
 import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { ErrorBoundary } from "react-error-boundary";
@@ -86,8 +86,8 @@ const GuessDistribution = () => {
 		error,
 		resetErrorBoundary,
 	}: {
-		error: any;
-		resetErrorBoundary: any;
+		error: Error;
+		resetErrorBoundary: () => void;
 	}) {
 		return (
 			<div role="alert">

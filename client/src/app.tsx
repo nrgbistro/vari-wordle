@@ -26,7 +26,12 @@ import {
 import { useAppDispatch, useAppSelector } from "./redux/store";
 import { AuthContextProvider } from "./context/AuthContext";
 import Modal from "./components/modals/StatsModal";
-import { checkGameWon, guessAllowedCheck, isIos, isIosPWA } from "./appHelpers";
+import {
+	checkGameWon,
+	guessAllowedCheck,
+	isIos,
+	isIosPWA,
+} from "./utilities/appHelpers";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -147,7 +152,7 @@ const App = () => {
 		guessedWordsGrid.length,
 	]);
 
-	const safegGuessWord = useCallback(async () => {
+	const safeGuessWord = useCallback(async () => {
 		const result = guessAllowedCheck(
 			gameDone,
 			currentGuess,
@@ -186,7 +191,7 @@ const App = () => {
 	useEffect(() => {
 		const keyHandler = (event: KeyboardEvent) => {
 			if (event.code === "Enter") {
-				safegGuessWord();
+				safeGuessWord();
 			} else if (event.code === "Backspace" || event.code === "Delete") {
 				dispatch(removeLetter());
 			}
@@ -207,7 +212,7 @@ const App = () => {
 		return () => {
 			window.removeEventListener("keyup", keyHandler);
 		};
-	}, [correctWord.word.length, currentGuess, dispatch, safegGuessWord]);
+	}, [correctWord.word.length, currentGuess, dispatch, safeGuessWord]);
 
 	return (
 		<AuthContextProvider>
@@ -227,7 +232,7 @@ const App = () => {
 				<Navbar />
 				<Grid />
 				<Keyboard
-					safegGuessWord={safegGuessWord}
+					safeGuessWord={safeGuessWord}
 					className={isIosPWA() ? "mb-20" : ""}
 				/>
 			</div>

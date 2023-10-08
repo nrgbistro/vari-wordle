@@ -11,7 +11,7 @@ const wordPersistConfig = {
 	key: "word",
 	storage,
 	// Turn off persistence for development
-	...(process.env.NODE_ENV !== "production" ? { blacklist: ["word"] } : {}),
+	...(import.meta.env.DEV ? { blacklist: ["word"] } : {}),
 };
 
 const statsPersistConfig = {
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
 
 const store = configureStore({
 	reducer: rootReducer,
-	devTools: process.env.NODE_ENV !== "production",
+	devTools: import.meta.env.DEV,
 	middleware: [thunkMiddleware],
 });
 
