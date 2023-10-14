@@ -9,6 +9,12 @@ import LogRocket from "logrocket";
 import setupLogRocketReact from "logrocket-react";
 import { PersistGate } from "redux-persist/integration/react";
 
+declare global {
+	interface Window {
+		global: typeof globalThis;
+	}
+}
+
 window.global = globalThis;
 
 const persistor = persistStore(store);

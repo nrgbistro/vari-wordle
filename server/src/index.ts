@@ -42,17 +42,16 @@ const getUnsubscribe = () => {
 app.listen(port, () => console.log(`Using port ${port}`));
 
 const whitelist = [
+	"http://localhost:3000",
 	"http://localhost:3001",
 	"https://vari-wordle.nrgserver.me/",
 	"https://dev-vari-wordle.nrgserver.me/",
 ];
 
+// TODO: FIX CORS!!!
 const corsOptions = {
 	origin: (origin: any, cb: any) => {
-		if (
-			whitelist.includes(origin) ||
-			(origin !== undefined && origin === null)
-		) {
+		if (whitelist.includes(origin) || origin === undefined) {
 			cb(null, true);
 		} else {
 			console.log(`origin: ${origin}`);

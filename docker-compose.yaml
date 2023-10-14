@@ -18,7 +18,7 @@ services:
             dockerfile: Dockerfile
         container_name: vari-wordle-dev-client
         ports:
-            - '3000:3000'
+            - '3000:80'
         depends_on:
             - backend
         restart: unless-stopped

@@ -1,7 +1,12 @@
 FROM node:alpine
-WORKDIR /app
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 COPY . /app
-RUN yarn && yarn build
+WORKDIR /app
+RUN npm install -g pnpm
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm build
 
 FROM nginx:stable-alpine
 COPY --from=0 /app/dist /usr/share/nginx/html
