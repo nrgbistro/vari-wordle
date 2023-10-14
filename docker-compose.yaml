@@ -1,11 +1,31 @@
 version: '3.3'
 services:
-    vari-wordle-dev:
-        container_name: vari-wordle-dev
-        environment: # the following environment variables are required for the server to run
-            - FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
-            - FIREBASE_CLIENT_EMAIL=${FIREBASE_CLIENT_EMAIL}
-            - FIREBASE_PRIVATE_KEY=${FIREBASE_PRIVATE_KEY}
+    backend:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        container_name: vari-wordle-dev-server
+        env_file:
+            - server/.env
         ports:
-            - '999:3001'
-        image: vari-wordle-dev
+            - '3001:3001'
+        # image: vari-wordle-dev-server
+        networks:
+          - vari-wordle-net
+    frontend:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        container_name: vari-wordle-dev-client
+        ports:
+            - '3000:3000'
+        depends_on:
+            - backend
+        restart: unless-stopped
+        # image: vari-wordle-dev-client
+        networks:
+          - vari-wordle-net
+
+networks:
+  vari-wordle-net:
+    external: true
