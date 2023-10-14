@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "src/index.ts",
 	"scripts": {
-		"build": "npx tsc && yarn copy_static",
+		"build": "npx tsc && npm run copy_static",
 		"start": "node dist/index.js",
 		"dev": "ts-node-dev src/index.ts",
+		"lint": "eslint ./src  --ext .ts",
 		"copy_static": "copyfiles -u 1 src/static/**/* dist"
 	},
 	"keywords": [],
@@ -26,7 +27,17 @@
 		"@types/express": "^4.17.18",
 		"@types/node": "^20.8.2",
 		"@types/node-schedule": "^2.1.1",
+		"@typescript-eslint/eslint-plugin": "^6.7.5",
+		"@typescript-eslint/parser": ">=6.0.0",
 		"copyfiles": "^2.4.1",
+		"eslint": "^8.51.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-standard-with-typescript": "^39.1.1",
+		"eslint-config-xo": "^0.43.1",
+		"eslint-config-xo-typescript": "^1.0.1",
+		"eslint-plugin-import": "^2.25.2",
+		"eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+		"eslint-plugin-promise": "^6.0.0",
 		"ts-node-dev": "^2.0.0",
 		"typescript": "^5.2.2"
 	}

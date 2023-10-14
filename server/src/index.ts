@@ -9,7 +9,7 @@ import {
 } from "./gameHelpers";
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT ?? 3001;
 
 let currentWord = "";
 let wordleCount = 0;
@@ -17,7 +17,7 @@ let unsubscribe: () => void; // Stores the database listener; call to unsubscrib
 
 const getUnsubscribe = () => {
 	return wordBankRef().onSnapshot(
-		async (snapshot: FirebaseFirestore.QuerySnapshot) => {
+		(snapshot: FirebaseFirestore.QuerySnapshot) => {
 			if (snapshot.empty) return;
 			const data = getRecentDocument(snapshot.docs);
 			currentWord = data.word;
@@ -33,7 +33,10 @@ const getUnsubscribe = () => {
 		currentWord = await generateNewWord(1);
 	}
 	unsubscribe = getUnsubscribe();
-})();
+})().catch((err) => {
+	console.error(err);
+	process.exit(1);
+});
 
 // This displays message that the server is running and listening to specified port
 app.listen(port, () => console.log(`Using port ${port}`));
@@ -46,7 +49,10 @@ const whitelist = [
 
 const corsOptions = {
 	origin: (origin: any, cb: any) => {
-		if (whitelist.includes(origin) || !origin) {
+		if (
+			whitelist.includes(origin) ||
+			(origin !== undefined && origin === null)
+		) {
 			cb(null, true);
 		} else {
 			console.log(`origin: ${origin}`);
@@ -73,7 +79,7 @@ app.get("/", (_req, res) => {
 // Generate a new word at midnight every day
 schedule.scheduleJob("0 0 * * *", () => {
 	wordleCount++;
-	generateNewWord(wordleCount);
+	generateNewWord(wordleCount).catch((err) => console.error(err));
 	unsubscribe(); // unsubscribe from the old listener to prevent conflicts
 	unsubscribe = getUnsubscribe();
 });

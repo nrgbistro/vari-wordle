@@ -11,23 +11,27 @@ interface WordBankDocument {
 	count: number;
 }
 
-export let validWords: any = null;
+export let validWords: string[] | null = null;
 
 // Load filtered words list
-(async function getWords() {
-	return new Promise((resolve, reject) => {
+(async () => {
+	return await new Promise<string[]>((resolve, reject) => {
 		fs.readFile(
 			path.resolve(__dirname, "static/words_filtered.txt"),
 			"utf-8",
 			(err, data) => {
-				if (err) {
+				if (err !== null && err !== undefined) {
 					reject(err);
 				}
 				resolve(data.split(","));
 			}
 		);
 	});
-})().then((data) => (validWords = data));
+})()
+	.then((data) => (validWords = data))
+	.catch((err) => {
+		console.error(err);
+	});
 
 export const wordBankRef = () => {
 	const collectionName =
@@ -45,13 +49,17 @@ export const getRecentDocument = (
 
 const generateNewWordHelper = () => {
 	let ret = "";
-	import("random-words").then((randomWords) => {
-		ret = randomWords.generate({
-			exactly: 1,
-			minLength: 4,
-			maxLength: 8,
-		})[0];
-	});
+	import("random-words")
+		.then((randomWords) => {
+			ret = randomWords.generate({
+				exactly: 1,
+				minLength: 4,
+				maxLength: 8,
+			})[0];
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 	return ret;
 };
 
@@ -61,13 +69,13 @@ export const generateNewWord = async (
 	pushToDatabase = true
 ) => {
 	let newWord = generateNewWordHelper();
-	if (!validWords) {
+	if (validWords === null || validWords === undefined) {
 		// Ensure validWords array has been created
 		setTimeout(() => {
 			console.log("Waiting for validWords array to be created...");
 		}, 500);
 	}
-	while (!validWords.includes(newWord)) {
+	while (!(validWords ?? []).includes(newWord)) {
 		newWord = generateNewWordHelper();
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
