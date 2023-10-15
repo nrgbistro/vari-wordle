@@ -5,8 +5,6 @@ import "../index.css";
 import store from "./redux/store";
 import { persistStore } from "redux-persist";
 import { Provider } from "react-redux";
-import LogRocket from "logrocket";
-import setupLogRocketReact from "logrocket-react";
 import { PersistGate } from "redux-persist/integration/react";
 
 declare global {
@@ -18,11 +16,6 @@ declare global {
 window.global = globalThis;
 
 const persistor = persistStore(store);
-
-if (process.env.NODE_ENV === "production") {
-	LogRocket.init("nrgworx/vari-wordle");
-	setupLogRocketReact(LogRocket);
-}
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>

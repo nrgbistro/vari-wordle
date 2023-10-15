@@ -32,6 +32,8 @@ import {
 	isIos,
 	isIosPWA,
 } from "./utilities/appHelpers";
+import LogRocket from "logrocket";
+import setupLogRocketReact from "logrocket-react";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -48,8 +50,13 @@ const App = () => {
 	// Ensure changes to the app don't break local storage by using package version
 	useEffect(() => {
 		if (localStorage.getItem("version") !== APP_VERSION) {
-			localStorage.clear();
+			localStorage.removeItem("");
 			localStorage.setItem("version", APP_VERSION);
+		}
+
+		if (import.meta.env.PROD) {
+			LogRocket.init("nrgworx/vari-wordle");
+			setupLogRocketReact(LogRocket);
 		}
 	}, []);
 
