@@ -142,7 +142,7 @@ const App = () => {
 	const checkForNewWord = useCallback(async () => {
 		if (correctWord.word.length <= 0 || correctWord.status === "loading")
 			return;
-		const response = await axios.get("/api/word");
+		const response = await axios.get("/api/word", { withCredentials: true });
 		const newWord = response.data.word;
 		if (newWord !== correctWord.word) {
 			if (!checkGameWonCached() && guessedWordsGrid.length > 0) {

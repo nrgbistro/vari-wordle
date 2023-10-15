@@ -5,7 +5,7 @@ import { RootState } from "../store";
 
 export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
 	try {
-		const word = await axios.get("/api/word");
+		const word = await axios.get("/api/word", { withCredentials: true });
 		return word;
 	} catch (err) {
 		return err;
@@ -16,7 +16,9 @@ export const fetchValidWords = createAsyncThunk(
 	"word/fetchValidWords",
 	async () => {
 		try {
-			const words = await axios.get("/api/validWords");
+			const words = await axios.get("/api/validWords", {
+				withCredentials: true,
+			});
 			return words;
 		} catch (err) {
 			return err;
