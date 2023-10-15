@@ -22,6 +22,8 @@ jobs:
       - name: Get Package Version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: ./client
 
       - name: Build Docker image
         run: docker build -t ghcr.io/nrgbistro/vari-wordle/client:latest-dev -t ghcr.io/nrgbistro/vari-wordle/client:${{steps.package-version.outputs.current-version}}-dev .
@@ -46,6 +48,8 @@ jobs:
       - name: Get Package Version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@main
+        with:
+          path: ./server
 
       - name: Build Docker image
         run: docker build -t ghcr.io/nrgbistro/vari-wordle/server:latest-dev -t ghcr.io/nrgbistro/vari-wordle/server:${{steps.package-version.outputs.current-version}}-dev .
