@@ -41,26 +41,25 @@ const getUnsubscribe = () => {
 // This displays message that the server is running and listening to specified port
 app.listen(port, () => console.log(`Using port ${port}`));
 
-// const whitelist = [
-// 	"http://localhost:3000",
-// 	"https://vari-wordle.nrgserver.me/",
-// 	"https://dev-vari-wordle.nrgserver.me/",
-// ];
+const whitelist = [
+	"http://localhost:3000",
+	"https://vari-wordle.nrgserver.me/",
+	"https://dev-vari-wordle.nrgserver.me/",
+];
 
-// const corsOptions = {
-// 	origin: (origin: any, cb: any) => {
-// 		if (whitelist.includes(origin)) {
-// 			cb(null, true);
-// 		} else {
-// 			console.log(`origin: ${origin}`);
-// 			cb(new Error("Not allowed by CORS"));
-// 		}
-// 	},
-// 	optionsSuccessStatus: 200,
-// };
+const corsOptions = {
+	origin: (origin: any, cb: any) => {
+		if (origin === undefined || whitelist.includes(origin)) {
+			cb(null, true);
+		} else {
+			console.log(`origin: ${origin}`);
+			cb(new Error("Not allowed by CORS"));
+		}
+	},
+	optionsSuccessStatus: 200,
+};
 
-// TODO: FIX CORS
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.get("/api/word", (_req, res) => {
 	res.json({ word: currentWord, count: wordleCount });
