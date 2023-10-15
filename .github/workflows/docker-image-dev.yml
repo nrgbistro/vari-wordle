@@ -7,8 +7,11 @@ on:
     branches: ["dev"]
 
 jobs:
-  build:
+  build_client:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
 
     steps:
       - name: Checkout
@@ -21,10 +24,34 @@ jobs:
         uses: martinbeentjes/npm-get-version-action@main
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev -t ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev:${{steps.package-version.outputs.current-version}} .
+        run: docker build -t ghcr.io/nrgbistro/vari-wordle/client:latest-dev -t ghcr.io/nrgbistro/vari-wordle/client:${{steps.package-version.outputs.current-version}}-dev .
 
       - name: Login to ghcr.io
         run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
 
       - name: Push image to ghcr.io
-        run: docker push -a ghcr.io/nrgbistro/vari-wordle/vari-wordle-dev
+        run: docker push -a ghcr.io/nrgbistro/vari-wordle/client
+  build_server:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: "dev"
+
+      - name: Get Package Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@main
+
+      - name: Build Docker image
+        run: docker build -t ghcr.io/nrgbistro/vari-wordle/server:latest-dev -t ghcr.io/nrgbistro/vari-wordle/server:${{steps.package-version.outputs.current-version}}-dev .
+
+      - name: Login to ghcr.io
+        run: docker login ghcr.io -u nrgbistro -p ${{ secrets.GHCR_PASSWORD }}
+
+      - name: Push image to ghcr.io
+        run: docker push -a ghcr.io/nrgbistro/vari-wordle/server
