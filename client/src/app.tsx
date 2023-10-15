@@ -50,7 +50,7 @@ const App = () => {
 	// Ensure changes to the app don't break local storage by using package version
 	useEffect(() => {
 		if (localStorage.getItem("version") !== APP_VERSION) {
-			localStorage.removeItem("");
+			localStorage.removeItem("persist:word");
 			localStorage.setItem("version", APP_VERSION);
 		}
 
