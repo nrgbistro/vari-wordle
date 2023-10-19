@@ -33,6 +33,7 @@ jobs:
 
       - name: Push image to ghcr.io
         run: docker push -a ghcr.io/nrgbistro/vari-wordle/client
+        
   build_server:
     runs-on: ubuntu-latest
     defaults:
