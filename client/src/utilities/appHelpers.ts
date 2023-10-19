@@ -1,4 +1,14 @@
-import { Status } from "../components/gameGrid/Block";
+import { Status } from "./types";
+
+// LogRocket
+export const logRocketInit = async () => {
+	if (import.meta.env.PROD) {
+		const LogRocket = await import("logrocket");
+		const SetupLogRocket = await import("logrocket-react");
+		LogRocket.init("nrgworx/vari-wordle");
+		SetupLogRocket.default(LogRocket);
+	}
+};
 
 // Mobile Formatting
 export const isIosPWA = () => {

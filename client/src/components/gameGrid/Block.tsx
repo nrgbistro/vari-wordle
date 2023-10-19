@@ -1,18 +1,12 @@
 import { useCallback, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, useAppSelector } from "../../redux/store";
+import { Status } from "../../utilities/types";
 
 type Props = {
 	x: number;
 	y: number;
 };
-
-export const enum Status {
-	empty,
-	guessed,
-	yellow,
-	green,
-}
 
 const Block: React.FC<Props> = ({ x, y }) => {
 	const ref = useRef<HTMLDivElement>(null);

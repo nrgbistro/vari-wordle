@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Status } from "../../components/gameGrid/Block";
 import { RootState } from "../store";
+import { Status, Word, WordData } from "../../utilities/types";
 
 export const fetchWord = createAsyncThunk("word/fetchWord", async () => {
 	try {
-		const word = await axios.get("/api/word", { withCredentials: true });
+		const word = await axios.get<Word>("/api/word", { withCredentials: true });
 		return word;
 	} catch (err) {
 		return err;
@@ -26,28 +26,7 @@ export const fetchValidWords = createAsyncThunk(
 	}
 );
 
-interface wordData {
-	correctWord: {
-		word: string;
-		count: number;
-		status: "idle" | "loading" | "succeeded" | "failed";
-		error: null | string;
-	};
-	validWords: {
-		words: string[];
-		status: "idle" | "loading" | "succeeded" | "failed";
-		error: null | string;
-	};
-	currentGuess: string;
-	guessIndex: number;
-	guessedWords: string[];
-	guessedLetters: [string, Status][];
-	guessedWordsGrid: Status[][];
-	gameDone: boolean;
-	modal: boolean;
-}
-
-const initialState: wordData = {
+const initialState: WordData = {
 	correctWord: {
 		word: "",
 		count: 0,

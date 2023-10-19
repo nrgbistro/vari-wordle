@@ -1,8 +1,16 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+	Suspense,
+	lazy,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import Grid from "./components/gameGrid/Grid";
 import Keyboard from "./components/keyboard/Keyboard";
-import Popup from "./components/PopupMessage";
+// import Popup from "./components/PopupMessage";
+// import Modal from "./components/modals/StatsModal";
 import Navbar from "./components/Navbar";
 import {
 	typeLetter,
@@ -25,15 +33,13 @@ import {
 } from "./redux/slices/statisticsSlice";
 import { useAppDispatch, useAppSelector } from "./redux/store";
 import { AuthContextProvider } from "./context/AuthContext";
-import Modal from "./components/modals/StatsModal";
 import {
 	checkGameWon,
 	guessAllowedCheck,
 	isIos,
 	isIosPWA,
+	logRocketInit,
 } from "./utilities/appHelpers";
-import LogRocket from "logrocket";
-import setupLogRocketReact from "logrocket-react";
 
 const App = () => {
 	const dispatch = useAppDispatch();
@@ -47,6 +53,9 @@ const App = () => {
 		gameDone,
 	} = useAppSelector((state) => state.word);
 
+	const Popup = lazy(() => import("./components/PopupMessage"));
+	const Modal = lazy(() => import("./components/modals/StatsModal"));
+
 	// Ensure changes to the app don't break local storage by using package version
 	useEffect(() => {
 		if (localStorage.getItem("version") !== APP_VERSION) {
@@ -54,10 +63,7 @@ const App = () => {
 			localStorage.setItem("version", APP_VERSION);
 		}
 
-		if (import.meta.env.PROD) {
-			LogRocket.init("nrgworx/vari-wordle");
-			setupLogRocketReact(LogRocket);
-		}
+		logRocketInit();
 	}, []);
 
 	// Fetch the word on first load
@@ -228,12 +234,14 @@ const App = () => {
 				ref={containerRef}
 			>
 				{popupVisible && (
-					<Popup
-						message={popupMessage}
-						setVisible={setPopupVisible}
-						duration={popupDuration}
-						setDuration={setPopupDuration}
-					/>
+					<Suspense>
+						<Popup
+							message={popupMessage}
+							setVisible={setPopupVisible}
+							duration={popupDuration}
+							setDuration={setPopupDuration}
+						/>
+					</Suspense>
 				)}
 				{modal && <Modal />}
 				<Navbar />
