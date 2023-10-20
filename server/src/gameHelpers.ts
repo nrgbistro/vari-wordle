@@ -46,7 +46,7 @@ export const getRecentDocument = (
 		.data();
 };
 
-const generateNewWordHelper = async () => {
+export const generateNewWordHelper = async () => {
 	try {
 		const { generate } = await import("random-words");
 		const ret = generate({
