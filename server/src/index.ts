@@ -88,6 +88,7 @@ export const initializeServer = async (
 	);
 };
 
-initializeServer(parseInt(process.env.PORT ?? "3001"), true).catch(
-	console.error
-);
+process.env.JEST_WORKER_ID === undefined &&
+	initializeServer(parseInt(process.env.PORT ?? "3001"), true).catch(
+		console.error
+	);
