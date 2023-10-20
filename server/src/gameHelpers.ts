@@ -3,7 +3,6 @@ import path from "path";
 import * as dotenv from "dotenv";
 import { db } from "./firebase";
 
-
 dotenv.config();
 
 interface WordBankDocument {
@@ -47,20 +46,19 @@ export const getRecentDocument = (
 		.data();
 };
 
-const generateNewWordHelper = () => {
-	let ret = "";
-	import("random-words")
-		.then((randomWords) => {
-			ret = randomWords.generate({
-				exactly: 1,
-				minLength: 4,
-				maxLength: 8,
-			})[0];
-		})
-		.catch((err) => {
-			console.error(err);
-		});
-	return ret;
+const generateNewWordHelper = async () => {
+	try {
+		const { generate } = await import("random-words");
+		const ret = generate({
+			exactly: 1,
+			minLength: 4,
+			maxLength: 8,
+		})[0];
+		return ret;
+	} catch (err) {
+		console.error(err);
+		return "";
+	}
 };
 
 // Creates a new random word and writes it to the database
@@ -68,7 +66,7 @@ export const generateNewWord = async (
 	newCount: number,
 	pushToDatabase = true
 ) => {
-	let newWord = generateNewWordHelper();
+	let newWord = await generateNewWordHelper();
 	if (validWords === null || validWords === undefined) {
 		// Ensure validWords array has been created
 		setTimeout(() => {
@@ -76,7 +74,7 @@ export const generateNewWord = async (
 		}, 500);
 	}
 	while (!(validWords ?? []).includes(newWord)) {
-		newWord = generateNewWordHelper();
+		newWord = await generateNewWordHelper();
 	}
 	console.log("Generated word: " + newWord + " on " + getDateAndTime());
 	if (pushToDatabase) {

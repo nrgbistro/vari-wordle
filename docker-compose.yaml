@@ -9,7 +9,6 @@ services:
             - server/.env
         ports:
             - '3001:3001'
-        # image: vari-wordle-dev-server
         networks:
           - vari-wordle-net
     frontend:
@@ -22,7 +21,6 @@ services:
         depends_on:
             - backend
         restart: unless-stopped
-        # image: vari-wordle-dev-client
         networks:
           - vari-wordle-net
 
