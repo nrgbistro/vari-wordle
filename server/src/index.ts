@@ -9,9 +9,6 @@ import {
 	getDateAndTime,
 } from "./gameHelpers";
 
-const app = express();
-const port = process.env.PORT ?? 3001;
-
 let currentWord = "";
 let wordleCount = 0;
 let unsubscribe: () => void; // Stores the database listener; call to unsubscribe
@@ -28,21 +25,13 @@ const getUnsubscribe = () => {
 };
 
 // Loads the most recent word in the database, adds first word if database only contains placeholder
-(async function initializeGame() {
+async function initializeBackendConnection() {
 	const querySnapshot = await wordBankRef().get();
 	if (getRecentDocument(querySnapshot.docs).count < 1) {
 		currentWord = await generateNewWord(1);
 	}
 	unsubscribe = getUnsubscribe();
-})().catch((err) => {
-	console.error(err);
-	process.exit(1);
-});
-
-// This displays message that the server is running and listening to specified port
-app.listen(port, () =>
-	console.log(`Starting backend on port ${port}, ${getDateAndTime()}`)
-);
+}
 
 const whitelist = [
 	"http://localhost:3000",
@@ -62,24 +51,43 @@ const corsOptions = {
 	optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
-
-app.get("/api/word", (_req, res) => {
-	res.json({ word: currentWord, count: wordleCount });
-});
-
-app.get("/api/validWords", (_req, res) => {
-	res.json(validWords);
-});
-
-app.get("/", (_req, res) => {
-	res.send("Vari-Wordle Backend Up!");
-});
-
 // Generate a new word at midnight every day
-schedule.scheduleJob("0 0 * * *", () => {
-	wordleCount++;
-	generateNewWord(wordleCount).catch((err) => console.error(err));
-	unsubscribe(); // unsubscribe from the old listener to prevent conflicts
-	unsubscribe = getUnsubscribe();
-});
+const createScheduler = () =>
+	schedule.scheduleJob("0 0 * * *", () => {
+		wordleCount++;
+		generateNewWord(wordleCount).catch((err) => console.error(err));
+		unsubscribe(); // unsubscribe from the old listener to prevent conflicts
+		unsubscribe = getUnsubscribe();
+	});
+
+export const initializeServer = async (
+	port: number,
+	startScheduler: boolean
+) => {
+	await initializeBackendConnection();
+	const app = express();
+
+	app.use(cors(corsOptions));
+
+	app.get("/api/word", (_req, res) => {
+		res.json({ word: currentWord, count: wordleCount });
+	});
+
+	app.get("/api/validWords", (_req, res) => {
+		res.json(validWords);
+	});
+
+	app.get("/", (_req, res) => {
+		res.send("Vari-Wordle Backend Up!");
+	});
+
+	startScheduler && createScheduler();
+
+	return app.listen(port, () =>
+		console.log(`Starting backend on port ${port}, ${getDateAndTime()}`)
+	);
+};
+
+initializeServer(parseInt(process.env.PORT ?? "3001"), true).catch(
+	console.error
+);
