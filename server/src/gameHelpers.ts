@@ -90,7 +90,7 @@ export const generateNewWord = async (
 	return newWord;
 };
 
-const getDateAndTime = (): string => {
+export const getDateAndTime = (): string => {
 	const date = new Date();
 	return (
 		date.getMonth() +

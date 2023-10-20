@@ -6,6 +6,7 @@ import {
 	getRecentDocument,
 	validWords,
 	wordBankRef,
+	getDateAndTime,
 } from "./gameHelpers";
 
 const app = express();
@@ -39,7 +40,9 @@ const getUnsubscribe = () => {
 });
 
 // This displays message that the server is running and listening to specified port
-app.listen(port, () => console.log(`Using port ${port}`));
+app.listen(port, () =>
+	console.log(`Starting backend on port ${port}, ${getDateAndTime()}`)
+);
 
 const whitelist = [
 	"http://localhost:3000",
