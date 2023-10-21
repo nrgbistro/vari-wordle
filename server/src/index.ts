@@ -1,7 +1,6 @@
 import cors from "cors";
 import express from "express";
 import schedule from "node-schedule";
-import { startGraphqlServer } from "graphql/index";
 import {
 	generateNewWord,
 	getRecentDocument,
@@ -9,6 +8,10 @@ import {
 	wordBankRef,
 	getDateAndTime,
 } from "./gameHelpers";
+import { ApolloServer } from "@apollo/server";
+import typeDefs from "./graphql/typeDefs";
+import resolvers from "./graphql/resolvers";
+import { expressMiddleware } from "@apollo/server/express4";
 
 let currentWord = "";
 let wordleCount = 0;
@@ -61,12 +64,25 @@ const createScheduler = () =>
 		unsubscribe = getUnsubscribe();
 	});
 
+const serverGraphql = new ApolloServer({
+	typeDefs,
+	resolvers,
+	introspection: true,
+});
+
 export const initializeServer = async (
 	port: number,
 	startScheduler: boolean
 ) => {
-	await initializeBackendConnection();
 	const app = express();
+	await initializeBackendConnection();
+	await serverGraphql.start().catch((error) => {
+		console.error("Apollo Server initialization error:", error);
+	});
+
+	app.use(express.json());
+
+	app.use("/api/graphql", expressMiddleware(serverGraphql));
 
 	app.use(cors(corsOptions));
 
@@ -93,9 +109,3 @@ process.env.TEST === undefined &&
 	initializeServer(parseInt(process.env.PORT ?? "3001"), true).catch(
 		console.error
 	);
-
-startGraphqlServer()
-	.then(({ url }) => {
-		console.log(`🚀 Server ready at: ${url}`);
-	})
-	.catch(console.error);
