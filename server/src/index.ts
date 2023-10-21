@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import schedule from "node-schedule";
+import { startGraphqlServer } from "graphql/index";
 import {
 	generateNewWord,
 	getRecentDocument,
@@ -92,3 +93,9 @@ process.env.TEST === undefined &&
 	initializeServer(parseInt(process.env.PORT ?? "3001"), true).catch(
 		console.error
 	);
+
+startGraphqlServer()
+	.then(({ url }) => {
+		console.log(`🚀 Server ready at: ${url}`);
+	})
+	.catch(console.error);
