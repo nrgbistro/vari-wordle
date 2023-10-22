@@ -1,4 +1,4 @@
-import { generateNewWord, generateNewWordHelper } from "../src/gameHelpers";
+import { generateNewWord, generateNewWordHelper } from "../gameHelpers";
 
 describe("Game Helpers", () => {
 	it("generates a word", async () => {

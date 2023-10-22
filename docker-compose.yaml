@@ -1,9 +1,10 @@
 version: '3.3'
 services:
     backend:
-        build:
-            context: ./server
-            dockerfile: Dockerfile
+        image: ghcr.io/nrgbistro/vari-wordle/server:latest-dev
+        # build:
+        #     context: ./server
+        #     dockerfile: Dockerfile
         container_name: vari-wordle-dev-server
         env_file:
             - server/.env
@@ -12,9 +13,10 @@ services:
         networks:
           - vari-wordle-net
     frontend:
-        build:
-            context: ./client
-            dockerfile: Dockerfile
+        image: ghcr.io/nrgbistro/vari-wordle/client:latest-dev
+        # build:
+        #     context: ./client
+        #     dockerfile: Dockerfile
         container_name: vari-wordle-dev-client
         ports:
             - '3000:80'

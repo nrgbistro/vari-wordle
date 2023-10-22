@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "src/index.ts",
 	"scripts": {
-		"build": "npx tsc && npm run copy_static",
+		"build": "npx tsc --project tsconfig.build.json && npm run copy_static",
 		"start": "node dist/index.js",
 		"dev": "ts-node-dev src/index.ts",
 		"lint": "eslint ./src  --ext .ts",

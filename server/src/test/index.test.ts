@@ -1,4 +1,4 @@
-import { initializeServer } from "../src/index";
+import { initializeServer } from "../index";
 import type { Server, IncomingMessage, ServerResponse } from "http";
 import request from "supertest";
 
