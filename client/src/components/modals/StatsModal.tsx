@@ -8,8 +8,7 @@ import Popup from "../PopupMessage";
 import useDarkMode from "use-dark-mode";
 import Stats from "./Stats";
 import GuessDistribution from "./GuessDistribution";
-// import { UserAuth } from "../../context/AuthContext";
-// import GoogleButton from "react-google-button";
+
 
 const Modal = () => {
 	const dispatch = useAppDispatch();

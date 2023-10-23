@@ -41,6 +41,9 @@ import {
 	logRocketInit,
 } from "./utilities/appHelpers";
 
+const Popup = lazy(() => import("./components/PopupMessage"));
+const Modal = lazy(() => import("./components/modals/StatsModal"));
+
 const App = () => {
 	const dispatch = useAppDispatch();
 	const wordStatus = useAppSelector(getWordStatus);
@@ -52,9 +55,6 @@ const App = () => {
 		guessedWordsGrid,
 		gameDone,
 	} = useAppSelector((state) => state.word);
-
-	const Popup = lazy(() => import("./components/PopupMessage"));
-	const Modal = lazy(() => import("./components/modals/StatsModal"));
 
 	// Ensure changes to the app don't break local storage by using package version
 	useEffect(() => {
@@ -243,7 +243,11 @@ const App = () => {
 						/>
 					</Suspense>
 				)}
-				{modal && <Modal />}
+				{modal && (
+					<Suspense>
+						<Modal />
+					</Suspense>
+				)}
 				<Navbar />
 				<Grid />
 				<Keyboard
