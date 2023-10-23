@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
-import { db } from "./firebase";
+import { firestore } from "./firebase";
 
 dotenv.config();
 
@@ -35,7 +35,7 @@ export let validWords: string[] | null = null;
 export const wordBankRef = () => {
 	const collectionName =
 		process.env.NODE_ENV === "production" ? "wordBank" : "wordBankDev";
-	return db.collection(collectionName);
+	return firestore.collection(collectionName);
 };
 
 export const getRecentDocument = (

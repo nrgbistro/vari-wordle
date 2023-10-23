@@ -2,7 +2,12 @@ import gql from "graphql-tag";
 
 const typeDefs = gql`
 	type Query {
-		hello: String
+		getWord: String
+	}
+
+	type Word {
+		word: String
+		count: Int
 	}
 `;
 

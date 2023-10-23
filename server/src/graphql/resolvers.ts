@@ -1,6 +1,9 @@
 const resolvers = {
 	Query: {
-		hello: () => "Hello, world!",
+		getWord: (_: any, __: any, dataSources: any) => {
+			console.log(dataSources.dataSources.wordsData.collection);
+			return "dataSources.dataSources.wordsData.collection";
+		},
 	},
 };
 

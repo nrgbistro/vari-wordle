@@ -12,6 +12,7 @@ import { ApolloServer } from "@apollo/server";
 import typeDefs from "./graphql/typeDefs";
 import resolvers from "./graphql/resolvers";
 import { expressMiddleware } from "@apollo/server/express4";
+import { ContextValue } from "graphql/context";
 
 let currentWord = "";
 let wordleCount = 0;
@@ -64,7 +65,7 @@ const createScheduler = () =>
 		unsubscribe = getUnsubscribe();
 	});
 
-const serverGraphql = new ApolloServer({
+const graphqlServer = new ApolloServer<ContextValue>({
 	typeDefs,
 	resolvers,
 	introspection: true,
@@ -75,14 +76,19 @@ export const initializeServer = async (
 	startScheduler: boolean
 ) => {
 	const app = express();
+	app.use(express.json());
 	await initializeBackendConnection();
-	await serverGraphql.start().catch((error) => {
+	await graphqlServer.start().catch((error) => {
 		console.error("Apollo Server initialization error:", error);
 	});
 
-	app.use(express.json());
+	app.use(
+		expressMiddleware(graphqlServer, {
+			context: async ({ req }) => new ContextValue({ req, server }),
+		})
+	);
 
-	app.use("/api/graphql", expressMiddleware(serverGraphql));
+	app.use("/api/graphql", expressMiddleware(graphqlServer));
 
 	app.use(cors(corsOptions));
 
